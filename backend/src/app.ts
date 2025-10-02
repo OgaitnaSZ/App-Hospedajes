@@ -1,14 +1,19 @@
-import express, { Express, Request, Response } from "express";
+import "dotenv/config";
+import express from "express";
+import cors from "cors";
+import routes from "./routes";
 
-const PORT = 4000;
 const app = express();
+app.use(cors());
+app.use(express.json());
 
-app.get('/', (req: Request, res: Response)=>{
-    res.send({
-         message: 'Hola mundo'
-    })
-})
+const PORT = 4001;
+
+// Importacion dinamica de rutas
+app.use("/api", routes);
 
 app.listen(PORT, ()=>{
-    console.log("Listo por el puerto 3000");
+    console.log(`Listo por http://localhost:${PORT}`);
 })
+
+export default app;
