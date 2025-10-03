@@ -1,0 +1,158 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model actividades {
+  Id          Int    @id @default(autoincrement())
+  Nombre      String @db.Text
+  Descripcion String @db.Text
+  Imagen      String @db.Text
+  Ciudad      String @db.Text
+  Precio      Float  @db.Float
+}
+
+model fotos {
+  IdFoto      Int       @id @default(autoincrement())
+  IdHospedaje Int
+  Name        String    @db.VarChar(255)
+  hospedaje   hospedaje @relation(fields: [IdHospedaje], references: [IdHospedaje], onUpdate: Restrict, map: "fotos_ibfk_1")
+
+  @@index([IdHospedaje], map: "IdHospedaje")
+}
+
+model habitaciones {
+  IdHabitacion Int               @id @default(autoincrement())
+  IdHospedaje  Int?
+  Numero       String            @db.VarChar(10)
+  Tipo         habitaciones_Tipo
+  Precio       Decimal           @db.Decimal(10, 2)
+  Capacidad    Int
+  Servicios    String?           @db.VarChar(255)
+  hospedaje    hospedaje?        @relation(fields: [IdHospedaje], references: [IdHospedaje], onDelete: Restrict, onUpdate: Restrict, map: "IdHospedaje")
+  reservas     reservas[]
+
+  @@index([IdHospedaje], map: "habitaciones_ibfk_1")
+}
+
+model hospedaje {
+  IdHospedaje  Int            @id @default(autoincrement())
+  Titulo       String         @db.VarChar(150)
+  Descripcion  String?        @db.Text
+  Servicios    String         @db.VarChar(255)
+  Estrellas    Int
+  Telefono     String         @db.VarChar(20)
+  Ciudad       String         @db.VarChar(100)
+  Direccion    String         @db.VarChar(255)
+  Coordenadas  String         @db.Text
+  Imagen       String?        @db.Text
+  fotos        fotos[]
+  habitaciones habitaciones[]
+  resena       resena[]
+  reservas     reservas[]
+}
+
+model pago {
+  IdPago     Int      @id @default(autoincrement())
+  IdReserva  Int
+  IdUsuario  Int
+  Nombre     String   @db.Text
+  Apellido   String   @db.Text
+  Dni        String   @db.Text
+  Direccion  String   @db.Text
+  Email      String   @db.Text
+  Telefono   String   @db.Text
+  Monto      Decimal  @db.Decimal(10, 2)
+  MetodoPago String   @db.VarChar(50)
+  FechaPago  DateTime @db.Date
+  reservas   reservas @relation(fields: [IdReserva], references: [IdReserva], onUpdate: Restrict, map: "pago_ibfk_1")
+  usuario    usuario  @relation(fields: [IdUsuario], references: [IdUsuario], onUpdate: Restrict, map: "pago_ibfk_2")
+
+  @@index([IdReserva], map: "IdReserva")
+  @@index([IdUsuario], map: "IdUsuario")
+}
+
+model password_resets {
+  Email  String   @db.VarChar(255)
+  Token  String   @id @db.VarChar(32)
+  Expiry DateTime @db.DateTime(0)
+}
+
+model resena {
+  IdResena     Int       @id @default(autoincrement())
+  IdUsuario    Int
+  IdHospedaje  Int
+  IdHabitacion Int
+  Calificacion Int
+  Comentario   String?   @db.Text
+  Fecha        DateTime  @db.Date
+  usuario      usuario   @relation(fields: [IdUsuario], references: [IdUsuario], onUpdate: Restrict, map: "resena_ibfk_1")
+  hospedaje    hospedaje @relation(fields: [IdHospedaje], references: [IdHospedaje], onUpdate: Restrict, map: "resena_ibfk_2")
+
+  @@index([IdHospedaje], map: "IdHospedaje")
+  @@index([IdUsuario], map: "IdUsuario")
+}
+
+model reservas {
+  IdReserva    Int          @id @default(autoincrement())
+  IdUsuario    Int
+  IdHospedaje  Int
+  IdHabitacion Int
+  FechaInicio  DateTime     @db.Date
+  FechaFin     DateTime     @db.Date
+  Personas     Int
+  PrecioTotal  Decimal      @db.Decimal(10, 2)
+  Estado       String       @db.VarChar(30)
+  pago         pago[]
+  usuario      usuario      @relation(fields: [IdUsuario], references: [IdUsuario], onUpdate: Restrict, map: "reservas_ibfk_1")
+  hospedaje    hospedaje    @relation(fields: [IdHospedaje], references: [IdHospedaje], onUpdate: Restrict, map: "reservas_ibfk_2")
+  habitaciones habitaciones @relation(fields: [IdHabitacion], references: [IdHabitacion], onUpdate: Restrict, map: "reservas_ibfk_3")
+
+  @@index([IdHabitacion], map: "IdHabitacion")
+  @@index([IdHospedaje], map: "IdHospedaje")
+  @@index([IdUsuario], map: "IdUsuario")
+}
+
+model servicios_habitacion {
+  IdServicio  Int     @id @default(autoincrement())
+  Nombre      String  @db.VarChar(255)
+  Descripcion String? @db.Text
+}
+
+model servicios_hospedaje {
+  IdServicio  Int     @id @default(autoincrement())
+  Nombre      String  @db.VarChar(255)
+  Descripcion String? @db.Text
+}
+
+model usuario {
+  IdUsuario Int         @id @default(autoincrement())
+  Nombre    String      @db.VarChar(100)
+  Apellido  String      @db.VarChar(100)
+  Email     String      @unique(map: "Email") @db.VarChar(150)
+  Telefono  String?     @db.VarChar(20)
+  Password  String      @db.VarChar(255)
+  Rol       usuario_Rol
+  pago      pago[]
+  resena    resena[]
+  reservas  reservas[]
+}
+
+enum habitaciones_Tipo {
+  individual
+  doble
+  suite
+  deluxe
+}
+
+enum usuario_Rol {
+  administrador
+  cliente
+  huesped
+  EMPTY_ENUM_VALUE @map("")
+}
