@@ -57,6 +57,7 @@ model hospedaje {
   direccion    String         @db.VarChar(255)
   coordenadas  String         @db.Text
   imagen       String?        @db.Text
+  destacado    Boolean
   created_at   DateTime       @default(now()) @db.Timestamp(0)
   updated_at   DateTime       @default(now()) @db.Timestamp(0)
   fotos        fotos[]

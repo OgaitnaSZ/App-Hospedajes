@@ -3,7 +3,7 @@ const router = express.Router();
 import { getHospedajes, getHospedaje, getHospedajesDestacados, getHospedajesUsuario} from "../controllers/hospedaje";
 import * as hospedajeValidators from "../validators/hospedaje";
 
-router.get("/", hospedajeValidators.validatorHospedajesFiltro, getHospedajes);
+router.get("/hospedajes", hospedajeValidators.validatorHospedajesFiltro, getHospedajes);
 router.get("/:id", hospedajeValidators.validatorHospedaje, getHospedaje);
 router.get("/destacados",  getHospedajesDestacados);
 router.get("/usuarios/:id/hospedajes",  getHospedajesUsuario);

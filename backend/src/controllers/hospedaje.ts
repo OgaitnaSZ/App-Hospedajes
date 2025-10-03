@@ -16,10 +16,10 @@ export async function getHospedajes(req: Request, res: Response) {
         */
         const hospedajes = await prisma.hospedaje.findMany({
           where: {
-            ...(Ciudad && { Ciudad: String(Ciudad) }),
+            ...(Ciudad && { ciudad: String(Ciudad) }),
             habitaciones: {
               some: {
-                ...(Capacidad && { Capacidad: { gte: Number(Capacidad) } }),
+                ...(Capacidad && { capacidad: { gte: Number(Capacidad) } }),
                 ...(FechaInicio && FechaFin
                   ? {
                       reservas: {
@@ -41,7 +41,7 @@ export async function getHospedajes(req: Request, res: Response) {
           include: {
             habitaciones: {
               where: {
-                ...(Capacidad && { Capacidad: { gte: Number(Capacidad) } }),
+                ...(Capacidad && { capacidad: { gte: Number(Capacidad) } }),
                 ...(FechaInicio && FechaFin
                   ? {
                       reservas: {
@@ -83,6 +83,7 @@ export async function getHospedajes(req: Request, res: Response) {
     
         return res.status(200).json(result);
     }catch(error){
+        console.log(error);
         handleHttpError(res, "Error al obtener hospedajes", 500);
         return;
     }
@@ -92,7 +93,7 @@ export async function getHospedajes(req: Request, res: Response) {
 export async function getHospedaje(req: Request, res: Response) {
     try{
       const hospedaje = await prisma.hospedaje.findUnique({
-        where: { idHospedaje: req.params.id }
+        where: { idHospedaje: String(req.params.id) }
       });
   
       if (!hospedaje) {
