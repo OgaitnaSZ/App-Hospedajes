@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
-import { PrismaClient } from '../generated/prisma'
+import { PrismaClient } from '../generated/prisma';
+import { matchedData } from 'express-validator';
 import { compare, encrypt } from "../utils/handlePassword";
 import { tokenSign } from "../utils/handlerJwt";
 import { handleHttpError } from "../utils/handleError";
@@ -8,10 +9,10 @@ const prisma = new PrismaClient()
 
 async function login(req: Request, res: Response): Promise<void> {
   try {
-    const { email, password } = req.body;
+    const dataLogin = matchedData(req);
 
     const existingUser = await prisma.usuario.findUnique({
-      where: { Email: email }
+      where: { Email: dataLogin.email }
     });
     
     if(!existingUser){
@@ -20,7 +21,7 @@ async function login(req: Request, res: Response): Promise<void> {
     }
     
     const hashPassword = existingUser.Password;
-    const check = await compare(password, hashPassword);
+    const check = await compare(dataLogin.password, hashPassword);
     if(!check){
         handleHttpError(res, "PASSWORD INVALIDO", 400)
         return
@@ -43,9 +44,10 @@ async function login(req: Request, res: Response): Promise<void> {
 
 async function register(req: Request, res: Response): Promise<void> {
   try {
-    const { nombre, apellido, email, telefono, password } = req.body;
+    const dataRegister = matchedData(req);
+
     const existingUser = await prisma.usuario.findUnique({
-      where: { Email: email }
+      where: { Email: dataRegister.email }
     });
 
     if (existingUser) {
@@ -53,20 +55,28 @@ async function register(req: Request, res: Response): Promise<void> {
       return;
     }
 
-    const hashedPassword = await encrypt(password);
+    const hashedPassword = await encrypt(dataRegister.password);
 
-    await prisma.usuario.create({ 
+    const dataUser = await prisma.usuario.create({ 
       data: { 
-        Nombre: nombre,
-        Apellido: apellido, 
-        Email: email,
-        Telefono: telefono,
+        Nombre: dataRegister.nombre,
+        Apellido: dataRegister.apellido, 
+        Email: dataRegister.email,
+        Telefono: dataRegister.telefono,
         Password: hashedPassword,
         Rol: 'huesped' 
       } 
     });
 
-    res.status(201).json("Usuario creado con éxito");
+    const token = await tokenSign(dataUser);
+    const { Password, ...userWithoutPassword } = dataUser; // Eliminar password para la respuesta
+
+    const data = {
+      token,
+      user: userWithoutPassword
+    };
+    res.status(201)
+    res.send({ data });
   } catch (error) {
     handleHttpError(res, "Error al registrar el usuario", 500)
   }
