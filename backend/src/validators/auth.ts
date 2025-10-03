@@ -2,7 +2,7 @@ import { check } from "express-validator";
 import { Request, Response, NextFunction } from "express";
 import { validateResults } from "../utils/handleValidator";
 
-const validatorLogin = [
+export const validatorLogin = [
   check("email")
     .exists().withMessage("Email requerido")
     .notEmpty().withMessage("Email no puede estar vacío")
@@ -18,7 +18,7 @@ const validatorLogin = [
 ];
 
 
-const validatorRegister = [
+export const validatorRegister = [
   check("nombre")
     .exists().withMessage("El nombre es requerido")
     .notEmpty().withMessage("El nombre no puede estar vacío")
@@ -48,7 +48,7 @@ const validatorRegister = [
   (req: Request, res: Response, next: NextFunction) => validateResults(req, res, next)
 ];
 
-const validatorUpdatePassword = [
+export const validatorUpdatePassword = [
   check("idUsuario")
     .exists().withMessage("El IdUsuario es requerido")
     .notEmpty().withMessage("El IdUsuario no puede estar vacío"),
@@ -66,7 +66,7 @@ const validatorUpdatePassword = [
   (req: Request, res: Response, next: NextFunction) => validateResults(req, res, next)
 ]
 
-const validatorRecoverPassword = [
+export const validatorRecoverPassword = [
   check("email")
     .exists().withMessage("El email es requerido")
     .notEmpty().withMessage("El email no puede estar vacío")
@@ -76,7 +76,7 @@ const validatorRecoverPassword = [
     (req: Request, res: Response, next: NextFunction) => validateResults(req, res, next)
 ]
 
-const validatorResetPassword = [
+export const validatorResetPassword = [
   check("password")
     .exists().withMessage("La contraseña es requerida")
     .notEmpty().withMessage("La contraseña no puede estar vacía")
@@ -88,5 +88,3 @@ const validatorResetPassword = [
 
     (req: Request, res: Response, next: NextFunction) => validateResults(req, res, next)
 ]
-
-export { validatorLogin, validatorRegister, validatorUpdatePassword, validatorRecoverPassword, validatorResetPassword };

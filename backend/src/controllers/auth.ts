@@ -10,7 +10,7 @@ import { handleHttpError } from "../utils/handleError";
 
 const prisma = new PrismaClient()
 
-async function login(req: Request, res: Response): Promise<void> {
+export async function login(req: Request, res: Response): Promise<void> {
   try {
     const dataLogin = matchedData(req);
 
@@ -42,10 +42,11 @@ async function login(req: Request, res: Response): Promise<void> {
   } catch (error) {
       res.status(500)
       handleHttpError(res, "ERROR_LOGIN_USER")
+      return;
   }
 }
 
-async function register(req: Request, res: Response): Promise<void> {
+export async function register(req: Request, res: Response): Promise<void> {
   try {
     const dataRegister = matchedData(req);
 
@@ -82,11 +83,12 @@ async function register(req: Request, res: Response): Promise<void> {
     res.send({ data });
   } catch (error) {
     handleHttpError(res, "Error al registrar el usuario", 500)
+    return;
   }
 }
 
 
-async function updatePassword(req: Request, res: Response): Promise<void> {
+export async function updatePassword(req: Request, res: Response): Promise<void> {
   try{
     const dataPassword = matchedData(req);
 
@@ -118,10 +120,11 @@ async function updatePassword(req: Request, res: Response): Promise<void> {
     res.status(200).send({updatedUser: userWithoutPassword});
   }catch(error){
     handleHttpError(res, "Error al actualizar password", 500)
+    return;
   }
 }
 
-async function recoverPassword(req: Request, res: Response): Promise<void> {
+export async function recoverPassword(req: Request, res: Response): Promise<void> {
   try{
     const emailUser = matchedData(req);
 
@@ -178,10 +181,11 @@ async function recoverPassword(req: Request, res: Response): Promise<void> {
 
   }catch(error){
     handleHttpError(res, "Error al intentar recuperar el password", 500)
+    return;
   }
 }
 
-async function resetPassword(req: Request, res: Response): Promise<void> {
+export async function resetPassword(req: Request, res: Response): Promise<void> {
   try {
     const data = matchedData(req);
 
@@ -222,7 +226,6 @@ async function resetPassword(req: Request, res: Response): Promise<void> {
     res.status(200).send({ message: "Contraseña actualizada correctamente" });
   } catch (error) {
     handleHttpError(res, "Error al intentar restablecer el password", 500)
+    return;
   }
 }
-
-export { login, register, updatePassword, recoverPassword, resetPassword }

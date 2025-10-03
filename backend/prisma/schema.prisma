@@ -20,7 +20,7 @@ model actividades {
 model fotos {
   IdFoto      Int       @id @default(autoincrement())
   IdHospedaje Int
-  Name        String    @db.VarChar(255)
+  Name        String    @db.VarChar(30)
   hospedaje   hospedaje @relation(fields: [IdHospedaje], references: [IdHospedaje], onUpdate: Restrict, map: "fotos_ibfk_1")
 
   @@index([IdHospedaje], map: "IdHospedaje")
@@ -42,13 +42,13 @@ model habitaciones {
 
 model hospedaje {
   IdHospedaje  Int            @id @default(autoincrement())
-  Titulo       String         @db.VarChar(150)
+  Titulo       String         @db.VarChar(30)
   Descripcion  String?        @db.Text
   Servicios    String         @db.VarChar(255)
   Estrellas    Int
   Telefono     String         @db.VarChar(20)
-  Ciudad       String         @db.VarChar(100)
-  Direccion    String         @db.VarChar(255)
+  Ciudad       String         @db.VarChar(50)
+  Direccion    String         @db.VarChar(100)
   Coordenadas  String         @db.Text
   Imagen       String?        @db.Text
   fotos        fotos[]
@@ -78,7 +78,7 @@ model pago {
 }
 
 model password_resets {
-  Email  String   @db.VarChar(255)
+  Email  String   @db.VarChar(30)
   Token  String   @id @db.VarChar(32)
   Expiry DateTime @db.DateTime(0)
 }
@@ -120,28 +120,37 @@ model reservas {
 
 model servicios_habitacion {
   IdServicio  Int     @id @default(autoincrement())
-  Nombre      String  @db.VarChar(255)
+  Nombre      String  @db.VarChar(20)
   Descripcion String? @db.Text
 }
 
 model servicios_hospedaje {
   IdServicio  Int     @id @default(autoincrement())
-  Nombre      String  @db.VarChar(255)
+  Nombre      String  @db.VarChar(20)
   Descripcion String? @db.Text
 }
 
 model usuario {
   IdUsuario Int         @id @default(autoincrement())
-  Nombre    String      @db.VarChar(100)
-  Apellido  String      @db.VarChar(100)
-  Email     String      @unique(map: "Email") @db.VarChar(150)
+  Nombre    String      @db.VarChar(20)
+  Apellido  String      @db.VarChar(20)
+  Email     String      @unique(map: "Email") @db.VarChar(30)
   Telefono  String?     @db.VarChar(20)
-  Password  String      @db.VarChar(255)
+  Password  String      @db.VarChar(30)
   Rol       usuario_Rol
   pago      pago[]
   resena    resena[]
   reservas  reservas[]
 }
+
+model suscripcionesNewsletter {
+  IdSubscripcion    Int      @id @default(autoincrement())
+  Email             String   @unique(map: "Email") @db.VarChar(30)
+  FechaSuscripcion  DateTime @default(now())
+
+  @@map("suscripciones_newsletter") // nombre real de la tabla en la base de datos
+}
+
 
 enum habitaciones_Tipo {
   individual
