@@ -76,4 +76,17 @@ const validatorRecoverPassword = [
     (req: Request, res: Response, next: NextFunction) => validateResults(req, res, next)
 ]
 
-export { validatorLogin, validatorRegister, validatorUpdatePassword, validatorRecoverPassword };
+const validatorResetPassword = [
+  check("password")
+    .exists().withMessage("La contraseña es requerida")
+    .notEmpty().withMessage("La contraseña no puede estar vacía")
+    .isLength({ min: 6, max: 20 }).withMessage("La contraseña debe tener entre 6 y 20 caracteres"),
+    
+  check("token")
+    .exists().withMessage("El token es requerido")
+    .notEmpty().withMessage("El token no puede estar vacío"),
+
+    (req: Request, res: Response, next: NextFunction) => validateResults(req, res, next)
+]
+
+export { validatorLogin, validatorRegister, validatorUpdatePassword, validatorRecoverPassword, validatorResetPassword };

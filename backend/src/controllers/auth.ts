@@ -177,13 +177,52 @@ async function recoverPassword(req: Request, res: Response): Promise<void> {
     res.status(200).send({ message: "Correo de recuperación enviado" });
 
   }catch(error){
-    console.log(error);
     handleHttpError(res, "Error al intentar recuperar el password", 500)
   }
 }
 
 async function resetPassword(req: Request, res: Response): Promise<void> {
-  res.send("Paso 2 de recuperación");
+  try {
+    const data = matchedData(req);
+
+    // Buscar token
+    const resetEntry = await prisma.password_resets.findUnique({
+      where: { Token: data.token },
+    });
+
+    if (!resetEntry || resetEntry.Expiry < new Date()) {
+      handleHttpError(res, "Token inválido o expirado", 400)
+      return;
+    }
+
+    // Buscar usuario por email
+    const user = await prisma.usuario.findUnique({
+      where: { Email: resetEntry.Email },
+    });
+
+    if (!user) {
+      handleHttpError(res, "Usuario no encontrado", 400)
+      return;
+    }
+
+    // Hashear contraseña nueva
+    const hashedPassword = await encrypt(data.password);
+
+    // Actualizar usuario
+    await prisma.usuario.update({
+      where: { Email: resetEntry.Email },
+      data: { Password: hashedPassword },
+    });
+
+    // Eliminar token usado
+    await prisma.password_resets.delete({
+      where: { Token: data.token },
+    });
+
+    res.status(200).send({ message: "Contraseña actualizada correctamente" });
+  } catch (error) {
+    handleHttpError(res, "Error al intentar restablecer el password", 500)
+  }
 }
 
 export { login, register, updatePassword, recoverPassword, resetPassword }
