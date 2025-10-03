@@ -110,7 +110,16 @@ export async function getHospedaje(req: Request, res: Response) {
 
 export async function getHospedajesDestacados(req: Request, res: Response) {
     try{
+      const hospedajes = await prisma.hospedaje.findMany({
+        where: { destacado: true }
+      });
+  
+      if (!hospedajes) {
+        handleHttpError(res, "No hay hospedajes destacados", 400)
+        return;
+      }
 
+      return res.status(200).json(hospedajes);
     }catch(error){
         handleHttpError(res, "Error al obtener hospedajes", 500);
         return;

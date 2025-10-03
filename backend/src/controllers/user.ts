@@ -91,7 +91,6 @@ export async function subscribeEmail(req: Request, res: Response) {
 
     res.status(201).json({" message": "Suscripto correctamente.", "email": subscribed });
   }catch(error){
-    console.log(error);
     handleHttpError(res, "No se pudo suscribir al email", 500);
     return;
   }

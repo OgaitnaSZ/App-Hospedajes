@@ -4,7 +4,7 @@ import { getHospedajes, getHospedaje, getHospedajesDestacados, getHospedajesUsua
 import * as hospedajeValidators from "../validators/hospedaje";
 
 router.get("/hospedajes", hospedajeValidators.validatorHospedajesFiltro, getHospedajes);
-router.get("/:id", hospedajeValidators.validatorHospedaje, getHospedaje);
+router.get("/hospedaje/:id", hospedajeValidators.validatorHospedaje, getHospedaje);
 router.get("/destacados",  getHospedajesDestacados);
 router.get("/usuarios/:id/hospedajes",  getHospedajesUsuario);
 
