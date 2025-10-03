@@ -15,7 +15,7 @@ export async function login(req: Request, res: Response): Promise<void> {
     const dataLogin = matchedData(req);
 
     const existingUser = await prisma.usuario.findUnique({
-      where: { Email: dataLogin.email }
+      where: { email: dataLogin.email }
     });
     
     if(!existingUser){
@@ -23,7 +23,7 @@ export async function login(req: Request, res: Response): Promise<void> {
         return
     }
     
-    const hashPassword = existingUser.Password;
+    const hashPassword = existingUser.password;
     const check = await compare(dataLogin.password, hashPassword);
     if(!check){
         handleHttpError(res, "PASSWORD INVALIDO", 400)
@@ -31,7 +31,7 @@ export async function login(req: Request, res: Response): Promise<void> {
     }
 
     const token = await tokenSign(existingUser);
-    const { Password, ...userWithoutPassword } = existingUser; // Eliminar password para la respuesta
+    const { password, ...userWithoutPassword } = existingUser; // Eliminar password para la respuesta
     
     const data = {
       token,
@@ -51,7 +51,7 @@ export async function register(req: Request, res: Response): Promise<void> {
     const dataRegister = matchedData(req);
 
     const existingUser = await prisma.usuario.findUnique({
-      where: { Email: dataRegister.email }
+      where: { email: dataRegister.email }
     });
 
     if (existingUser) {
@@ -63,17 +63,17 @@ export async function register(req: Request, res: Response): Promise<void> {
 
     const dataUser = await prisma.usuario.create({ 
       data: { 
-        Nombre: dataRegister.nombre,
-        Apellido: dataRegister.apellido, 
-        Email: dataRegister.email,
-        Telefono: dataRegister.telefono,
-        Password: hashedPassword,
-        Rol: 'huesped' 
+        nombre: dataRegister.nombre,
+        apellido: dataRegister.apellido, 
+        email: dataRegister.email,
+        telefono: dataRegister.telefono,
+        password: hashedPassword,
+        rol: 'huesped' 
       } 
     });
 
     const token = await tokenSign(dataUser);
-    const { Password, ...userWithoutPassword } = dataUser; // Eliminar password para la respuesta
+    const { password, ...userWithoutPassword } = dataUser; // Eliminar password para la respuesta
 
     const data = {
       token,
@@ -93,7 +93,7 @@ export async function updatePassword(req: Request, res: Response): Promise<void>
     const dataPassword = matchedData(req);
 
     const existingUser = await prisma.usuario.findUnique({
-      where: { IdUsuario: dataPassword.idUsuario }
+      where: { idUsuario: dataPassword.idUsuario }
     });
     
     if(!existingUser){
@@ -101,7 +101,7 @@ export async function updatePassword(req: Request, res: Response): Promise<void>
         return
     }
 
-    const hashPassword = existingUser.Password;
+    const hashPassword = existingUser.password;
     const check = await compare(dataPassword.password, hashPassword);
     if(!check){
         handleHttpError(res, "PASSWORD INVALIDO", 400)
@@ -111,11 +111,11 @@ export async function updatePassword(req: Request, res: Response): Promise<void>
     const hashedNewPassword = await encrypt(dataPassword.newPassword);
 
     const updatedUser = await prisma.usuario.update({
-      where: {IdUsuario: Number(dataPassword.idUsuario)},
-      data: { Password: hashedNewPassword }
+      where: {idUsuario: dataPassword.idUsuario},
+      data: { password: hashedNewPassword }
     });
 
-    const { Password, ...userWithoutPassword } = updatedUser; // Eliminar password para la respuesta
+    const { password, ...userWithoutPassword } = updatedUser; // Eliminar password para la respuesta
 
     res.status(200).send({updatedUser: userWithoutPassword});
   }catch(error){
@@ -129,7 +129,7 @@ export async function recoverPassword(req: Request, res: Response): Promise<void
     const emailUser = matchedData(req);
 
     const existingUser = await prisma.usuario.findUnique({
-      where: { Email: emailUser.email }
+      where: { email: emailUser.email }
     });
 
     if (!existingUser) {
@@ -139,7 +139,7 @@ export async function recoverPassword(req: Request, res: Response): Promise<void
 
     // Eliminar tokens viejos de la DB
     await prisma.password_resets.deleteMany({
-      where: { Email: emailUser.email }
+      where: { email: emailUser.email }
     });
 
     // Generar nuevo token que expira en una hora
@@ -149,9 +149,9 @@ export async function recoverPassword(req: Request, res: Response): Promise<void
     // Guardar token en la db
     const reset = await prisma.password_resets.create({
       data: {
-        Email: emailUser.email,
-        Token: token,
-        Expiry: expiry,
+        email: emailUser.email,
+        token: token,
+        expiry: expiry,
       },
     });
 
@@ -191,17 +191,17 @@ export async function resetPassword(req: Request, res: Response): Promise<void> 
 
     // Buscar token
     const resetEntry = await prisma.password_resets.findUnique({
-      where: { Token: data.token },
+      where: { token: data.token },
     });
 
-    if (!resetEntry || resetEntry.Expiry < new Date()) {
+    if (!resetEntry || resetEntry.expiry < new Date()) {
       handleHttpError(res, "Token inválido o expirado", 400)
       return;
     }
 
     // Buscar usuario por email
     const user = await prisma.usuario.findUnique({
-      where: { Email: resetEntry.Email },
+      where: { email: resetEntry.email },
     });
 
     if (!user) {
@@ -214,13 +214,13 @@ export async function resetPassword(req: Request, res: Response): Promise<void> 
 
     // Actualizar usuario
     await prisma.usuario.update({
-      where: { Email: resetEntry.Email },
-      data: { Password: hashedPassword },
+      where: { email: resetEntry.email },
+      data: { password: hashedPassword },
     });
 
     // Eliminar token usado
     await prisma.password_resets.delete({
-      where: { Token: data.token },
+      where: { token: data.token },
     });
 
     res.status(200).send({ message: "Contraseña actualizada correctamente" });

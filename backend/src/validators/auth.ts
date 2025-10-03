@@ -12,7 +12,7 @@ export const validatorLogin = [
   check("password")
     .exists().withMessage("Password requerido")
     .notEmpty().withMessage("Password no puede estar vacío")
-    .isLength({ min: 6, max: 20 }).withMessage("Password debe tener entre 6 y 20 caracteres"),
+    .isLength({ min: 5, max: 20 }).withMessage("Password debe tener entre 5 y 20 caracteres"),
 
   (req: Request, res: Response, next: NextFunction) => validateResults(req, res, next)
 ];
@@ -43,7 +43,7 @@ export const validatorRegister = [
   check("password")
     .exists().withMessage("La contraseña es requerida")
     .notEmpty().withMessage("La contraseña no puede estar vacía")
-    .isLength({ min: 6, max: 20 }).withMessage("La contraseña debe tener entre 6 y 20 caracteres"),
+    .isLength({ min: 5, max: 20 }).withMessage("La contraseña debe tener entre 5 y 20 caracteres"),
 
   (req: Request, res: Response, next: NextFunction) => validateResults(req, res, next)
 ];
@@ -56,12 +56,12 @@ export const validatorUpdatePassword = [
   check("password")
     .exists().withMessage("La contraseña es requerida")
     .notEmpty().withMessage("La contraseña no puede estar vacía")
-    .isLength({ min: 6, max: 20 }).withMessage("La contraseña debe tener entre 6 y 20 caracteres"),
+    .isLength({ min: 5, max: 20 }).withMessage("La contraseña debe tener entre 5 y 20 caracteres"),
 
   check("newPassword")
     .exists().withMessage("La nueva contraseña es requerida")
     .notEmpty().withMessage("La nueva contraseña no puede estar vacía")
-    .isLength({ min: 6, max: 20 }).withMessage("La nueva contraseña debe tener entre 6 y 20 caracteres"),
+    .isLength({ min: 5, max: 20 }).withMessage("La nueva contraseña debe tener entre 5 y 20 caracteres"),
 
   (req: Request, res: Response, next: NextFunction) => validateResults(req, res, next)
 ]
@@ -80,7 +80,7 @@ export const validatorResetPassword = [
   check("password")
     .exists().withMessage("La contraseña es requerida")
     .notEmpty().withMessage("La contraseña no puede estar vacía")
-    .isLength({ min: 6, max: 20 }).withMessage("La contraseña debe tener entre 6 y 20 caracteres"),
+    .isLength({ min: 5, max: 20 }).withMessage("La contraseña debe tener entre 5 y 20 caracteres"),
     
   check("token")
     .exists().withMessage("El token es requerido")

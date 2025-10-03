@@ -24,11 +24,11 @@ export async function getHospedajes(req: Request, res: Response) {
                   ? {
                       reservas: {
                         none: {
-                          Estado: "Aprobado",
+                          estado: "Aprobado",
                           OR: [
                             {
-                              FechaInicio: { lte: new Date(String(FechaFin)) },
-                              FechaFin: { gte: new Date(String(FechaInicio)) },
+                              fechaInicio: { lte: new Date(String(FechaFin)) },
+                              fechaFin: { gte: new Date(String(FechaInicio)) },
                             },
                           ],
                         },
@@ -46,11 +46,11 @@ export async function getHospedajes(req: Request, res: Response) {
                   ? {
                       reservas: {
                         none: {
-                          Estado: "Aprobado",
+                          estado: "Aprobado",
                           OR: [
                             {
-                              FechaInicio: { lte: new Date(String(FechaFin)) },
-                              FechaFin: { gte: new Date(String(FechaInicio)) },
+                              fechaInicio: { lte: new Date(String(FechaFin)) },
+                              fechaFin: { gte: new Date(String(FechaInicio)) },
                             },
                           ],
                         },
@@ -59,22 +59,21 @@ export async function getHospedajes(req: Request, res: Response) {
                   : {}),
               },
               select: {
-                IdHabitacion: true,
-                Capacidad: true,
-                Precio: true,
+                idHabitacion: true,
+                capacidad: true,
+                precio: true,
               },
             },
           },
         });
-
     
         if (!hospedajes.length) {
           return res.status(404).json({ message: "No hay hospedajes disponibles." });
         }
     
         const result = hospedajes.map((h) => {
-          const capacidades = h.habitaciones.map((hab) => hab.Capacidad);
-          const precios = h.habitaciones.map((hab) => hab.Precio.toNumber());
+          const capacidades = h.habitaciones.map((hab) => hab.capacidad);
+          const precios = h.habitaciones.map((hab) => hab.precio.toNumber());
           return {
             ...h,
             Capacidad: Math.max(...capacidades),

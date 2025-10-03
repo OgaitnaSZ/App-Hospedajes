@@ -14,8 +14,8 @@ const tokenSign = async (usuario: usuario)=>{
 
     return await jwt.sign(
         {
-            idUsuario: usuario.IdUsuario,
-            nombre: usuario.Nombre
+            idUsuario: usuario.idUsuario,
+            nombre: usuario.nombre
         },
         JWT_SECRET,
         {

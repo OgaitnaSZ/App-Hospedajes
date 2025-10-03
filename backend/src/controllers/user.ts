@@ -9,18 +9,18 @@ export async function getData(req: Request, res: Response) {
   try {
     const idUsuario = req.query.idUsuario;
 
-    if (!idUsuario || isNaN(Number(idUsuario))) {
+    if (!idUsuario) {
         handleHttpError(res, "ID de usuario no válido", 400);
         return;
     }
 
     const existingUser = await prisma.usuario.findUnique({
-      where: { IdUsuario: Number(idUsuario) },
+      where: { idUsuario: String(idUsuario) },
       select: {
-        Nombre: true,
-        Apellido: true,
-        Email: true,
-        Telefono: true
+        nombre: true,
+        apellido: true,
+        email: true,
+        telefono: true
       },
     });
 
@@ -42,18 +42,18 @@ export async function updateData(req: Request, res: Response) {
     const dataUser = matchedData(req);
 
     const updatedUser = await prisma.usuario.update({
-      where: { IdUsuario: Number(dataUser.idUsuario) },
+      where: { idUsuario: String(dataUser.idUsuario) },
       data: { 
-        Nombre: dataUser.nombre,
-        Apellido: dataUser.apellido,
-        Email: dataUser.email,
-        Telefono: dataUser.telefono
+        nombre: dataUser.nombre,
+        apellido: dataUser.apellido,
+        email: dataUser.email,
+        telefono: dataUser.telefono
       },
       select: {
-        Nombre: true,
-        Apellido: true,
-        Email: true,
-        Telefono: true
+        nombre: true,
+        apellido: true,
+        email: true,
+        telefono: true
       }
     });
 
@@ -75,7 +75,7 @@ export async function subscribeEmail(req: Request, res: Response) {
     const dataUser = matchedData(req);
 
     const existingUser = await prisma.suscripcionesNewsletter.findUnique({
-      where: { Email: dataUser.email }
+      where: { email: dataUser.email }
     });
 
     if (existingUser) {
@@ -85,7 +85,7 @@ export async function subscribeEmail(req: Request, res: Response) {
 
     const subscribed = await prisma.suscripcionesNewsletter.create({
       data: {
-        Email: dataUser.email,
+        email: dataUser.email,
       },
     });
 
