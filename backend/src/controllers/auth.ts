@@ -84,7 +84,39 @@ async function register(req: Request, res: Response): Promise<void> {
 
 
 async function updatePassword(req: Request, res: Response): Promise<void> {
-  res.send("Contraseña actualizada");
+  try{
+    const dataPassword = matchedData(req);
+
+    const existingUser = await prisma.usuario.findUnique({
+      where: { IdUsuario: dataPassword.idUsuario }
+    });
+    
+    if(!existingUser){
+        handleHttpError(res, "USUARIO NO EXISTE", 404)
+        return
+    }
+
+    const hashPassword = existingUser.Password;
+    const check = await compare(dataPassword.password, hashPassword);
+    if(!check){
+        handleHttpError(res, "PASSWORD INVALIDO", 400)
+        return
+    }
+
+    const hashedNewPassword = await encrypt(dataPassword.newPassword);
+
+    const updatedUser = await prisma.usuario.update({
+      where: {IdUsuario: Number(dataPassword.idUsuario)},
+      data: { Password: hashedNewPassword }
+    });
+
+    const { Password, ...userWithoutPassword } = updatedUser; // Eliminar password para la respuesta
+
+    res.status(200).send({updatedUser: userWithoutPassword});
+  }catch(error){
+    console.log(error);
+    handleHttpError(res, "Error al actualizar password", 500)
+  }
 }
 
 async function recoverPasswordStep1(req: Request, res: Response): Promise<void> {
