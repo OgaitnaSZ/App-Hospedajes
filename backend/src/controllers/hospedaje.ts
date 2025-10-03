@@ -83,7 +83,6 @@ export async function getHospedajes(req: Request, res: Response) {
     
         return res.status(200).json(result);
     }catch(error){
-        console.log(error);
         handleHttpError(res, "Error al obtener hospedajes", 500);
         return;
     }
@@ -91,13 +90,37 @@ export async function getHospedajes(req: Request, res: Response) {
 }
 
 export async function getHospedaje(req: Request, res: Response) {
-    
+    try{
+      const hospedaje = await prisma.hospedaje.findUnique({
+        where: { idHospedaje: req.params.id }
+      });
+  
+      if (!hospedaje) {
+        handleHttpError(res, "No se encuentra el hospedaje", 400)
+        return;
+      }
+          
+      res.status(200).json(hospedaje);
+    }catch(error){
+        handleHttpError(res, "Error al obtener hospedajes", 500);
+        return;
+    }
 }
 
 export async function getHospedajesDestacados(req: Request, res: Response) {
-    
+    try{
+
+    }catch(error){
+        handleHttpError(res, "Error al obtener hospedajes", 500);
+        return;
+    }
 }
 
 export async function getHospedajesUsuario(req: Request, res: Response) {
-    
+    try{
+
+    }catch(error){
+        handleHttpError(res, "Error al obtener hospedajes", 500);
+        return;
+    }
 }
