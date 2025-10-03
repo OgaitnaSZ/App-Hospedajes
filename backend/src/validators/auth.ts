@@ -66,4 +66,14 @@ const validatorUpdatePassword = [
   (req: Request, res: Response, next: NextFunction) => validateResults(req, res, next)
 ]
 
-export { validatorLogin, validatorRegister, validatorUpdatePassword };
+const validatorRecoverPassword = [
+  check("email")
+    .exists().withMessage("El email es requerido")
+    .notEmpty().withMessage("El email no puede estar vacío")
+    .isEmail().withMessage("El email no es válido")
+    .isLength({ max: 30 }).withMessage("El email debe tener como máximo 30 caracteres"),
+
+    (req: Request, res: Response, next: NextFunction) => validateResults(req, res, next)
+]
+
+export { validatorLogin, validatorRegister, validatorUpdatePassword, validatorRecoverPassword };

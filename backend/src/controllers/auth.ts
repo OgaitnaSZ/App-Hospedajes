@@ -1,9 +1,12 @@
 import { Request, Response } from "express";
 import { PrismaClient } from '../generated/prisma';
+import crypto from "crypto";
+import nodemailer from "nodemailer";
 import { matchedData } from 'express-validator';
 import { compare, encrypt } from "../utils/handlePassword";
 import { tokenSign } from "../utils/handlerJwt";
 import { handleHttpError } from "../utils/handleError";
+
 
 const prisma = new PrismaClient()
 
@@ -114,17 +117,73 @@ async function updatePassword(req: Request, res: Response): Promise<void> {
 
     res.status(200).send({updatedUser: userWithoutPassword});
   }catch(error){
-    console.log(error);
     handleHttpError(res, "Error al actualizar password", 500)
   }
 }
 
-async function recoverPasswordStep1(req: Request, res: Response): Promise<void> {
-  res.send("Paso 1 de recuperación");
+async function recoverPassword(req: Request, res: Response): Promise<void> {
+  try{
+    const emailUser = matchedData(req);
+
+    const existingUser = await prisma.usuario.findUnique({
+      where: { Email: emailUser.email }
+    });
+
+    if (!existingUser) {
+      res.status(200).send({ message: "Correo de recuperación enviado" }); // Para mas seguridad
+      return;
+    }
+
+    // Eliminar tokens viejos de la DB
+    await prisma.password_resets.deleteMany({
+      where: { Email: emailUser.email }
+    });
+
+    // Generar nuevo token que expira en una hora
+    const token = crypto.randomBytes(16).toString("hex"); 
+    const expiry = new Date(Date.now() + 60 * 60 * 1000);
+
+    // Guardar token en la db
+    const reset = await prisma.password_resets.create({
+      data: {
+        Email: emailUser.email,
+        Token: token,
+        Expiry: expiry,
+      },
+    });
+
+    // transporter con SMTP de tu proveedor
+    const transporter = nodemailer.createTransport({
+      host: "smtp.tu-proveedor.com",
+      port: 587,
+      secure: false, // true si usas 465
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
+      },
+    });
+
+    const resetLink = `${process.env.PUBLIC_URL}/reset-password?token=${token}`;
+
+    await transporter.sendMail({
+      from: '"Soporte" <no-reply@tu-dominio.com>',
+      to: emailUser.email,
+      subject: "Recuperación de contraseña",
+      text: `Haz clic en el siguiente enlace para restablecer tu contraseña: ${resetLink}`,
+      html: `<p>Haz clic en el enlace para restablecer tu contraseña:</p>
+             <a href="${resetLink}">${resetLink}</a>`,
+    });
+
+    res.status(200).send({ message: "Correo de recuperación enviado" });
+
+  }catch(error){
+    console.log(error);
+    handleHttpError(res, "Error al intentar recuperar el password", 500)
+  }
 }
 
-async function recoverPasswordStep2(req: Request, res: Response): Promise<void> {
+async function resetPassword(req: Request, res: Response): Promise<void> {
   res.send("Paso 2 de recuperación");
 }
 
-export { login, register, updatePassword, recoverPasswordStep1, recoverPasswordStep2 }
+export { login, register, updatePassword, recoverPassword, resetPassword }

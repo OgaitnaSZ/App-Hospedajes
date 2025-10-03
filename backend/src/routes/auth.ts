@@ -1,12 +1,12 @@
 import express from "express";
 const router = express.Router();
-import { login , register, updatePassword, recoverPasswordStep1, recoverPasswordStep2} from "../controllers/auth";
-import { validatorLogin, validatorRegister, validatorUpdatePassword } from "../validators/auth";
+import { login , register, updatePassword, recoverPassword, resetPassword} from "../controllers/auth";
+import { validatorLogin, validatorRegister, validatorUpdatePassword, validatorRecoverPassword } from "../validators/auth";
 
 router.post("/login", validatorLogin, login);
 router.post("/register", validatorRegister, register);
 router.post("/update-password", validatorUpdatePassword, updatePassword);
-router.post("/recover-password-1", recoverPasswordStep1);
-router.post("/recover-password-2", recoverPasswordStep2);
+router.post("/recover-password", validatorRecoverPassword, recoverPassword);
+router.post("/reset-password", resetPassword);
 
 export { router };
