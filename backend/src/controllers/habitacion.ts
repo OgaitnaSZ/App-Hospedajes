@@ -36,12 +36,11 @@ export async function getHabitaciones(req: Request, res: Response) {
           }
         });
 
-        if(habitaciones.length == 0){
-            return res.status(200).send("No se encontraron habitaciones disponibles con los filtros seleccionados.")
+        if(habitaciones.length > 0){
+          return res.status(200).json(habitaciones);
+        }else{
+          return res.status(200).send("No se encontraron habitaciones disponibles con los filtros seleccionados.")
         }
-    
-        return res.status(200).json(habitaciones);
-
     }catch(error){
         console.log(error);
         handleHttpError(res, "Error al obtener habitaciones", 500);

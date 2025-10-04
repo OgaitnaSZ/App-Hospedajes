@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import e, { Request, Response } from "express";
 import fs from 'fs';
 import path from 'path';
 import { PrismaClient } from '../generated/prisma'
@@ -6,6 +6,7 @@ import { matchedData } from "express-validator";
 import { handleHttpError } from "../utils/handleError";
 const prisma = new PrismaClient()
 
+// Hospedajes
 export async function agregarHospedaje(req: Request, res: Response) {
   try {
     const dataHospedaje = matchedData(req);
@@ -97,6 +98,27 @@ export async function eliminarHospedaje(req: Request, res: Response) {
   } catch(error){
     console.log(error);
     handleHttpError(res, "Error al intentar eliminar el hospedaje", 500);
+    return;
+  }
+}
+
+// Habitaciones
+export async function getHabitaciones(req: Request, res: Response) {
+  try {
+    const data = req.params;
+    const IdHospedaje = <string>data.id;
+
+    const habitaciones = await prisma.habitaciones.findMany({
+        where: { idHospedaje: IdHospedaje }
+    })
+
+    if(habitaciones.length > 0){
+      res.status(200).json(habitaciones);
+    }else{
+      return res.status(200).send("No se encontraron habitaciones para este hospedaje.")
+    }
+  } catch(error){
+    handleHttpError(res, "Error al obtener habitaciones", 500);
     return;
   }
 }
