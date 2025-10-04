@@ -22,7 +22,7 @@ model actividades {
 model fotos {
   idFoto      String    @id @default(dbgenerated("(uuid())")) @db.Char(36)
   idHospedaje String    @db.Char(36)
-  name        String    @db.VarChar(255)
+  path        String    @db.VarChar(255)
   created_at  DateTime  @default(now()) @db.Timestamp(0)
   updated_at  DateTime  @default(now()) @db.Timestamp(0)
   hospedaje   hospedaje @relation(fields: [idHospedaje], references: [idHospedaje], onUpdate: Restrict, map: "fotos_ibfk_1")
@@ -78,7 +78,6 @@ model pago {
   telefono   String   @db.Text
   monto      Decimal  @db.Decimal(10, 2)
   metodoPago String   @db.VarChar(50)
-  fechaPago  DateTime @db.Date
   created_at DateTime @default(now()) @db.Timestamp(0)
   updated_at DateTime @default(now()) @db.Timestamp(0)
   reservas   reservas @relation(fields: [idReserva], references: [idReserva], onUpdate: Restrict, map: "pago_ibfk_1")
@@ -103,7 +102,6 @@ model resena {
   idHabitacion String    @db.Char(36)
   calificacion Int
   comentario   String?   @db.Text
-  fecha        DateTime  @db.Date
   created_at   DateTime  @default(now()) @db.Timestamp(0)
   updated_at   DateTime  @default(now()) @db.Timestamp(0)
   usuario      usuario   @relation(fields: [idUsuario], references: [idUsuario], onUpdate: Restrict, map: "resena_ibfk_1")
@@ -136,7 +134,7 @@ model reservas {
 }
 
 model servicios_habitacion {
-  idServicio  String   @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  idServicio  Int      @id @default(autoincrement())
   nombre      String   @db.VarChar(255)
   descripcion String?  @db.Text
   created_at  DateTime @default(now()) @db.Timestamp(0)
@@ -144,7 +142,7 @@ model servicios_habitacion {
 }
 
 model servicios_hospedaje {
-  idServicio  String   @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  idServicio  Int      @id @default(autoincrement())
   nombre      String   @db.VarChar(255)
   descripcion String?  @db.Text
   created_at  DateTime @default(now()) @db.Timestamp(0)
@@ -167,11 +165,10 @@ model usuario {
 }
 
 model suscripcionesNewsletter {
-  idSubscripcion   String   @id @default(dbgenerated("(uuid())")) @db.Char(36)
-  email            String   @unique(map: "email") @db.VarChar(30)
-  fechaSuscripcion DateTime @default(now()) @db.Date
-  created_at       DateTime @default(now()) @db.Timestamp(0)
-  updated_at       DateTime @default(now()) @db.Timestamp(0)
+  idSubscripcion String   @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  email          String   @unique(map: "email") @db.VarChar(30)
+  created_at     DateTime @default(now()) @db.Timestamp(0)
+  updated_at     DateTime @default(now()) @db.Timestamp(0)
 
   @@map("suscripciones_newsletter")
 }
