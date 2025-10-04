@@ -94,6 +94,70 @@ export const validatorHospedajeUpdate = [
   (req: Request, res: Response, next: NextFunction) => validateResults(req, res, next)
 ];
 
+export const validatorHabitacionNew = [
+    check("IdHospedaje")
+    .exists().withMessage("El campo es obligatorio")
+    .notEmpty().withMessage("El campo no puede estar vacío"),
+
+    check("Numero")
+    .exists().withMessage("El campo es obligatorio")
+    .notEmpty().withMessage("El campo no puede estar vacío"),
+
+    check("Tipo")
+    .exists().withMessage("El campo es obligatorio")
+    .notEmpty().withMessage("El campo no puede estar vacío"),
+
+    check("Precio")
+    .exists().withMessage("El campo es obligatorio")
+    .notEmpty().withMessage("El campo no puede estar vacío")
+    .isDecimal().withMessage("El campo debe ser un decimal"),
+
+    check("Capacidad")
+    .exists().withMessage("El campo es obligatorio")
+    .notEmpty().withMessage("El campo no puede estar vacío")
+    .isNumeric(),
+
+    check("Servicios")
+    .exists().withMessage("El campo es obligatorio")
+    .notEmpty().withMessage("El campo no puede estar vacío"),
+
+  (req: Request, res: Response, next: NextFunction) => validateResults(req, res, next)
+];
+
+export const validatorHabitacionUpdate = [
+    check("IdHabitacion")
+    .exists().withMessage("El campo es obligatorio")
+    .notEmpty().withMessage("El campo no puede estar vacío"),
+
+    check("IdHospedaje")
+    .exists().withMessage("El campo es obligatorio")
+    .notEmpty().withMessage("El campo no puede estar vacío"),
+
+    check("Numero")
+    .exists().withMessage("El campo es obligatorio")
+    .notEmpty().withMessage("El campo no puede estar vacío"),
+
+    check("Tipo")
+    .exists().withMessage("El campo es obligatorio")
+    .notEmpty().withMessage("El campo no puede estar vacío"),
+
+    check("Precio")
+    .exists().withMessage("El campo es obligatorio")
+    .notEmpty().withMessage("El campo no puede estar vacío")
+    .isDecimal().withMessage("El campo debe ser un decimal"),
+
+    check("Capacidad")
+    .exists().withMessage("El campo es obligatorio")
+    .notEmpty().withMessage("El campo no puede estar vacío")
+    .isNumeric(),
+
+    check("Servicios")
+    .exists().withMessage("El campo es obligatorio")
+    .notEmpty().withMessage("El campo no puede estar vacío"),
+
+  (req: Request, res: Response, next: NextFunction) => validateResults(req, res, next)
+];
+
 export const validatorId = [
     param("id")
     .exists().withMessage("El ID es obligatorio")

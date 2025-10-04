@@ -1,7 +1,7 @@
-import e, { Request, Response } from "express";
+import { Request, Response } from "express";
 import fs from 'fs';
 import path from 'path';
-import { PrismaClient } from '../generated/prisma'
+import { PrismaClient, habitaciones_tipo } from '../generated/prisma'
 import { matchedData } from "express-validator";
 import { handleHttpError } from "../utils/handleError";
 const prisma = new PrismaClient()
@@ -60,7 +60,7 @@ export async function modificarHospedaje(req: Request, res: Response) {
 
     res.status(200).json(updatedHospedaje);
   } catch(error){
-    handleHttpError(res, "Error al obtener datos del usuario", 500);
+    handleHttpError(res, "Error al obtener datos del hospedaje", 500);
     return;
   }
 }
@@ -119,6 +119,82 @@ export async function getHabitaciones(req: Request, res: Response) {
     }
   } catch(error){
     handleHttpError(res, "Error al obtener habitaciones", 500);
+    return;
+  }
+}
+
+export async function agregarHabitacion(req: Request, res: Response) {
+  try {
+    const dataHabitacion = matchedData(req);
+
+    const nuevaHabitacion = await prisma.habitaciones.create({ 
+      data: { 
+        idHospedaje: String(dataHabitacion.IdHospedaje),
+        numero: String(dataHabitacion.Numero), 
+        tipo: dataHabitacion.Tipo as habitaciones_tipo,
+        precio: Number(dataHabitacion.Precio),
+        capacidad: Number(dataHabitacion.Capacidad),
+        servicios: String(dataHabitacion.Servicios)
+      } 
+    });
+        
+    return res.status(201).json(nuevaHabitacion);
+  } catch(error){
+    handleHttpError(res, "Error al agregar habitacion", 500);
+    return;
+  }
+}
+
+export async function modificarHabitacion(req: Request, res: Response) {
+  try {
+    const dataHabitacion = matchedData(req);
+
+    const updatedHabitacion = await prisma.habitaciones.update({
+      where: { idHabitacion: String(dataHabitacion.IdHabitacion) },
+      data: { 
+        idHospedaje: String(dataHabitacion.IdHospedaje),
+        numero: String(dataHabitacion.Numero), 
+        tipo: dataHabitacion.tipo as habitaciones_tipo,
+        precio: Number(dataHabitacion.Precio),
+        capacidad: Number(dataHabitacion.Capacidad),
+        servicios: String(dataHabitacion.Servicios)
+      } 
+    });
+
+    if(!updatedHabitacion){
+      handleHttpError(res, "ID de habitacion incorrecto", 404)
+      return
+    }
+    res.status(200).json(updatedHabitacion);
+  } catch(error){
+    console.log(error);
+    handleHttpError(res, "Error al modificar la habitacion", 500);
+    return;
+  }
+}
+
+export async function eliminarHabitacion(req: Request, res: Response) {
+  try {
+    const data = req.params;
+    const id = <string>data.id;
+
+    const habitacion = await prisma.habitaciones.findUnique({
+        where: { idHabitacion: String(id)}
+    });
+
+    if (!habitacion) {
+      handleHttpError(res, "No se encuentra la habitacion", 400)
+      return;
+    }
+
+    // Eliminar habitacion
+    await prisma.habitaciones.delete({
+      where: { idHabitacion: String(id) }
+    });
+
+    res.json({ success: true, message: 'Habitacion eliminada exitosamente' });
+  } catch(error){
+    handleHttpError(res, "Error al intentar eliminar la habitacion", 500);
     return;
   }
 }
