@@ -125,12 +125,3 @@ export async function getHospedajesDestacados(req: Request, res: Response) {
         return;
     }
 }
-
-export async function getHospedajesUsuario(req: Request, res: Response) {
-    try{
-
-    }catch(error){
-        handleHttpError(res, "Error al obtener hospedajes", 500);
-        return;
-    }
-}

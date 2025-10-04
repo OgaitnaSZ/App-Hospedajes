@@ -2,20 +2,40 @@ import { check, param } from "express-validator";
 import { Request, Response, NextFunction } from "express";
 import { validateResults } from "../utils/handleValidator";
 
-export const validatorHospedajesFiltro = [
-    param("Ciudad")
+export const validatorHospedaje = [
+    check("titulo")
     .optional()
     .isLength({ max: 20 }).withMessage("El campo debe tener como máximo 20 caracteres"),
 
-    param("FechaInicio")
+    check("descripcion")
     .optional()
     .isLength({ max: 20 }).withMessage("El campo debe tener como máximo 20 caracteres"),
 
-    param("FechaFin")
+    check("servicios")
     .optional()
     .isLength({ max: 20 }).withMessage("El campo debe tener como máximo 20 caracteres"),
 
-    param("Capacidad")
+    check("estrellas")
+    .optional()
+    .isLength({ max: 20 }).withMessage("El campo debe tener como máximo 20 caracteres"),
+
+    check("telefono")
+    .optional()
+    .isLength({ max: 20 }).withMessage("El campo debe tener como máximo 20 caracteres"),
+
+    check("ciudad")
+    .optional()
+    .isLength({ max: 20 }).withMessage("El campo debe tener como máximo 20 caracteres"),
+
+    check("direccion")
+    .optional()
+    .isLength({ max: 20 }).withMessage("El campo debe tener como máximo 20 caracteres"),
+
+    check("coordenadas")
+    .optional()
+    .isLength({ max: 20 }).withMessage("El campo debe tener como máximo 20 caracteres"),
+
+    check("imagen")
     .optional()
     .isLength({ max: 20 }).withMessage("El campo debe tener como máximo 20 caracteres"),
 
