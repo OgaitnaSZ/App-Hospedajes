@@ -133,22 +133,6 @@ model reservas {
   @@index([idHabitacion], map: "reservas_ibfk_3")
 }
 
-model servicios_habitacion {
-  idServicio  Int      @id @default(autoincrement())
-  nombre      String   @db.VarChar(255)
-  descripcion String?  @db.Text
-  created_at  DateTime @default(now()) @db.Timestamp(0)
-  updated_at  DateTime @default(now()) @db.Timestamp(0)
-}
-
-model servicios_hospedaje {
-  idServicio  Int      @id @default(autoincrement())
-  nombre      String   @db.VarChar(255)
-  descripcion String?  @db.Text
-  created_at  DateTime @default(now()) @db.Timestamp(0)
-  updated_at  DateTime @default(now()) @db.Timestamp(0)
-}
-
 model usuario {
   idUsuario  String      @id @default(dbgenerated("(uuid())")) @db.Char(36)
   nombre     String      @db.VarChar(100)
@@ -173,6 +157,15 @@ model suscripcionesNewsletter {
   @@map("suscripciones_newsletter")
 }
 
+model servicios {
+  idServicio  Int            @id @default(autoincrement())
+  tipo        servicios_tipo
+  nombre      String         @db.VarChar(255)
+  descripcion String?        @db.Text
+  created_at  DateTime       @default(now()) @db.Timestamp(0)
+  updated_at  DateTime       @default(now()) @db.Timestamp(0)
+}
+
 enum habitaciones_tipo {
   individual
   doble
@@ -185,4 +178,9 @@ enum usuario_rol {
   cliente
   huesped
   EMPTY_ENUM_VALUE @map("")
+}
+
+enum servicios_tipo {
+  hospedaje
+  habitacion
 }
