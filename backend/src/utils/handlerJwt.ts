@@ -10,7 +10,7 @@ if (!JWT_SECRET) {
 *Pasar el objeto usuario
 * @param {*} usuario
 */
-const tokenSign = async (usuario: usuario)=>{
+export const tokenSign = async (usuario: usuario)=>{
 
     return await jwt.sign(
         {
@@ -29,13 +29,10 @@ const tokenSign = async (usuario: usuario)=>{
  * @param {*} tokenJwt
  * @returns
  */
-const verifyToken = async (tokenJwt: string): Promise<any> => {
+export const verifyToken = async (tokenJwt: string): Promise<any> => {
     try {
         return jwt.verify(tokenJwt, JWT_SECRET as string);
     } catch (error) {
         return null;
     }
 };
-
-
-export { tokenSign, verifyToken }

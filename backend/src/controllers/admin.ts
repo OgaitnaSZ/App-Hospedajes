@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import fs from 'fs';
 import path from 'path';
-import { PrismaClient, habitaciones_tipo } from '../generated/prisma'
+import { PrismaClient, habitaciones_tipo } from '../generated/prisma';
 import { matchedData } from "express-validator";
 import { handleHttpError } from "../utils/handleError";
 const prisma = new PrismaClient()

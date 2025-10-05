@@ -2,6 +2,12 @@ import express from "express";
 const router = express.Router();
 import { agregarHospedaje, modificarHospedaje, eliminarHospedaje, getHabitaciones, agregarHabitacion, modificarHabitacion, eliminarHabitacion} from "../controllers/admin";
 import * as adminValidators from "../validators/admin";
+import { authMiddleware } from "../middleware/session";
+import { checkRol } from "../middleware/rol";
+import { usuario_rol } from "../generated/prisma";
+
+router.use(authMiddleware); // Middleware para todas las rutas
+router.use(checkRol([usuario_rol.administrador]));
 
 // Hospedajes
 router.post("/hospedajes/agregar", adminValidators.validatorHospedajeNew, agregarHospedaje);

@@ -12,10 +12,8 @@ function removeExtension(fileName: string): string {
 function loadRouter(file: string): void {
   const name = removeExtension(file);
   if (name !== "index") {
-
-    import(`./${file}`).then((routerModule) => {
-        router.use(`/${name}`, routerModule.router);
-    });
+    const routerModule = require(`./${file}`);
+    router.use(`/${name}`, routerModule.router);
   }
 }
 

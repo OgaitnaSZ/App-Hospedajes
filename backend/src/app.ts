@@ -3,6 +3,7 @@ dotenv.config();
 import express from "express";
 import cors from "cors";
 import routes from "./routes";
+import './global-types';
 
 const app = express();
 app.use(cors());

@@ -5,7 +5,7 @@
     "outDir": "./dist",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "types": [],
+    "types": ["node", "express"],
     "sourceMap": true,
     "declaration": true,
     "declarationMap": true,
@@ -20,7 +20,8 @@
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
     "skipLibCheck": true,
+    "typeRoots": ["./node_modules/@types", "./src/types"],
   },
-  "include": ["./src/*"],
-  "exclude": ["node_modules"]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
 }
