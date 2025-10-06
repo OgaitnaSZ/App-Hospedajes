@@ -92,7 +92,34 @@ export async function obtenerReserva(req: Request, res: Response) {
 
 export async function obtenerReservasUsuario(req: Request, res: Response) {
     try{
+        const data = req.params;
+        const id = <string>data.id;
 
+        const reservasUsuario = await prisma.reservas.findMany({
+          where: {
+            idUsuario: id, 
+          },
+          include: {
+            hospedaje: {
+              select: {
+                titulo: true,
+                descripcion: true,
+                ciudad: true,
+                imagen: true,
+              },
+            },
+            habitaciones: {
+              select: {
+                numero: true,
+                tipo: true,
+                capacidad: true,
+                precio: true,
+              },
+            },
+          },
+        });
+
+        res.status(200).json(reservasUsuario);
     } catch(error){
         return handleHttpError(res, "Error al subir fotos", 500);
     }
