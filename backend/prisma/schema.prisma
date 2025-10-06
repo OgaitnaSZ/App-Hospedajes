@@ -67,21 +67,23 @@ model hospedaje {
 }
 
 model pago {
-  idPago     String   @id @default(dbgenerated("(uuid())")) @db.Char(36)
-  idReserva  String   @db.Char(36)
-  idUsuario  String   @db.Char(36)
-  nombre     String   @db.Text
-  apellido   String   @db.Text
-  dni        String   @db.Text
-  direccion  String   @db.Text
-  email      String   @db.Text
-  telefono   String   @db.Text
-  monto      Decimal  @db.Decimal(10, 2)
-  metodoPago String   @db.VarChar(50)
-  created_at DateTime @default(now()) @db.Timestamp(0)
-  updated_at DateTime @default(now()) @db.Timestamp(0)
-  reservas   reservas @relation(fields: [idReserva], references: [idReserva], onUpdate: Restrict, map: "pago_ibfk_1")
-  usuario    usuario  @relation(fields: [idUsuario], references: [idUsuario], onUpdate: Restrict, map: "pago_ibfk_2")
+  idPago        String            @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  idReserva     String            @db.Char(36)
+  idUsuario     String            @db.Char(36)
+  nombre        String            @db.Text
+  apellido      String            @db.Text
+  dni           String            @db.Text
+  direccion     String            @db.Text
+  email         String            @db.Text
+  telefono      String            @db.Text
+  monto         Decimal           @db.Decimal(10, 2)
+  idPreferencia String            @db.VarChar(64)
+  estado        pago_estado       @default(pendiente)
+  tipoReserva   pago_tipoReserva?
+  created_at    DateTime          @default(now()) @db.Timestamp(0)
+  updated_at    DateTime          @default(now()) @db.Timestamp(0)
+  reservas      reservas          @relation(fields: [idReserva], references: [idReserva], onUpdate: Restrict, map: "pago_ibfk_1")
+  usuario       usuario           @relation(fields: [idUsuario], references: [idUsuario], onUpdate: Restrict, map: "pago_ibfk_2")
 
   @@index([idReserva], map: "pago_ibfk_1")
   @@index([idUsuario], map: "pago_ibfk_2")
@@ -183,4 +185,15 @@ enum usuario_rol {
 enum servicios_tipo {
   hospedaje
   habitacion
+}
+
+enum pago_estado {
+  pendiente
+  aprobado
+  rechazado
+}
+
+enum pago_tipoReserva {
+  hospedaje
+  actividad
 }
