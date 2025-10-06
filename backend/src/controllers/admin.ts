@@ -178,15 +178,6 @@ export async function eliminarHabitacion(req: Request, res: Response) {
     const data = req.params;
     const id = <string>data.id;
 
-    const habitacion = await prisma.habitaciones.findUnique({
-        where: { idHabitacion: String(id)}
-    });
-
-    if (!habitacion) {
-      handleHttpError(res, "No se encuentra la habitacion", 400)
-      return;
-    }
-
     // Eliminar habitacion
     await prisma.habitaciones.delete({
       where: { idHabitacion: String(id) }

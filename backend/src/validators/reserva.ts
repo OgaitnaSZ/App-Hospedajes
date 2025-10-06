@@ -64,3 +64,11 @@ export const validatorReservaHospedaje = [
 
     (req: Request, res: Response, next: NextFunction) => validateResults(req, res, next)
 ]
+
+export const validatorId = [
+    param("id")
+    .exists()
+    .notEmpty(),
+
+    (req: Request, res: Response, next: NextFunction) => validateResults(req, res, next)
+]

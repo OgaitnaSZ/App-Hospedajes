@@ -51,6 +51,22 @@ export async function reservarHospedaje(req: Request, res: Response) {
 
 export async function cancelarReserva(req: Request, res: Response) {
     try{
+        const data = req.params;
+        const id = <string>data.id;
+
+        const reservaCancelada = await prisma.reservas.update({
+            where: { idReserva: String(id) },
+            data: { 
+                estado: 'Pendiente de Cancelacion',
+            }
+        });
+    
+        if(!reservaCancelada){
+            handleHttpError(res, "Reserva no encontrada", 404)
+            return
+        }
+    
+        res.status(200).json(reservaCancelada);
 
     } catch(error){
         return handleHttpError(res, "Error al subir fotos", 500);

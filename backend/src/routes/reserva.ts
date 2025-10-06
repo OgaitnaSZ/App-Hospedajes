@@ -6,7 +6,7 @@ import * as validator from "../validators/reserva";
 
 // Hospedajes
 router.post("/reservar-hospedaje", validator.validatorReservaHospedaje, reservarHospedaje);
-router.post("/cancelar-reserva", cancelarReserva);
+router.get("/cancelar-reserva/:id", validator.validatorId, cancelarReserva);
 router.get("/obtener-reserva", obtenerReserva);
 router.get("/obtener-reservas-por-usuario", obtenerReservasUsuario);
 router.get("/obtener-fechas-ocupadas", obtenerFechasOcupadas);
