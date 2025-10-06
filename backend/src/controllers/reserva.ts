@@ -69,15 +69,24 @@ export async function cancelarReserva(req: Request, res: Response) {
         res.status(200).json(reservaCancelada);
 
     } catch(error){
-        return handleHttpError(res, "Error al subir fotos", 500);
+        return handleHttpError(res, "Error al solicitar cancelacion", 500);
     }
 }
 
 export async function obtenerReserva(req: Request, res: Response) {
     try{
+        const data = req.params;
+        const id = <string>data.id;
 
+        const reserva = await prisma.reservas.findUnique({
+            where: { idReserva: String(id) }
+        });
+    
+        if (!reserva) return handleHttpError(res, "No se encuentra la reserva", 400)
+            
+        res.status(200).json(reserva);
     } catch(error){
-        return handleHttpError(res, "Error al subir fotos", 500);
+        return handleHttpError(res, "Error al obtener reserva", 500);
     }
 }
 
