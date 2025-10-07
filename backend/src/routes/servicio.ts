@@ -1,8 +1,8 @@
 import express from "express";
 const router = express.Router();
-import { getServicios } from "../controllers/servicio";
-import { validatorServicios } from "../validators/servicio";
+import * as servicio from "../controllers/servicio";
+import * as validator from "../validators/servicio";
 
-router.get("/", validatorServicios, getServicios);
+router.get("/", validator.validatorServicios, servicio.getServicios);
 
 export { router };

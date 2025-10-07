@@ -1,8 +1,8 @@
 import express from "express";
 const router = express.Router();
-import { getHabitaciones,} from "../controllers/habitacion";
-import * as habitacionValidators from "../validators/habitacion";
+import * as habitacion from "../controllers/habitacion";
+import * as validator from "../validators/habitacion";
 
-router.get("/hospedaje", habitacionValidators.validatorHabitaciones, getHabitaciones);
+router.get("/hospedaje", validator.validatorHabitaciones, habitacion.getHabitaciones);
 
 export { router };
