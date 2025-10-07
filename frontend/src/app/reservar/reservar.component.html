@@ -1,0 +1,77 @@
+<main>
+    <div class="container my-5">
+        <h1 class="text-center mb-4">Checkout</h1>
+        <div class="row">
+          <!-- Columna izquierda: Datos del Pago -->
+          <div class="col-md-6 mb-4">
+            <div class="card">
+              <div class="card-body">
+                <h4 class="mb-3">Datos del Pago</h4>
+                <form id="datosPagoForm">
+                  <div class="mb-3">
+                    <label for="nombre" class="form-label">Nombre</label>
+                    <input type="text" id="nombre" class="form-control" [(ngModel)]="detallesPago.Nombre" name="Nombre" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="apellido" class="form-label">Apellido</label>
+                    <input type="text" id="apellido" class="form-control" [(ngModel)]="detallesPago.Apellido" name="Apellido" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="dni" class="form-label">DNI</label>
+                    <input type="text" id="dni" class="form-control" [(ngModel)]="detallesPago.Dni" name="Dni" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="direccion" class="form-label">Dirección</label>
+                    <input type="text" id="direccion" class="form-control" [(ngModel)]="detallesPago.Direccion" name="Direccion" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" id="email" class="form-control" [(ngModel)]="detallesPago.Email" name="Email" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="Telefono" class="form-label">Telefono</label>
+                    <input type="tel" id="Telefono" class="form-control" [(ngModel)]="detallesPago.Telefono" name="Telefono" required>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+      
+          <!-- Columna derecha: Datos de la Reserva -->
+          <div class="col-md-6 mb-4">
+            <div class="card">
+              <div class="card-body">
+                <h4 class="mb-3">Detalles de la Reserva</h4>
+                <div *ngIf="parametros.TipoReserva == 'Hospedaje' else reservaActividad">
+                  <p>Alojamiento: <strong>{{[parametros.TituloHospedaje]}}</strong></p>
+                  <p>Habitacion: <strong>{{parametros.Habitacion}}</strong></p>
+                  <p>Fecha de Entrada: <strong>{{parametros.FechaInicio}}</strong></p>
+                  <p>Fecha de Salida: <strong>{{parametros.FechaFin}}</strong></p>
+                  <p>Cantidad de Personas: <strong>{{parametros.Personas}}</strong></p>
+                </div>
+                <ng-template #reservaActividad>
+                  <p>Actividad: <strong>{{[parametros.Titulo]}}</strong></p>
+                  <p>Precio por persona: <strong>$ {{[subtotal]}}</strong></p>
+                  <div class="mt-2">
+                    <label for="fecha" class="form-label">Fecha de Reserva:</label>
+                    <input type="date" class="form-control w-50" [min]="minDate" [(ngModel)]="parametros.Fecha" required>
+                  </div>
+                  <div class="mt-2">
+                    <label for="personas" class="form-label">Cantidad de Personas:</label>
+                    <input type="number" class="form-control w-50" max="10" min="1" [(ngModel)]="parametros.Personas" (change)="calcularTotal()" required>
+                  </div>
+                </ng-template>
+                <hr>
+                <p>Total: <strong>$ {{ parametros.Total }}</strong></p>
+              </div>
+            </div>
+            
+            <!-- Botón de pagar -->
+            <div class="text-center">
+                <button type="button" class="btn btn-primary w-100 mt-3" (click)="pagar()">Pagar con MercadoPago</button>
+            </div>
+          </div>
+        </div>
+      </div>
+        
+</main>

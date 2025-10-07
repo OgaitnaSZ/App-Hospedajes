@@ -1,0 +1,29 @@
+<main class="d-flex flex-column justify-content-center align-items-center">
+    <section class="col-11 col-md-2">
+        <form (ngSubmit)="onLogin()" class="mt-5">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" [(ngModel)]="email" name="email" placeholder="Email" required>
+            </div>
+            <div class="form-group mt-3">
+                <label for="email">Contraseña</label>
+                <input type="password" class="form-control" [(ngModel)]="pass" name="password" placeholder="Contraseña" required>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">Iniciar Sesión</button>
+        </form>
+        <p class="text-danger">{{ error }}</p>
+        
+        <!-- Modal para recuperar contraseña -->
+        <div *ngIf="recuperar == true">
+            <form (ngSubmit)="recuperarPassword()">
+                <div class="form-group">
+                    <label for="email">Escribe tu Email para recuperar la contraseña</label>
+                    <input type="email" [(ngModel)]="emailRec" name="email" class="form-control" placeholder="Email" required>
+                </div>
+                <button type="submit" class="btn btn-primary mt-3">Recuperar Contraseña</button>
+            </form>
+        </div>
+        <p>¿Olvidaste tu contraseña? <a [routerLink]="['/login']" [queryParams]="{recuperar: 'si'}" class="fw-bold">Recuperar contraseña</a></p>
+        <p>¿No tienes cuenta? <a routerLink="/registro" class="fw-bold">Crear Cuenta</a></p>
+    </section>
+</main>

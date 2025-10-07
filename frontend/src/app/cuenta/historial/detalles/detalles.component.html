@@ -1,0 +1,40 @@
+<div class="d-flex flex-column flex-md-row justify-content-between">
+  <div class="pb-2">
+      <h2 class="h3">Detalles de la reserva</h2>
+      <p>Estado: <span class="bg-warning col-2 text-center rounded m-0 p-1 text-light fw-bold">{{ reserva.Estado }}</span></p>
+      <p>Fecha de entrada: <span class="fw-bold">{{ reserva.FechaInicio | date:'dd/MM/yyyy' }}</span></p>
+      <p>Fecha de salida: <span class="fw-bold">{{ reserva.FechaFin | date:'dd/MM/yyyy' }}</span></p>
+      <p>Precio total: <span class="fw-bold">$ {{ reserva.PrecioTotal | number:'1.0-0' }}</span></p>
+      <button *ngIf="esCancelable(reserva.FechaInicio) && reserva.Estado =='Pendiente'" (click)="cancelarReserva(reserva.IdReserva)" class="btn btn-danger">Cancelar Reserva</button>
+  </div>
+  <div *ngIf="reserva.Estado === 'Concluido'" class="mb-2 ps-md-2">
+      <h3>Dinos tu reseña</h3>
+      <form (ngSubmit)="agregarResena(reserva.IdHospedaje)">
+          <div class="d-flex flex-column">
+              <label>Calificación</label>
+              <div class="star-rating">
+                <span
+                  *ngFor="let star of stars; let i = index"
+                  class="material-icons"
+                  [class.filled]="i < (nuevaResena.Calificacion)"
+                  (click)="setRating(i + 1)"
+                  (mouseover)="hoverRating(i + 1)"
+                >
+                  star
+                </span>
+              </div>
+            </div>
+            
+          <div class="form-group">
+              <label for="comentario">Comentario</label>
+              <textarea id="comentario" class="form-control" [(ngModel)]="nuevaResena.Comentario" name="comentario" required></textarea>
+          </div>
+          <button *ngIf="!existeResena" type="submit" class="btn btn-primary">
+              Enviar Reseña
+            </button>
+          <button *ngIf="existeResena" type="submit" class="btn btn-warning">
+            Actualizar Reseña
+          </button>
+      </form>
+  </div>
+</div>

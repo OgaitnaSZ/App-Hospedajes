@@ -1,0 +1,103 @@
+<main>
+  <div class="container">
+    <p style="font-size: 0.8em;">América del Sur > Argentina > Norte de Argentina > {{ destino }}</p>
+        <form class="row g-3 bg-light p-4 rounded shadow">
+          <div class="col-md-4">
+            <label for="filterDestino" class="form-label">Destino</label>
+            <select 
+              id="filterDestino" 
+              class="form-select" 
+              [(ngModel)]="destino" 
+              name="destino">
+              <option value="">Todos los destinos</option>
+              <option value="termas">Termas de Río Hondo (SDE)</option>
+              <option value="salta">Salta</option>
+              <option value="tucuman">Tucumán</option>
+              <option value="jujuy">Jujuy</option>
+            </select>
+          </div>
+      
+          <div class="col-md-2">
+            <label for="filterDesde" class="form-label">Desde</label>
+            <input 
+              type="date" 
+              id="filterDesde" 
+              class="form-control" 
+              min="{{fechaActual}}"
+              [(ngModel)]="desde" 
+              name="desde" 
+              [disabled]="cualquierFecha">
+            <div class="col-12">
+                <div class="form-check">
+                    <input 
+                    class="form-check-input" 
+                    type="checkbox" 
+                    id="filtercualquierFecha" 
+                    [(ngModel)]="cualquierFecha" 
+                    name="cualquierFecha" 
+                    (change)="onCualquierFechaChange()">
+                    <label class="form-check-label" for="filtercualquierFecha">
+                    Cualquier Fecha
+                    </label>
+                </div>
+              </div>
+          </div>
+      
+          <div class="col-md-2">
+            <label for="filterHasta" class="form-label">Hasta</label>
+            <input 
+              type="date" 
+              id="filterHasta" 
+              class="form-control" 
+              [(ngModel)]="hasta" 
+              name="hasta" 
+              [disabled]="cualquierFecha || !desde" 
+              [min]="desde">
+          </div>
+      
+          <div class="col-md-2">
+            <label for="filterPersonas" class="form-label">Personas</label>
+            <select id="filterPersonas" class="form-select" [(ngModel)]="personas" name="personas">
+              <option value="0">Cualquier cantidad</option>
+              <option value="1">1 Persona</option>
+              <option value="2">2 Personas</option>
+              <option value="3">3 Personas</option>
+              <option value="4">4 Personas</option>
+              <option value="5">5 Personas o más</option>
+            </select>
+          </div>
+      
+          <div class="col-md-2 d-flex align-items-end">
+            <button 
+              type="button" 
+              class="btn btn-info w-100" 
+              (click)="aplicarFiltros()">
+              Aplicar Filtros
+            </button>
+          </div>
+        </form>
+    </div>
+      
+    <section class="d-flex flex-column justify-content-center align-items-center mt-4" *ngIf="hayHospedajes else noHospedaje">        
+      <div class="d-flex flex-column flex-md-row col-12 col-md-8 mb-4" *ngFor="let hospedaje of hospedajes">
+        <figure class="col-12 col-md-4 h-100 me-2 mb-0">
+          <img [src]="'assets/uploads/hospedajes/' + hospedaje.Imagen" class="img-fluid w-100" alt="Hospedaje">
+        </figure>
+        <div class="col-12 col-md-6">
+          <div class="d-flex flex-row align-items-center flex-wrap m-0">
+            <h3>{{ hospedaje.Titulo }}</h3>
+            <span><i class="material-icons text-info align-bottom" *ngFor="let star of obtenerEstrellas(hospedaje.Estrellas)">star</i></span>
+          </div>
+          <p class="fw-bold text-info">{{hospedaje.Ciudad}}</p>
+          <p>{{ hospedaje.Descripcion | slice:0:130 }}</p>
+        </div>
+        <div class="col-12 col-md-2 d-flex flex-column align-items-end justify-content-end">
+          <p class="fw-bold mb-0">Desde: ${{ hospedaje.PrecioMinimo }}</p>
+          <a [routerLink]="['/hospedaje', hospedaje.IdHospedaje]" class="btn btn-primary">Ver Disponibilidad</a>
+        </div>
+      </div>
+    </section>
+    <ng-template #noHospedaje>
+      <h2 class="text-center">No hay hospedajes disponibles para los filtros seleccionados</h2>
+    </ng-template>
+</main>

@@ -1,0 +1,118 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+/* You can add global styles to this file, and also import other style files */
+.navbar-expand-lg .navbar-collapse{
+    justify-content: space-between;
+}
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;}
+
+main{padding-top: 8vh !important;}
+
+#abton{
+    width: 75px;
+    position: fixed;
+    bottom: 2%;
+    right: 2%;
+    border-radius: 1000px;
+    padding: 0.8em;
+    background-color: #25D366;
+    border:none;
+    box-shadow: 0px 0px 15px 0px rgba(37, 211, 102, 0.2);
+}
+#abton img{
+    width: 100%;
+}
+@media all and (max-width: 500px){
+    #abton{
+        bottom: 2%;
+        right: 2%;
+    }	
+}
+
+/* Bootstrap edits */
+.btn-info{
+    background-color: #7ED956;
+    color: #ffffff;
+    border-color: #7ED956;
+}
+.btn-info:hover{
+    border-color: #7ED956 !important;
+    background-color: #fff !important;
+}
+.btn-outline-info{
+    border-color: #7ED956 !important;
+}
+.btn-outline-info:hover{
+    background-color: #7ED956 !important;
+}
+.text-info{
+    color:#7ED956 !important;
+}
+.bg-info{
+    background-color: #7ED956 !important;
+}
+.btn-primary{
+    background-color: #6CADE7;
+    color: #ffffff;
+    border-color: #6CADE7;
+}
+.btn-primary:hover{
+    border-color: #6CADE7 !important;
+    color: #6CADE7 !important;
+    background-color: #fff !important;
+}
+.btn-outline-primary{
+    border-color: #6CADE7 !important;
+}
+.btn-outline-primary:hover{
+    background-color: #6CADE7 !important;
+}
+.text-primary{
+    color:#6CADE7 !important;
+}
+.bg-primary{
+    background-color: #6CADE7 !important;
+}
+
+
+/* Tipografias */
+h1{
+font-family: "Montserrat", sans-serif;
+}
+h2, h3, h4, h5, h6, .form-label{
+font-family: "Poppins", sans-serif;
+}
+p, a{
+font-family: "Open Sans", sans-serif;
+}
+
+/* Iconos Google */
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 1,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 24
+}
+
+.no-gutters {
+    margin-right: 0;
+    margin-left: 0;
+
+    > .row,
+    > [class*="row-"] {
+        padding-right: 0;
+        padding-left: 0;
+    }
+}
+/* Mantén el gutter horizontal en pantallas grandes */
+.row {
+    --bs-gutter-x: 1.5rem;
+  }
+  
+  /* Elimina el gutter horizontal en dispositivos móviles */
+  @media (max-width: 575.98px) {
+    .row {
+      --bs-gutter-x: 0;
+    }
+  }

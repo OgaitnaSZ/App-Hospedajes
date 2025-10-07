@@ -1,0 +1,94 @@
+/* Estilo base del menú lateral */
+.side-menu {
+  position: fixed;
+  top: 0;
+  left: -100%; /* Fuera de la vista inicialmente */
+  width: 250px;
+  height: 100%;
+  background-color: #f8f9fa;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  z-index: 1051;
+  transition: left 0.3s ease-in-out; /* Animación */
+}
+
+/* Clase para cuando el menú está activo */
+.side-menu.active {
+  left: 0; /* Desliza el menú hacia dentro */
+}
+
+.navbar.home-navbar.scrolled .abrir, .navbar.home-navbar.scrolled span{
+  color: #000 !important;
+}
+
+/* Opcional: Fondo oscuro para enfatizar el menú abierto */
+body.menu-open {
+  overflow: hidden; /* Evita el scroll cuando el menú está abierto */
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1050;
+  display: none; /* Oculta el fondo inicialmente */
+}
+
+.overlay.active {
+  display: block; /* Muestra el fondo cuando el menú está abierto */
+}
+
+/* Scroll */
+.nav-link {
+  color: #fff;
+}
+.navbar.scrolled {
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.navbar.scrolled .nav-link, .navbar.scrolled .btn {
+  color: #000 !important;
+}
+
+
+/* Estilo base para Home */
+.navbar.home-navbar {
+  background-color: transparent;
+}
+
+.navbar.home-navbar .nav-link,
+.navbar.home-navbar .btn,
+.navbar.home-navbar .abrir,
+.navbar.home-navbar span{
+  color: #fff !important; 
+}
+
+/* Cuando se scrollea en Home */
+.navbar.home-navbar.scrolled {
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar.home-navbar.scrolled .nav-link,
+.navbar.home-navbar.scrolled .btn {
+  color: #000 !important;
+}
+
+/* Estilo base para otras páginas */
+.navbar:not(.home-navbar) {
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar:not(.home-navbar) .nav-link,
+.navbar:not(.home-navbar) .btn {
+  color: #000 !important;
+}
+
+@media all and (max-width: 768px) {
+  span {
+    font-size: 2em;
+  }
+}

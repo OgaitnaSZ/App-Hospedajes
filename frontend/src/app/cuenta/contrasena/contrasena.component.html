@@ -1,0 +1,33 @@
+<div>
+    <h2>Cambiar Contraseña</h2>
+    <form (ngSubmit)="guardarDatos()" #passwordForm="ngForm">
+      <div class="form-group">
+        <label for="OldPassword">Contraseña Actual:</label>
+        <input class="form-control" id="OldPassword" type="password" [(ngModel)]="OldPassword" name="OldPassword" #oldPassword="ngModel" required>
+        <div *ngIf="oldPassword.invalid && oldPassword.touched" class="error">
+          La contraseña actual es requerida.
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <label for="NewPassword">Nueva Contraseña:</label>
+        <input class="form-control" id="NewPassword" type="password" [(ngModel)]="NewPassword" name="NewPassword" #newPassword="ngModel" required minlength="6">
+        <div *ngIf="newPassword.invalid && newPassword.touched" class="error">
+          La nueva contraseña debe tener al menos 6 caracteres.
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <label for="ConfirmPassword">Confirmar Nueva Contraseña:</label>
+        <input class="form-control" id="ConfirmPassword" type="password" [(ngModel)]="ConfirmPassword" name="ConfirmPassword" #confirmPassword="ngModel" required>
+      </div>
+  
+      <button type="submit" class="btn btn-primary" [disabled]="passwordForm.invalid || NewPassword !== ConfirmPassword">Cambiar Contraseña</button>
+    </form>
+    <div *ngIf="confirmPassword.invalid && confirmPassword.touched ||
+          (NewPassword !== ConfirmPassword && confirmPassword.touched)" 
+          class="text-danger">Las contraseñas no coinciden.
+    </div>
+    <p class="{{estilo}}">{{ mensajeError }}</p>
+  </div>
+  

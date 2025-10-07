@@ -1,0 +1,66 @@
+<footer class="d-flex flex-column bg-primary">
+    <div class="container d-flex flex-column flex-md-row justify-content-between align-items-md-center">
+        <div>
+            <p class="verde-oscuro fw-bold h5">Siguenos:</p>
+            <div class="d-flex flex-row">
+              <a href="https://www.facebook.com/profile.php?id=61567550991438" class="nav-link col-2"><img src="/assets/facebook-vamos-logo.png" class="img-fluid"></a>
+              <a href="https://www.instagram.com/vamos.agenciadeturismo" class="nav-link col-2 ms-2"><img src="/assets/instagram-vamos-logo.png" class="img-fluid"></a>
+            </div>
+        </div>
+        <figure class="col-4 col-md-2">
+            <img src="/assets/vamos-logo.png" alt="Logo" class="img-fluid">
+        </figure>
+        <div class="d-flex flex-column justify-content-center">
+            <p class="verde-oscuro fw-bold m-0 mt-3 h5">Llamanos:</p>
+            <a href="https://api.whatsapp.com/send?phone=543855889378" class="nav-link">+54 385 588-9378</a>
+            <p class="verde-oscuro fw-bold m-0 mt-3 h5">Reservas:</p>
+            <a href="mailto:vamos.agencia.tur&#64;gmail.com" class="nav-link">vamos.agencia.tur&#64;gmail.com</a>
+        </div>
+    </div>
+    <hr>
+    <div class="container d-flex flex-column flex-md-row justify-content-between">
+        <div>
+            <p class="verde-oscuro fw-bold h5">Destinos:</p>
+            <p>Termas de Río Hondo</p>
+            <p>Salta</p>
+            <p>Tucumán</p>
+            <p>Jujuy</p>
+        </div>
+        <div>
+            <p class="verde-oscuro fw-bold h5">Menu:</p>
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item">
+                  <a class="nav-link" routerLink="/">Inicio</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" routerLink="/hospedajes">Hospedajes</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" routerLink="/actividaes">Actividades</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" routerLink="/paquetes">Paquetes</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" routerLink="/blog">Blog</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" routerLink="/temporada">Temporada</a>
+                </li>
+              </ul>
+        </div>
+        <div>
+            <p class="verde-oscuro h3 fw-bold">Suscribete al Newsletter:</p>
+            <p>Recibe noticias, ofertas, etc.</p>
+            <form (submit)="subscribe()">
+                <input type="email" class="form-item" [(ngModel)]="email" name="email" required>
+                <button class="btn btn-info ms-2">Suscribirse</button>
+                <p class="text-success">{{ mensaje }}</p>
+            </form> 
+        </div>
+    </div>
+    <hr>
+    <div>
+        <p class="text-center">Todos los derechos reservados © 2025 - Vamos - Agencia de Turismo</p>
+    </div>
+</footer>

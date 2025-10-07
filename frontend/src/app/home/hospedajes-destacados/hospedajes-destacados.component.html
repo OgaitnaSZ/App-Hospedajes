@@ -1,0 +1,20 @@
+<h2 class="text-center mb-2">Hospedajes Destacados</h2>
+<div class="row">
+    <!-- Mostrar 3 en escritorio y 1 en móvil -->
+    <a [routerLink]="['/hospedaje', h.IdHospedaje]" class="col-12 col-md-4 mb-4 text-decoration-none" *ngFor="let h of hospedajes">
+      <div class="card">
+        <img src="assets/uploads/hospedajes/{{ h.Imagen }}" class="card-img-top" style="height: 28vh;" />
+        <div class="card-body">
+          <p class="bg-info text-center rounded text-light fw-bold m-0 p-1 col-3">Oferta</p>
+          <h5 class="card-title mb-0">{{ h.Titulo }}</h5>
+          <p class="figure-caption">{{h.Ciudad}}</p>
+          <p class="card-text">{{ h.Descripcion | slice:0:128 }}...</p>
+          <div class="d-flex justify-content-end align-items-baseline">
+            <p class="figure-caption me-2">Desde</p>
+            <p class="fw-bold h3"> ${{ h.PrecioMinimo | number:'1.0-0' }}</p>
+          </div>
+        </div>
+      </div>
+    </a>
+</div>
+  

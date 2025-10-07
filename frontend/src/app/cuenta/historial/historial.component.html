@@ -1,0 +1,31 @@
+<section class="container" *ngIf="hayReservas; else noHospedajes">
+    <article class="d-flex flex-column" *ngFor="let hospedaje of reservas; let i = index">
+        <div class="d-flex flex-column flex-md-row">
+            <figure class="col-12 col-md-4">
+                <img src="https://vamos.fullbusiness.io/assets/uploads/hospedajes/{{ hospedaje.Imagen }}" class="img-fluid">
+            </figure>
+            <div class="ps-2 pb-2 w-100">
+                <p class="bg-info col-4 col-md-2 text-center rounded m-0 text-light fw-bold">{{ hospedaje.Ciudad }}</p>
+                <h2>{{ hospedaje.Titulo }}</h2>
+                <p>{{ hospedaje.Descripcion }}</p>
+                <p>Habitación: {{ hospedaje.Numero }} ({{ hospedaje.Tipo }})</p>
+                <p>Precio: $ {{ hospedaje.Precio | number:'1.0-0' }} por noche</p>
+                <p>Fecha: {{ hospedaje.FechaInicio | date }} - {{ hospedaje.FechaFin | date }}</p>
+                <div class="d-flex flex-row justify-content-end">
+                    <button (click)="indiceDetalle = i" class="btn btn-info" *ngIf="indiceDetalle == null || indiceDetalle != i else botonCerrar">Ver Detalles</button>
+                    <ng-template #botonCerrar>
+                        <button (click)="indiceDetalle = null" class="btn btn-danger">Cerrar</button>
+                    </ng-template>
+                </div>
+            </div>
+        </div>
+        <!-- Aquí se carga el componente de detalle dinámicamente -->
+        <div *ngIf="indiceDetalle === i">
+            <app-detalles [IdReserva]="hospedaje.IdReserva"></app-detalles>
+        </div>
+        <hr>
+    </article>
+</section>
+<ng-template #noHospedajes>
+    <p>No tienes reservas</p>
+</ng-template>

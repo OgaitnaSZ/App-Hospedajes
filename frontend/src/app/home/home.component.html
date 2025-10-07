@@ -1,0 +1,255 @@
+<div class="bg">
+    <main class="text-light d-flex flex-column justify-content-between align-items-center h-100 px-3 px-md-0">
+        <div></div>
+        <div>
+          <h1 class="text-center">Armemos tu próximo viaje.</h1>
+          <div class="form-container rounded">
+              <form class="row g-3 p-4" (ngSubmit)="buscarHospedajes()">
+                  <div class="col-md-6">
+                    <label for="destino" class="form-label text-white">Destino</label>
+                    <select class="form-select text-white bg-transparent" [(ngModel)]="destino" name="destino">
+                      <option selected>¿A dónde quieres ir?</option>
+                      <option value="termas">Termas de Río Hondo (SDE)</option>
+                      <option value="salta">Salta</option>
+                      <option value="tucuman">Tucumán</option>
+                      <option value="jujuy">Jujuy</option>
+                    </select>
+                  </div>              
+                  <div class="col-md-3">
+                      <label for="checkin" class="form-label text-white">Desde</label>
+                      <input type="date" class="form-control" name="checkIn" min="{{fechaActual}}" [(ngModel)]="desde" (change)="onCheckInChange($event)" [disabled]="cualquierFecha">
+                      <div class="form-check">
+                        <input 
+                        class="form-check-input" 
+                        type="checkbox" 
+                        id="filtercualquierFecha" 
+                        [(ngModel)]="cualquierFecha" 
+                        name="cualquierFecha"
+                        (change)="onCualquierFechaChange()">
+                        <label class="form-check-label" for="filtercualquierFecha">
+                        Cualquier Fecha
+                        </label>
+                    </div>
+
+                  </div>
+                  <div class="col-md-3">
+                      <label for="checkout" class="form-label text-white">Hasta</label>
+                      <input type="date" class="form-control" name="checkOut" [disabled]="!desde" [(ngModel)]="hasta" [min]="checkOutMinDate" (change)="onCheckOutChange($event)" [disabled]="cualquierFecha">
+                  </div>
+                  <div class="col-md-6">
+                      <label for="guests" class="form-label text-white">Cantidad de Personas</label>
+                      <select class="form-select" [(ngModel)]="personas" name="personas">
+                          <option value="1">1 Persona</option>
+                          <option value="2">2 Personas</option>
+                          <option value="3">3 Personas</option>
+                          <option value="4">4 Personas</option>
+                          <option value="5">5 Personas o más</option>
+                      </select>
+                  </div>
+                  <div class="col-md-6 d-flex align-items-end">
+                      <button type="submit" class="btn btn-outline-light w-100" [disabled]="(!desde || !hasta) && !cualquierFecha">Buscar</button>
+                  </div>
+              </form>
+          </div>
+        </div>
+        <div class="d-flex flex-column flex-md-row justify-content-evenly">
+          <div class="me-md-5 d-flex flex-row">
+            <span class="material-symbols-outlined me-2"> verified </span>
+            <p class="h5 text-nowrap">Los mejores hospedajes y actividades</p>
+          </div>
+          <div class="d-flex flex-row justify-content-md-center">
+            <span class="material-symbols-outlined me-2"> support_agent </span>
+            <p class="h5 text-nowrap">Atención al cliente 24/7</p>
+          </div>
+          <div class="ms-md-5 d-flex flex-row">
+            <span class="material-symbols-outlined me-2"> paid </span>
+            <p class="h5 text-nowrap">Precios finales</p>
+          </div>
+        </div>
+    </main>
+</div>
+<section class="m-2 m-md-5 h-md-50 d-flex flex-column justify-content-center text-center">
+    <h2 class="text-info mb-5 h1">Bienvenidos a tu próximo destino de vacaciones</h2>
+    <div class="container">
+      <p><strong>Descubre una selección única de alojamientos que combinan confort, estilo y accesibilidad</strong>, diseñados para brindarte la mejor experiencia durante tu estancia. Somos una agencia en crecimiento, apasionada por ayudarte a vivir los momentos más especiales de tu vida. Nos dedicamos a trabajar con confianza, respeto y humildad para ofrecerte siempre lo mejor.</p>
+      <p>Ya sea que busques un retiro tranquilo en la naturaleza, una escapada romántica junto al mar o una aventura en una ciudad vibrante, aquí encontrarás la opción perfecta para ti. Nuestra plataforma te ofrece una amplia variedad de alojamientos, desde apartamentos modernos hasta acogedoras cabañas y lujosos resorts, cuidadosamente seleccionados para garantizar una estancia inolvidable.</p>
+      <p>Porque sabemos que <strong>"El tiempo que se disfruta es el verdadero tiempo vivido"</strong> — Jorge Bucay.</p>
+      <p>Además de encontrar el lugar ideal para hospedarte, te ayudamos a descubrir los mejores destinos turísticos, actividades locales y recomendaciones de expertos, diseñados para que aproveches cada instante de tu viaje. Desde visitas culturales hasta excursiones al aire libre, hay algo para todos los gustos.</p>
+      <p class="fw-bold text-center mt-5">Tu viaje comienza aquí. ¡Explora, reserva y vive momentos únicos con nosotros!</p>
+    </div>
+</section>
+
+<section class="container my-5">
+  <h2 class="text-center mb-4">No te podés perder estos destinos</h2>
+  <div id="destinosCarousel" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+      <!-- Slide 1: Termas de Río Hondo -->
+      <div class="carousel-item active">
+        <div class="position-relative">
+          <img
+            src="/assets/termas-de-rio-hondo.jpg"
+            class="d-block w-100"
+            alt="Termas de Río Hondo"
+            style="object-fit: cover; height: 500px;"
+          />
+          <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
+            <h3 class="fw-bold text-white bg-dark bg-opacity-75 p-2 rounded">
+              Termas de Río Hondo (SDE)
+            </h3>
+          </div>
+        </div>
+      </div>
+      <!-- Slide 2: Tucumán -->
+      <div class="carousel-item">
+        <div class="position-relative">
+          <img
+            src="/assets/tucuman.jpg"
+            class="d-block w-100"
+            alt="Tucumán"
+            style="object-fit: cover; height: 500px;"
+          />
+          <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
+            <h3 class="fw-bold text-white bg-dark bg-opacity-75 p-2 rounded">
+              Tucumán
+            </h3>
+          </div>
+        </div>
+      </div>
+      <!-- Slide 3: Salta -->
+      <div class="carousel-item">
+        <div class="position-relative">
+          <img
+            src="/assets/salta.jpg"
+            class="d-block w-100"
+            alt="Salta"
+            style="object-fit: cover; height: 500px;"
+          />
+          <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
+            <h3 class="fw-bold text-white bg-dark bg-opacity-75 p-2 rounded">
+              Salta
+            </h3>
+          </div>
+        </div>
+      </div>
+      <!-- Slide 4: Jujuy -->
+      <div class="carousel-item">
+        <div class="position-relative">
+          <img
+            src="/assets/jujuy.jpg"
+            class="d-block w-100"
+            alt="Jujuy"
+            style="object-fit: cover; height: 500px;"
+          />
+          <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
+            <h3 class="fw-bold text-white bg-dark bg-opacity-75 p-2 rounded">
+              Jujuy
+            </h3>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Controles del Carrusel -->
+    <button
+      class="carousel-control-prev"
+      type="button"
+      data-bs-target="#destinosCarousel"
+      data-bs-slide="prev"
+    >
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Anterior</span>
+    </button>
+    <button
+      class="carousel-control-next"
+      type="button"
+      data-bs-target="#destinosCarousel"
+      data-bs-slide="next"
+    >
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Siguiente</span>
+    </button>
+  </div>
+</section>
+
+<section class="my-5 container d-flex justify-content-center">
+    <app-hospedajes-destacados></app-hospedajes-destacados>
+</section>    
+<section class="m-2 m-md-5 d-flex flex-column justify-content-center align-items-center">
+    <app-resenas [page]="'home'"></app-resenas>
+</section>    
+
+<section class="container-fluid my-5">
+    <div class="position-relative text-center text-white">
+      <img
+        src="/assets/cta.jpg"
+        alt="Explora Destinos"
+        class="img-fluid w-100"
+        style="object-fit: cover; height: 500px; filter: brightness(0.7);"
+      />
+      <div class="position-absolute top-50 start-50 translate-middle text-center">
+        <h2 class="display-4 fw-bold">Explora Destinos Inolvidables</h2>
+        <p class="lead mb-4">
+          Descubre lugares fascinantes y vive experiencias únicas. 
+        </p>
+        <a href="/temporada" class="btn btn-info btn-lg">Explorar Destinos</a>
+      </div>
+    </div>
+</section>
+  
+<section class="container my-5">
+    <h2 class="text-center mb-4">Últimos Artículos del Blog</h2>
+    <div class="row">
+      <!-- Artículo 1 -->
+      <div class="col-md-4 mb-4">
+        <div class="card shadow-sm">
+          <img
+            src="https://via.placeholder.com/400x200"
+            class="card-img-top"
+            alt="Artículo 1"
+          />
+          <div class="card-body">
+            <h5 class="card-title">Consejos para tu Próxima Escapada</h5>
+            <p class="card-text">
+              Descubre cómo planificar tu viaje perfecto con estos sencillos pasos. Ideal para escapadas rápidas.
+            </p>
+            <a href="#" class="btn btn-primary">Leer más</a>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Artículo 2 -->
+      <div class="col-md-4 mb-4">
+        <div class="card shadow-sm">
+          <img
+            src="https://via.placeholder.com/400x200"
+            class="card-img-top"
+            alt="Artículo 2"
+          />
+          <div class="card-body">
+            <h5 class="card-title">Los Mejores Destinos de 2024</h5>
+            <p class="card-text">
+              Una guía completa de los lugares más populares que no puedes perderte este año. ¡Planifica ahora!
+            </p>
+            <a href="#" class="btn btn-primary">Leer más</a>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Artículo 3 -->
+      <div class="col-md-4 mb-4">
+        <div class="card shadow-sm">
+          <img
+            src="https://via.placeholder.com/400x200"
+            class="card-img-top"
+            alt="Artículo 3"
+          />
+          <div class="card-body">
+            <h5 class="card-title">Cómo Ahorrar en tu Próxima Reserva</h5>
+            <p class="card-text">
+              Aprende trucos y consejos para encontrar las mejores ofertas en alojamiento y transporte.
+            </p>
+            <a href="#" class="btn btn-primary">Leer más</a>
+          </div>
+        </div>
+      </div>
+    </div>
+</section>

@@ -1,0 +1,16 @@
+<main class="container d-flex flex-column flex-md-row" *ngIf="isAdmin(); else noAdmin">
+    <aside>
+        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+            <a class="nav-link" routerLink="/administrador/hospedajes" routerLinkActive="active">Administrar Hospedajes</a>
+            <a class="nav-link" routerLink="/administrador/actividades" routerLinkActive="active">Administrar Actividades</a>
+            <a class="nav-link" routerLinkActive="active">Pagos</a>
+            <a class="nav-link" routerLink="/administrador/perfil" routerLinkActive="active">Mi Perfil</a>
+            <a class="nav-link" routerLink="/administrador/cambiar-contrasena" routerLinkActive="active">Cambiar Contraseña</a>
+            <a class="nav-link" style="cursor:pointer" (click)="cerrarSession()" routerLinkActive="active">Cerrar Sesión</a>
+        </div>
+    </aside>
+    <router-outlet></router-outlet>
+</main>
+<ng-template #noAdmin>
+    <p>Error</p>
+</ng-template>

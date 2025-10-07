@@ -1,0 +1,25 @@
+<div class="container ms-2" *ngIf="userData">
+    <h2>Mi Perfil</h2>
+    <form>
+      <div class="form-group">
+        <label for="nombre">Nombre</label>
+        <input type="text" id="nombre" class="form-control" [(ngModel)]="userData.Nombre" name="Nombre">
+      </div>
+      <div class="form-group">
+        <label for="apellido">Apellido</label>
+        <input type="text" id="apellido" class="form-control" [(ngModel)]="userData.Apellido" name="Apellido">
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" class="form-control" [(ngModel)]="userData.Email" name="Email">
+      </div>
+      <div class="form-group">
+        <label for="telefono">Teléfono</label>
+        <input type="text" id="telefono" class="form-control" [(ngModel)]="userData.Telefono" name="Telefono">
+      </div>
+      <input type="hidden" id="IdUsuario" class="form-control" [(ngModel)]="userData.IdUsuario" name="IdUsuario">
+      <button class="btn btn-primary mt-2" (click)="guardarDatos()">Guardar Cambios</button>
+    </form>
+    <p>{{ mensaje }}</p>
+  </div>
+  
