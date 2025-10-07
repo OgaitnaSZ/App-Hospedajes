@@ -4,15 +4,13 @@ import { reservarHospedaje, cancelarReserva, obtenerReserva, obtenerReservasUsua
 
 import * as validator from "../validators/reserva";
 
-// Hospedajes
 router.post("/reservar-hospedaje", validator.validatorReservaHospedaje, reservarHospedaje);
-router.get("/cancelar/:id", validator.validatorId, cancelarReserva);
-router.get("/reserva/:id", validator.validatorId, obtenerReserva);
-router.get("/reservas-usuario/:id", validator.validatorId, obtenerReservasUsuario);
-router.get("/fechas-ocupadas", obtenerFechasOcupadas);
+router.post("/reservar-actividad", validator.validatorReservaActividad, reservarActividad);
 
-// Actividades
-router.post("/reservar-actividad", reservarActividad);
+router.post("/cancelar", validator.validatorTipo, cancelarReserva);
+router.post("/reserva", validator.validatorTipo, obtenerReserva);
+router.post("/reservas-usuario", validator.validatorTipo, obtenerReservasUsuario);
+router.post("/fechas-ocupadas", validator.validatorTipo, obtenerFechasOcupadas);
 
 export { router };
 

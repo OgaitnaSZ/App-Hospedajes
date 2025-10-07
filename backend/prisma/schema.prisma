@@ -9,14 +9,15 @@ datasource db {
 }
 
 model actividades {
-  id          String   @id @default(dbgenerated("(uuid())")) @db.Char(36)
-  nombre      String   @db.Text
-  descripcion String   @db.Text
-  imagen      String   @db.Text
-  ciudad      String   @db.Text
-  precio      Float    @db.Float
-  created_at  DateTime @default(now()) @db.Timestamp(0)
-  updated_at  DateTime @default(now()) @db.Timestamp(0)
+  idActividad          String                 @id @db.Char(36)
+  nombre               String                 @db.Text
+  descripcion          String                 @db.Text
+  imagen               String                 @db.Text
+  ciudad               String                 @db.Text
+  precio               Float                  @db.Float
+  created_at           DateTime               @default(now()) @db.Timestamp(0)
+  updated_at           DateTime               @default(now()) @db.Timestamp(0)
+  reservas_actividades reservas_actividades[]
 }
 
 model fotos {
@@ -31,62 +32,39 @@ model fotos {
 }
 
 model habitaciones {
-  idHabitacion String            @id @default(dbgenerated("(uuid())")) @db.Char(36)
-  idHospedaje  String?           @db.Char(36)
-  numero       String            @db.VarChar(10)
-  tipo         habitaciones_tipo
-  precio       Decimal           @db.Decimal(10, 2)
-  capacidad    Int
-  servicios    String?           @db.VarChar(255)
-  created_at   DateTime          @default(now()) @db.Timestamp(0)
-  updated_at   DateTime          @default(now()) @db.Timestamp(0)
-  hospedaje    hospedaje?        @relation(fields: [idHospedaje], references: [idHospedaje], onDelete: Restrict, onUpdate: Restrict, map: "habitaciones_ibfk_1")
-  reservas     reservas[]
+  idHabitacion        String                @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  idHospedaje         String?               @db.Char(36)
+  numero              String                @db.VarChar(10)
+  tipo                habitaciones_tipo
+  precio              Decimal               @db.Decimal(10, 2)
+  capacidad           Int
+  servicios           String?               @db.VarChar(255)
+  created_at          DateTime              @default(now()) @db.Timestamp(0)
+  updated_at          DateTime              @default(now()) @db.Timestamp(0)
+  hospedaje           hospedaje?            @relation(fields: [idHospedaje], references: [idHospedaje], onDelete: Restrict, onUpdate: Restrict, map: "habitaciones_ibfk_1")
+  reservas_hospedajes reservas_hospedajes[]
 
   @@index([idHospedaje], map: "habitaciones_ibfk_1")
 }
 
 model hospedaje {
-  idHospedaje  String         @id @default(dbgenerated("(uuid())")) @db.Char(36)
-  titulo       String         @db.VarChar(150)
-  descripcion  String?        @db.Text
-  servicios    String         @db.VarChar(255)
-  estrellas    Int
-  telefono     String         @db.VarChar(20)
-  ciudad       String         @db.VarChar(100)
-  direccion    String         @db.VarChar(255)
-  coordenadas  String         @db.Text
-  imagen       String?        @db.Text
-  destacado    Boolean
-  created_at   DateTime       @default(now()) @db.Timestamp(0)
-  updated_at   DateTime       @default(now()) @db.Timestamp(0)
-  fotos        fotos[]
-  habitaciones habitaciones[]
-  resena       resena[]
-  reservas     reservas[]
-}
-
-model pago {
-  idPago        String            @id @default(dbgenerated("(uuid())")) @db.Char(36)
-  idReserva     String            @db.Char(36)
-  idUsuario     String            @db.Char(36)
-  nombre        String            @db.Text
-  apellido      String            @db.Text
-  dni           String            @db.Text
-  direccion     String            @db.Text
-  email         String            @db.Text
-  telefono      String            @db.Text
-  monto         Decimal           @db.Decimal(10, 2)
-  idPreferencia String            @db.VarChar(64)
-  estado        pago_estado       @default(pendiente)
-  tipoReserva   pago_tipoReserva?
-  created_at    DateTime          @default(now()) @db.Timestamp(0)
-  updated_at    DateTime          @default(now()) @db.Timestamp(0)
-  reservas      reservas          @relation(fields: [idReserva], references: [idReserva], onUpdate: Restrict, map: "pago_ibfk_1")
-  usuario       usuario           @relation(fields: [idUsuario], references: [idUsuario], onUpdate: Restrict, map: "pago_ibfk_2")
-
-  @@index([idReserva], map: "pago_ibfk_1")
-  @@index([idUsuario], map: "pago_ibfk_2")
+  idHospedaje         String                @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  titulo              String                @db.VarChar(150)
+  descripcion         String?               @db.Text
+  servicios           String                @db.VarChar(255)
+  estrellas           Int
+  telefono            String                @db.VarChar(20)
+  ciudad              String                @db.VarChar(100)
+  direccion           String                @db.VarChar(255)
+  coordenadas         String                @db.Text
+  imagen              String?               @db.Text
+  destacado           Boolean
+  created_at          DateTime              @default(now()) @db.Timestamp(0)
+  updated_at          DateTime              @default(now()) @db.Timestamp(0)
+  fotos               fotos[]
+  habitaciones        habitaciones[]
+  resena              resena[]
+  reservas_hospedajes reservas_hospedajes[]
 }
 
 model password_resets {
@@ -113,41 +91,20 @@ model resena {
   @@index([idHospedaje], map: "resena_ibfk_2")
 }
 
-model reservas {
-  idReserva    String       @id @default(dbgenerated("(uuid())")) @db.Char(36)
-  idUsuario    String       @db.Char(36)
-  idHospedaje  String       @db.Char(36)
-  idHabitacion String       @db.Char(36)
-  fechaInicio  DateTime     @db.Date
-  fechaFin     DateTime     @db.Date
-  personas     Int
-  precioTotal  Decimal      @db.Decimal(10, 2)
-  estado       String       @db.VarChar(30)
-  created_at   DateTime     @default(now()) @db.Timestamp(0)
-  updated_at   DateTime     @default(now()) @db.Timestamp(0)
-  pago         pago[]
-  usuario      usuario      @relation(fields: [idUsuario], references: [idUsuario], onUpdate: Restrict, map: "reservas_ibfk_1")
-  hospedaje    hospedaje    @relation(fields: [idHospedaje], references: [idHospedaje], onUpdate: Restrict, map: "reservas_ibfk_2")
-  habitaciones habitaciones @relation(fields: [idHabitacion], references: [idHabitacion], onUpdate: Restrict, map: "reservas_ibfk_3")
-
-  @@index([idUsuario], map: "reservas_ibfk_1")
-  @@index([idHospedaje], map: "reservas_ibfk_2")
-  @@index([idHabitacion], map: "reservas_ibfk_3")
-}
-
 model usuario {
-  idUsuario  String      @id @default(dbgenerated("(uuid())")) @db.Char(36)
-  nombre     String      @db.VarChar(100)
-  apellido   String      @db.VarChar(100)
-  email      String      @unique(map: "email") @db.VarChar(150)
-  telefono   String?     @db.VarChar(20)
-  password   String      @db.VarChar(255)
-  rol        usuario_rol
-  created_at DateTime    @default(now()) @db.Timestamp(0)
-  updated_at DateTime    @default(now()) @db.Timestamp(0)
-  pago       pago[]
-  resena     resena[]
-  reservas   reservas[]
+  idUsuario            String                 @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  nombre               String                 @db.VarChar(100)
+  apellido             String                 @db.VarChar(100)
+  email                String                 @unique(map: "email") @db.VarChar(150)
+  telefono             String?                @db.VarChar(20)
+  password             String                 @db.VarChar(255)
+  rol                  usuario_rol
+  created_at           DateTime               @default(now()) @db.Timestamp(0)
+  updated_at           DateTime               @default(now()) @db.Timestamp(0)
+  pagos_hospedajes     pagos_hospedajes[]
+  resena               resena[]
+  reservas_actividades reservas_actividades[]
+  reservas_hospedajes  reservas_hospedajes[]
 }
 
 model suscripcionesNewsletter {
@@ -166,6 +123,87 @@ model servicios {
   descripcion String?        @db.Text
   created_at  DateTime       @default(now()) @db.Timestamp(0)
   updated_at  DateTime       @default(now()) @db.Timestamp(0)
+}
+
+model reservas_actividades {
+  idReserva         String                      @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  idUsuario         String                      @db.VarChar(36)
+  idActividad       String                      @db.VarChar(36)
+  fecha             DateTime                    @db.Date
+  personas          Int
+  precioTotal       Decimal                     @db.Decimal(10, 2)
+  estado            reservas_actividades_estado
+  pagos_actividades pagos_actividades[]
+  actividades       actividades                 @relation(fields: [idActividad], references: [idActividad], onDelete: Cascade, map: "fk_actividad")
+  usuario           usuario                     @relation(fields: [idUsuario], references: [idUsuario], onDelete: Cascade, map: "fk_usuario")
+
+  @@index([idActividad], map: "fk_actividad")
+  @@index([idUsuario], map: "fk_usuario")
+}
+
+model pagos_actividades {
+  idPago               String                   @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  idReserva            String                   @db.Char(36)
+  idUsuario            String                   @db.Char(36)
+  nombre               String                   @db.Text
+  apellido             String                   @db.Text
+  dni                  String                   @db.Text
+  direccion            String                   @db.Text
+  email                String                   @db.Text
+  telefono             String                   @db.Text
+  monto                Decimal                  @db.Decimal(10, 2)
+  idPreferencia        String                   @db.VarChar(64)
+  estado               pagos_actividades_estado @default(pendiente)
+  created_at           DateTime                 @default(now()) @db.Timestamp(0)
+  updated_at           DateTime                 @default(now()) @db.Timestamp(0)
+  reservas_actividades reservas_actividades     @relation(fields: [idReserva], references: [idReserva], onUpdate: Restrict, map: "fk_pagos_actividades_reserva")
+
+  @@index([idReserva], map: "fk_pagos_actividades_reserva")
+  @@index([idUsuario], map: "pago_ibfk_2")
+}
+
+model pagos_hospedajes {
+  idPago              String                  @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  idReserva           String                  @db.Char(36)
+  idUsuario           String                  @db.Char(36)
+  nombre              String                  @db.Text
+  apellido            String                  @db.Text
+  dni                 String                  @db.Text
+  direccion           String                  @db.Text
+  email               String                  @db.Text
+  telefono            String                  @db.Text
+  monto               Decimal                 @db.Decimal(10, 2)
+  idPreferencia       String                  @db.VarChar(64)
+  estado              pagos_hospedajes_estado @default(pendiente)
+  created_at          DateTime                @default(now()) @db.Timestamp(0)
+  updated_at          DateTime                @default(now()) @db.Timestamp(0)
+  reservas_hospedajes reservas_hospedajes     @relation(fields: [idReserva], references: [idReserva], onUpdate: Restrict, map: "fk_pagos_hospedajes_reserva")
+  usuario             usuario                 @relation(fields: [idUsuario], references: [idUsuario], onUpdate: Restrict, map: "pagos_hospedajes_ibfk_2")
+
+  @@index([idReserva], map: "fk_pagos_hospedajes_reserva")
+  @@index([idUsuario], map: "pago_ibfk_2")
+}
+
+model reservas_hospedajes {
+  idReserva        String                     @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  idUsuario        String                     @db.Char(36)
+  idHospedaje      String                     @db.Char(36)
+  idHabitacion     String                     @db.Char(36)
+  fechaInicio      DateTime                   @db.Date
+  fechaFin         DateTime                   @db.Date
+  personas         Int
+  precioTotal      Decimal                    @db.Decimal(10, 2)
+  estado           reservas_hospedajes_estado
+  created_at       DateTime                   @default(now()) @db.Timestamp(0)
+  updated_at       DateTime                   @default(now()) @db.Timestamp(0)
+  pagos_hospedajes pagos_hospedajes[]
+  usuario          usuario                    @relation(fields: [idUsuario], references: [idUsuario], onUpdate: Restrict, map: "reservas_hospedajes_ibfk_1")
+  hospedaje        hospedaje                  @relation(fields: [idHospedaje], references: [idHospedaje], onUpdate: Restrict, map: "reservas_hospedajes_ibfk_2")
+  habitaciones     habitaciones               @relation(fields: [idHabitacion], references: [idHabitacion], onUpdate: Restrict, map: "reservas_hospedajes_ibfk_3")
+
+  @@index([idUsuario], map: "reservas_ibfk_1")
+  @@index([idHospedaje], map: "reservas_ibfk_2")
+  @@index([idHabitacion], map: "reservas_ibfk_3")
 }
 
 enum habitaciones_tipo {
@@ -187,13 +225,28 @@ enum servicios_tipo {
   habitacion
 }
 
-enum pago_estado {
+enum reservas_actividades_estado {
+  pendiente
+  concretado
+  pendiente_de_cancelacion @map("pendiente de cancelacion")
+  cancelado
+}
+
+enum reservas_hospedajes_estado {
+  pendiente
+  concretado
+  pendiente_de_cancelacion @map("pendiente de cancelacion")
+  cancelado
+}
+
+enum pagos_actividades_estado {
   pendiente
   aprobado
   rechazado
 }
 
-enum pago_tipoReserva {
-  hospedaje
-  actividad
+enum pagos_hospedajes_estado {
+  pendiente
+  aprobado
+  rechazado
 }
