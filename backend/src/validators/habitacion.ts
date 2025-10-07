@@ -3,19 +3,18 @@ import { Request, Response, NextFunction } from "express";
 import { validateResults } from "../utils/handleValidator";
 
 export const validatorHabitaciones = [
-    query("IdHospedaje")
-      .exists().withMessage("El campo 'IdHospedaje' es obligatorio")
-      .notEmpty().withMessage("El campo 'IdHospedaje' no puede estar vacío"),
+    query("idHospedaje")
+      .isUUID().withMessage('El ID debe ser un UUID válido.'),
 
-    query("Desde")
+    query("desde")
       .exists().withMessage("El campo 'Desde' es obligatorio")
       .notEmpty().withMessage("El campo 'Desde' no puede estar vacío"),
 
-    query("Hasta")
+    query("hasta")
       .exists().withMessage("El campo 'Hasta' es obligatorio")
       .notEmpty().withMessage("El campo 'Hasta' no puede estar vacío"),
 
-    query("Capacidad")
+    query("capacidad")
       .exists().withMessage("El campo 'Capacidad' es obligatorio")
       .notEmpty().withMessage("El campo 'Capacidad' no puede estar vacío"),
 

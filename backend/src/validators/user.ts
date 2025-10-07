@@ -4,16 +4,14 @@ import { validateResults } from "../utils/handleValidator";
 
 export const validatorUserData = [
   check("idUsuario")
-    .exists().withMessage("El IdUsuario es requerido")
-    .notEmpty().withMessage("El IdUsuario no puede estar vacío"),
+    .isUUID().withMessage('El ID debe ser un UUID válido.'),
 
   (req: Request, res: Response, next: NextFunction) => validateResults(req, res, next)
 ];
 
 export const validatorUserUpdate = [
   check("idUsuario")
-    .exists().withMessage("El IdUsuario es requerido")
-    .notEmpty().withMessage("El IdUsuario no puede estar vacío"),
+    .isUUID().withMessage('El ID debe ser un UUID válido.'),
 
   check("nombre")
     .exists().withMessage("El nombre es requerido")

@@ -50,8 +50,7 @@ export const validatorRegister = [
 
 export const validatorUpdatePassword = [
   check("idUsuario")
-    .exists().withMessage("El IdUsuario es requerido")
-    .notEmpty().withMessage("El IdUsuario no puede estar vacío"),
+    .isUUID().withMessage('El ID debe ser un UUID válido.'),
   
   check("password")
     .exists().withMessage("La contraseña es requerida")

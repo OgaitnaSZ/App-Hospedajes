@@ -3,19 +3,19 @@ import { Request, Response, NextFunction } from "express";
 import { validateResults } from "../utils/handleValidator";
 
 export const validatorHospedajesFiltro = [
-    param("Ciudad")
+    param("ciudad")
     .optional()
     .isLength({ max: 20 }).withMessage("El campo debe tener como máximo 20 caracteres"),
 
-    param("FechaInicio")
+    param("fechaInicio")
     .optional()
     .isLength({ max: 20 }).withMessage("El campo debe tener como máximo 20 caracteres"),
 
-    param("FechaFin")
+    param("fechaFin")
     .optional()
     .isLength({ max: 20 }).withMessage("El campo debe tener como máximo 20 caracteres"),
 
-    param("Capacidad")
+    param("capacidad")
     .optional()
     .isLength({ max: 20 }).withMessage("El campo debe tener como máximo 20 caracteres"),
 
@@ -24,8 +24,7 @@ export const validatorHospedajesFiltro = [
 
 export const validatorId = [
     param("id")
-    .exists().withMessage("El ID es obligatorio")
-    .notEmpty().withMessage("El ID no puede estar vacío"),
+    .isUUID().withMessage('El ID debe ser un UUID válido.'),
 
   (req: Request, res: Response, next: NextFunction) => validateResults(req, res, next)
 ];

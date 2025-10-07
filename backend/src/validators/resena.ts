@@ -4,8 +4,7 @@ import { validateResults } from "../utils/handleValidator";
 
 export const validatorId = [
     param("id")
-    .exists().withMessage("El campo es obligatorio")
-    .notEmpty().withMessage("El ID no puede estar vacío"),
+    .isUUID().withMessage('El ID debe ser un UUID válido.'),
 
   (req: Request, res: Response, next: NextFunction) => validateResults(req, res, next)
 ];
@@ -20,36 +19,31 @@ export const validatorCantidad = [
 
 export const validatorGetResenas = [
     param("idUsuario")
-    .exists().withMessage("El campo es obligatorio")
-    .notEmpty().withMessage("El campo no puede estar vacio"),
+    .isUUID().withMessage('El ID debe ser un UUID válido.'),
 
     param("idHospedaje")
-    .exists().withMessage("El campo es obligatorio")
-    .notEmpty().withMessage("El campo no puede estar vacio"),
+    .isUUID().withMessage('El ID debe ser un UUID válido.'),
 
     param("idHabitacion")
-    .exists().withMessage("El campo es obligatorio")
-    .notEmpty().withMessage("El campo no puede estar vacio"),
+    .isUUID().withMessage('El ID debe ser un UUID válido.'),
 
   (req: Request, res: Response, next: NextFunction) => validateResults(req, res, next)
 ];
 
 export const validatorUploadResenas = [
     check("idUsuario")
-    .exists().withMessage("El campo es obligatorio")
-    .notEmpty().withMessage("El campo no puede estar vacio"),
+    .isUUID().withMessage('El ID debe ser un UUID válido.'),
 
     check("idHospedaje")
-    .exists().withMessage("El campo es obligatorio")
-    .notEmpty().withMessage("El campo no puede estar vacio"),
+    .isUUID().withMessage('El ID debe ser un UUID válido.'),
 
     check("idHabitacion")
-    .exists().withMessage("El campo es obligatorio")
-    .notEmpty().withMessage("El campo no puede estar vacio"),
+    .isUUID().withMessage('El ID debe ser un UUID válido.'),
         
     check("calificacion")
     .exists().withMessage("El campo es obligatorio")
-    .notEmpty().withMessage("El campo no puede estar vacio"),
+    .notEmpty().withMessage("El campo no puede estar vacio")
+    .isInt({ min: 1, max: 5 }).withMessage("El valor debe estar entre 1 y 5"),
 
     check("comentario")
     .exists().withMessage("El campo es obligatorio")
@@ -60,20 +54,16 @@ export const validatorUploadResenas = [
 
 export const validatorUpdateResenas = [
     check("idResena")
-    .exists().withMessage("El campo es obligatorio")
-    .notEmpty().withMessage("El campo no puede estar vacio"),
+    .isUUID().withMessage('El ID debe ser un UUID válido.'),
 
     check("idUsuario")
-    .exists().withMessage("El campo es obligatorio")
-    .notEmpty().withMessage("El campo no puede estar vacio"),
+    .isUUID().withMessage('El ID debe ser un UUID válido.'),
 
     check("idHospedaje")
-    .exists().withMessage("El campo es obligatorio")
-    .notEmpty().withMessage("El campo no puede estar vacio"),
+    .isUUID().withMessage('El ID debe ser un UUID válido.'),
 
     check("idHabitacion")
-    .exists().withMessage("El campo es obligatorio")
-    .notEmpty().withMessage("El campo no puede estar vacio"),
+    .isUUID().withMessage('El ID debe ser un UUID válido.'),
         
     check("calificacion")
     .exists().withMessage("El campo es obligatorio")

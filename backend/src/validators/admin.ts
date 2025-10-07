@@ -48,8 +48,7 @@ export const validatorHospedajeNew = [
 
 export const validatorHospedajeUpdate = [
     check("idHospedaje")
-    .exists().withMessage("El ID es obligatorio")
-    .notEmpty().withMessage("El ID no puede estar vacío"),
+    .isUUID().withMessage('El ID debe ser un UUID válido.'),
 
     check("titulo")
     .exists().withMessage("El campo es obligatorio")
@@ -95,29 +94,28 @@ export const validatorHospedajeUpdate = [
 ];
 
 export const validatorHabitacionNew = [
-    check("IdHospedaje")
+    check("idHospedaje")
+    .isUUID().withMessage('El ID debe ser un UUID válido.'),
+
+    check("numero")
     .exists().withMessage("El campo es obligatorio")
     .notEmpty().withMessage("El campo no puede estar vacío"),
 
-    check("Numero")
+    check("tipo")
     .exists().withMessage("El campo es obligatorio")
     .notEmpty().withMessage("El campo no puede estar vacío"),
 
-    check("Tipo")
-    .exists().withMessage("El campo es obligatorio")
-    .notEmpty().withMessage("El campo no puede estar vacío"),
-
-    check("Precio")
+    check("precio")
     .exists().withMessage("El campo es obligatorio")
     .notEmpty().withMessage("El campo no puede estar vacío")
     .isDecimal().withMessage("El campo debe ser un decimal"),
 
-    check("Capacidad")
+    check("capacidad")
     .exists().withMessage("El campo es obligatorio")
     .notEmpty().withMessage("El campo no puede estar vacío")
     .isNumeric(),
 
-    check("Servicios")
+    check("servicios")
     .exists().withMessage("El campo es obligatorio")
     .notEmpty().withMessage("El campo no puede estar vacío"),
 
@@ -125,33 +123,31 @@ export const validatorHabitacionNew = [
 ];
 
 export const validatorHabitacionUpdate = [
-    check("IdHabitacion")
+    check("idHabitacion")
+    .isUUID().withMessage('El ID debe ser un UUID válido.'),
+
+    check("idHospedaje")
+    .isUUID().withMessage('El ID debe ser un UUID válido.'),
+
+    check("numero")
     .exists().withMessage("El campo es obligatorio")
     .notEmpty().withMessage("El campo no puede estar vacío"),
 
-    check("IdHospedaje")
+    check("tipo")
     .exists().withMessage("El campo es obligatorio")
     .notEmpty().withMessage("El campo no puede estar vacío"),
 
-    check("Numero")
-    .exists().withMessage("El campo es obligatorio")
-    .notEmpty().withMessage("El campo no puede estar vacío"),
-
-    check("Tipo")
-    .exists().withMessage("El campo es obligatorio")
-    .notEmpty().withMessage("El campo no puede estar vacío"),
-
-    check("Precio")
+    check("precio")
     .exists().withMessage("El campo es obligatorio")
     .notEmpty().withMessage("El campo no puede estar vacío")
     .isDecimal().withMessage("El campo debe ser un decimal"),
 
-    check("Capacidad")
+    check("capacidad")
     .exists().withMessage("El campo es obligatorio")
     .notEmpty().withMessage("El campo no puede estar vacío")
     .isNumeric(),
 
-    check("Servicios")
+    check("servicios")
     .exists().withMessage("El campo es obligatorio")
     .notEmpty().withMessage("El campo no puede estar vacío"),
 
@@ -184,8 +180,7 @@ export const validatorActividadNew = [
 
 export const validatorActividadUpdate = [
     check("idActividad")
-    .exists().withMessage("El campo es obligatorio")
-    .notEmpty().withMessage("El campo no puede estar vacío"),
+    .isUUID().withMessage('El ID debe ser un UUID válido.'),
 
     check("nombre")
     .exists().withMessage("El campo es obligatorio")
@@ -212,8 +207,7 @@ export const validatorActividadUpdate = [
 
 export const validatorId = [
     param("id")
-    .exists().withMessage("El ID es obligatorio")
-    .notEmpty().withMessage("El ID no puede estar vacío"),
+    .isUUID().withMessage('El ID debe ser un UUID válido.'),
 
   (req: Request, res: Response, next: NextFunction) => validateResults(req, res, next)
 ];

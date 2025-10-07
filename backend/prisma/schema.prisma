@@ -52,7 +52,7 @@ model hospedaje {
   titulo              String                @db.VarChar(150)
   descripcion         String?               @db.Text
   servicios           String                @db.VarChar(255)
-  estrellas           Int
+  estrellas           Int?
   telefono            String                @db.VarChar(20)
   ciudad              String                @db.VarChar(100)
   direccion           String                @db.VarChar(255)
@@ -80,7 +80,7 @@ model resena {
   idUsuario    String    @db.Char(36)
   idHospedaje  String    @db.Char(36)
   idHabitacion String    @db.Char(36)
-  calificacion Int
+  calificacion Int?
   comentario   String?   @db.Text
   created_at   DateTime  @default(now()) @db.Timestamp(0)
   updated_at   DateTime  @default(now()) @db.Timestamp(0)
@@ -133,6 +133,8 @@ model reservas_actividades {
   personas          Int
   precioTotal       Decimal                     @db.Decimal(10, 2)
   estado            reservas_actividades_estado
+  created_at        DateTime                    @default(now()) @db.Timestamp(0)
+  updated_at        DateTime                    @default(now()) @db.Timestamp(0)
   pagos_actividades pagos_actividades[]
   actividades       actividades                 @relation(fields: [idActividad], references: [idActividad], onDelete: Cascade, map: "fk_actividad")
   usuario           usuario                     @relation(fields: [idUsuario], references: [idUsuario], onDelete: Cascade, map: "fk_usuario")
@@ -213,13 +215,6 @@ enum habitaciones_tipo {
   deluxe
 }
 
-enum usuario_rol {
-  administrador
-  cliente
-  huesped
-  EMPTY_ENUM_VALUE @map("")
-}
-
 enum servicios_tipo {
   hospedaje
   habitacion
@@ -249,4 +244,9 @@ enum pagos_hospedajes_estado {
   pendiente
   aprobado
   rechazado
+}
+
+enum usuario_rol {
+  administrador
+  cliente
 }
