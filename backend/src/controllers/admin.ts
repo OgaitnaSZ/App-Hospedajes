@@ -190,6 +190,90 @@ export async function eliminarHabitacion(req: Request, res: Response) {
   }
 }
 
+// Actividades
+export async function getActividades(req: Request, res: Response) {
+  try {
+    const data = req.params;
+    const idActividad = <string>data.id;
+
+    const actividades = await prisma.actividades.findMany({
+        where: { idActividad: idActividad }
+    })
+
+    if(actividades.length > 0){
+      res.status(200).json(actividades);
+    }else{
+      return res.status(200).send("No se encontraron actividades.")
+    }
+  } catch(error){
+    handleHttpError(res, "Error al intentar obtener actividades", 500);
+    return;
+  }
+}
+
+export async function agregarActividad(req: Request, res: Response) {
+  try {
+    const dataActividad = matchedData(req);
+
+    const nuevaActividad = await prisma.actividades.create({ 
+      data: { 
+        nombre: String(dataActividad.nombre),
+        descripcion: String(dataActividad.descripcion), 
+        imagen: String(dataActividad.imagen),
+        ciudad: String(dataActividad.ciudad),
+        precio: dataActividad.precio
+      } 
+    });
+        
+    return res.status(201).json(nuevaActividad);
+  } catch(error){
+    handleHttpError(res, "Error al agregar actividad", 500);
+    return;
+  }
+}
+
+export async function modificarActividad(req: Request, res: Response) {
+  try {
+    const dataActividad = matchedData(req);
+
+    const updatedActividad = await prisma.actividades.update({
+      where: { idActividad: String(dataActividad.idActividad) },
+      data: { 
+        idActividad:dataActividad.idActividad,
+        nombre: String(dataActividad.nombre),
+        descripcion: String(dataActividad.descripcion), 
+        imagen: String(dataActividad.imagen),
+        ciudad: String(dataActividad.ciudad),
+        precio: dataActividad.precio
+      } 
+    });
+
+    if(!updatedActividad){
+      handleHttpError(res, "ID de habitacion incorrecto", 404)
+      return
+    }
+    res.status(200).json(updatedActividad);
+  } catch(error){
+    handleHttpError(res, "Error al intentar eliminar la habitacion", 500);
+    return;
+  }
+}
+
+export async function eliminarActividad(req: Request, res: Response) {
+  try {
+    const data = req.params;
+    const id = <string>data.id;
+
+    await prisma.actividades.delete({
+      where: { idActividad: String(id) }
+    });
+    res.json({ success: true, message: 'Actividad eliminada exitosamente' });
+  } catch(error){
+    handleHttpError(res, "Error al intentar eliminar la actividad", 500);
+    return;
+  }
+}
+
 /*--- Funciones Extras ---*/
 const eliminarImagenesPorHospedaje = async (id: string, res: Response) => {
   try {

@@ -1,6 +1,6 @@
 import express from "express";
 const router = express.Router();
-import { agregarHospedaje, modificarHospedaje, eliminarHospedaje, getHabitaciones, agregarHabitacion, modificarHabitacion, eliminarHabitacion} from "../controllers/admin";
+import { agregarHospedaje, modificarHospedaje, eliminarHospedaje, getHabitaciones, agregarHabitacion, modificarHabitacion, eliminarHabitacion, getActividades, modificarActividad, eliminarActividad, agregarActividad} from "../controllers/admin";
 import * as adminValidators from "../validators/admin";
 import { authMiddleware } from "../middleware/session";
 import { checkRol } from "../middleware/rol";
@@ -19,5 +19,11 @@ router.get("/habitaciones/hospedaje/:id", adminValidators.validatorId, getHabita
 router.post("/habitaciones/agregar", adminValidators.validatorHabitacionNew, agregarHabitacion);
 router.put("/habitaciones/modificar", adminValidators.validatorHabitacionUpdate, modificarHabitacion);
 router.delete("/habitaciones/eliminar/:id", adminValidators.validatorId, eliminarHabitacion);
+
+// Actividades
+router.get("/actividades", getActividades);
+router.post("/actividades/agregar", adminValidators.validatorActividadNew, agregarActividad);
+router.put("/actividades/modificar", adminValidators.validatorActividadUpdate, modificarActividad);
+router.delete("/actividades/eliminar/:id", adminValidators.validatorId, eliminarActividad);
 
 export { router };

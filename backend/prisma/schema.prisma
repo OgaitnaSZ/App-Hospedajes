@@ -9,7 +9,7 @@ datasource db {
 }
 
 model actividades {
-  idActividad          String                 @id @db.Char(36)
+  idActividad          String                 @id @default(dbgenerated("(uuid())")) @db.Char(36)
   nombre               String                 @db.Text
   descripcion          String                 @db.Text
   imagen               String                 @db.Text

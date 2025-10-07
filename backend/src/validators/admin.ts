@@ -158,6 +158,58 @@ export const validatorHabitacionUpdate = [
   (req: Request, res: Response, next: NextFunction) => validateResults(req, res, next)
 ];
 
+export const validatorActividadNew = [
+    check("nombre")
+    .exists().withMessage("El campo es obligatorio")
+    .notEmpty().withMessage("El campo no puede estar vacío"),
+
+    check("descripcion")
+    .exists().withMessage("El campo es obligatorio")
+    .notEmpty().withMessage("El campo no puede estar vacío"),
+
+    check("imagen")
+    .exists().withMessage("El campo es obligatorio")
+    .notEmpty().withMessage("El campo no puede estar vacío"),
+
+    check("ciudad")
+    .exists().withMessage("El campo es obligatorio")
+    .notEmpty().withMessage("El campo no puede estar vacío"),
+
+    check("precio")
+    .exists().withMessage("El campo es obligatorio")
+    .notEmpty().withMessage("El campo no puede estar vacío"),
+
+  (req: Request, res: Response, next: NextFunction) => validateResults(req, res, next)
+]
+
+export const validatorActividadUpdate = [
+    check("idActividad")
+    .exists().withMessage("El campo es obligatorio")
+    .notEmpty().withMessage("El campo no puede estar vacío"),
+
+    check("nombre")
+    .exists().withMessage("El campo es obligatorio")
+    .notEmpty().withMessage("El campo no puede estar vacío"),
+
+    check("descripcion")
+    .exists().withMessage("El campo es obligatorio")
+    .notEmpty().withMessage("El campo no puede estar vacío"),
+
+    check("imagen")
+    .exists().withMessage("El campo es obligatorio")
+    .notEmpty().withMessage("El campo no puede estar vacío"),
+
+    check("ciudad")
+    .exists().withMessage("El campo es obligatorio")
+    .notEmpty().withMessage("El campo no puede estar vacío"),
+
+    check("precio")
+    .exists().withMessage("El campo es obligatorio")
+    .notEmpty().withMessage("El campo no puede estar vacío"),
+
+  (req: Request, res: Response, next: NextFunction) => validateResults(req, res, next)
+]
+
 export const validatorId = [
     param("id")
     .exists().withMessage("El ID es obligatorio")
