@@ -130,3 +130,11 @@ export const validatorTipo = [
 
     (req: Request, res: Response, next: NextFunction) => validateResults(req, res, next)
 ]
+
+export const validatorPago = [
+    check("idPreferencia")
+    .exists()
+    .notEmpty(),
+
+    (req: Request, res: Response, next: NextFunction) => validateResults(req, res, next)
+]
