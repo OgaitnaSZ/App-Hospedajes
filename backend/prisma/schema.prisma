@@ -248,5 +248,5 @@ enum pagos_hospedajes_estado {
 
 enum usuario_rol {
   administrador
-  cliente
+  huesped
 }
