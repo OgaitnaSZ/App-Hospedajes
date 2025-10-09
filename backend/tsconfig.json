@@ -5,7 +5,7 @@
     "outDir": "./dist",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "types": ["node", "express"],
+    "types": ["node", "express", "jest"],
     "sourceMap": true,
     "declaration": true,
     "declarationMap": true,

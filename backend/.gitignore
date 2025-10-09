@@ -2,4 +2,16 @@ node_modules
 # Keep environment variables out of version control
 .env
 
+# Logs
+/backend/logs/
+*.log
+npm-debug.log*
+
+# Prisma
 /src/generated/prisma
+
+# Archivos subidos
+/uploads
+
+# Test
+coverage
