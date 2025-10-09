@@ -92,6 +92,11 @@ export async function updatePassword(req: Request, res: Response): Promise<void>
   try{
     const dataPassword = matchedData(req);
 
+    if (req.user.idUsuario !== dataPassword.idUsuario) {
+      handleHttpError(res, "No tienes permiso para actualizar este usuario", 403);
+      return
+    }
+
     const existingUser = await prisma.usuario.findUnique({
       where: { idUsuario: dataPassword.idUsuario }
     });

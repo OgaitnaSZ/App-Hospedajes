@@ -23,6 +23,8 @@ export const authMiddleware = async (req:Request, res:Response, next:NextFunctio
                 idUsuario: dataToken.idUsuario
             }
         })
+
+        if (!user) return handleHttpError(res, "USUARIO NO ENCONTRADO", 404);
         
         req.user = user
 

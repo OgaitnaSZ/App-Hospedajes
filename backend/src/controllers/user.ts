@@ -9,6 +9,10 @@ export async function getData(req: Request, res: Response) {
   try {
     const idUsuario = req.query.idUsuario;
 
+    if (req.user.idUsuario !== idUsuario) {
+      return handleHttpError(res, "No tienes permiso para ver datos de este usuario", 403);
+    }
+
     if (!idUsuario) {
         handleHttpError(res, "ID de usuario no válido", 400);
         return;
@@ -40,6 +44,10 @@ export async function getData(req: Request, res: Response) {
 export async function updateData(req: Request, res: Response) {
   try {
     const dataUser = matchedData(req);
+
+    if (req.user.idUsuario !== dataUser.idUsuario) {
+      return handleHttpError(res, "No tienes permiso para actualizar este usuario", 403);
+    }
 
     const updatedUser = await prisma.usuario.update({
       where: { idUsuario: String(dataUser.idUsuario) },
