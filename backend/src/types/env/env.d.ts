@@ -6,6 +6,7 @@ declare global {
       PORT?: string;
       JWT_SECRET?: string;
       PUBLIC_URL?: string;
+      NODE_ENV?: string;
     }
   }
 }

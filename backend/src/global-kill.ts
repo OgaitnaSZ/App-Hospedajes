@@ -1,0 +1,1 @@
+export default process.exit(0); // Matar fugas de memorias en los test

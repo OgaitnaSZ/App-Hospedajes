@@ -25,8 +25,7 @@ app.use('/documentation',
 app.use("/api", routes);
 
 const port = process.env.PORT || 4001;
-app.listen(port, ()=>{
-    console.log(`Listo por http://localhost:${port}`);
-})
+const NODE_ENV = process.env.NODE_ENV;
+if(NODE_ENV !== 'test') app.listen(port);
 
 export default app;
