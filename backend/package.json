@@ -4,8 +4,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon ./src/app.ts",
-    "test": "prisma generate && cross-env NODE_ENV=test jest --coverage --runInBand",
-    "test:watch": "prisma generate && cross-env NODE_ENV=test jest --coverage --watch --silent --runInBand"
+    "test": "cross-env NODE_ENV=test jest --coverage --runInBand",
+    "test:watch": "cross-env NODE_ENV=test jest --coverage --watch --silent --runInBand"
   },
   "keywords": [],
   "author": "",
