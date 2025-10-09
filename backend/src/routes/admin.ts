@@ -9,21 +9,342 @@ import { usuario_rol } from "../generated/prisma";
 router.use(authMiddleware); // Middleware para todas las rutas
 router.use(checkRol([usuario_rol.administrador]));
 
-// Hospedajes
+/**
+ * http://localhost:4001/api/admin
+ * 
+ * Route create hospedaje
+ * @swagger
+ * /admin/hospedajes/agregar:
+ *     post:
+ *         tags:
+ *             - admin
+ *             - hospedaje
+ *         summary: "Agregar hospedaje"
+ *         description: "Ruta para agregar hospedaje"
+ *         requestBody:
+ *             content:
+ *                 application/json:
+ *                     schema:
+ *                         $ref: "#/components/schemas/hospedajeNew"
+ * 
+ *         responses:
+ *             '201':
+ *                 description: Hospedaje creado con exito
+ *             '401':
+ *                 description: No inicio session o no es administrador
+ *             '403':
+ *                 description: Datos incorrectos
+ *             '500':
+ *                 description: Error del servidor 
+ */
 router.post("/hospedajes/agregar", validator.validatorHospedajeNew, admin.agregarHospedaje);
+
+/**
+ * http://localhost:4001/api/admin
+ * 
+ * Route modify hospedaje
+ * @swagger
+ * /admin/hospedajes/modificar:
+ *     post:
+ *         tags:
+ *             - admin
+ *             - hospedaje
+ *         summary: "Modificar hospedaje"
+ *         description: "Ruta para modificar hospedaje"
+ *         requestBody:
+ *             content:
+ *                 application/json:
+ *                     schema:
+ *                         $ref: "#/components/schemas/hospedajeUpdate"
+ * 
+ *         responses:
+ *             '200':
+ *                 description: Hospedaje modificado con exito
+ *             '401':
+ *                 description: No inicio session o no es administrador
+ *             '403':
+ *                 description: Datos incorrectos
+ *             '404':
+ *                 description: ID del hospedaje incorrecto
+ *             '500':
+ *                 description: Error del servidor 
+ */
 router.put("/hospedajes/modificar", validator.validatorHospedajeUpdate, admin.modificarHospedaje);
+
+/**
+ * http://localhost:4001/api/admin
+ * 
+ * Route delete hospedaje
+ * @swagger
+ * /admin/hospedajes/eliminar/{id}:
+ *     post:
+ *         tags:
+ *             - admin
+ *             - hospedaje
+ *         summary: "Eliminar hospedaje"
+ *         description: "Ruta para eliminar hospedaje"
+ *         parameters:
+ *         - name: id
+ *           in: path
+ *           description: ID del hospedaje
+ *           required: true
+ *           schema:
+ *             type:string
+ * 
+ *         responses:
+ *             '200':
+ *                 description: Hospedaje eliminado
+ *             '401':
+ *                 description: No inicio session o no es administrador
+ *             '403':
+ *                 description: ID del hospedaje no valido
+ *             '404':
+ *                 description: Hospedaje no encontrado en la base de datos
+ *             '500':
+ *                 description: Error del servidor 
+ */
 router.delete("/hospedajes/eliminar/:id", validator.validatorId, admin.eliminarHospedaje);
 
-// Habitaciones
+/**
+ * http://localhost:4001/api/hospedaje
+ * 
+ * Route get habitaciones hospedaje
+ * @swagger
+ * /admin/habitacion/hospedaje:
+ *     get:
+ *         tags:
+ *             - admin
+ *             - habitacion
+ *         summary: "Obtener habitaciones del hospedaje"
+ *         description: "Ruta para obtener habitaciones de un hospedaje"
+ *         parameters:
+ *          - name: id
+ *            in: path
+ *            description: Id del hospedaje
+ *            schema:
+ *              type: string
+ *         responses:
+ *             '200':
+ *                 description: Listado de habitaciones del hospedaje
+ *             '401':
+ *                 description: No inicio session o no es administrador
+ *             '404':
+ *                 description: No hay habitaciones del hospedaje
+ *             '500':
+ *                 description: Error del servidor 
+ */
 router.get("/habitaciones/hospedaje/:id", validator.validatorId, admin.getHabitaciones);
+
+/**
+ * http://localhost:4001/api/admin
+ * 
+ * Route create habitacion
+ * @swagger
+ * /admin/habitaciones/agregar:
+ *     post:
+ *         tags:
+ *             - admin
+ *             - habitacion
+ *         summary: "Agregar habitacion"
+ *         description: "Ruta para agregar habitacion"
+ *         requestBody:
+ *             content:
+ *                 application/json:
+ *                     schema:
+ *                         $ref: "#/components/schemas/habitacionNew"
+ * 
+ *         responses:
+ *             '201':
+ *                 description: Habitacion creada con exito
+ *             '401':
+ *                 description: No inicio session o no es administrador
+ *             '403':
+ *                 description: Datos incorrectos
+ *             '500':
+ *                 description: Error del servidor 
+ */
 router.post("/habitaciones/agregar", validator.validatorHabitacionNew, admin.agregarHabitacion);
+
+/**
+ * http://localhost:4001/api/admin
+ * 
+ * Route modify habitacion
+ * @swagger
+ * /admin/habitaciones/agregar:
+ *     put:
+ *         tags:
+ *             - admin
+ *             - habitacion
+ *         summary: "Agregar habitacion"
+ *         description: "Ruta para agregar habitacion"
+ *         requestBody:
+ *             content:
+ *                 application/json:
+ *                     schema:
+ *                         $ref: "#/components/schemas/habitacionUpdate"
+ * 
+ *         responses:
+ *             '200':
+ *                 description: Habitacion creada con exito
+ *             '401':
+ *                 description: No inicio session o no es administrador
+ *             '403':
+ *                 description: Datos incorrectos
+ *             '404':
+ *                 description: Habitacion no encontrada
+ *             '500':
+ *                 description: Error del servidor 
+ */
 router.put("/habitaciones/modificar", validator.validatorHabitacionUpdate, admin.modificarHabitacion);
+
+/**
+ * http://localhost:4001/api/admin
+ * 
+ * Route delete habitacion
+ * @swagger
+ * /admin/habitacions/eliminar/{id}:
+ *     delete:
+ *         tags:
+ *             - admin
+ *             - habitacion
+ *         summary: "Eliminar habitacion"
+ *         description: "Ruta para eliminar habitacion"
+ *         parameters:
+ *         - name: id
+ *           in: path
+ *           description: ID del habitacion
+ *           required: true
+ *           schema:
+ *             type:string
+ * 
+ *         responses:
+ *             '200':
+ *                 description: Habitacion eliminada
+ *             '401':
+ *                 description: No inicio session o no es administrador
+ *             '403':
+ *                 description: ID de habitacion no valido
+ *             '500':
+ *                 description: Error del servidor 
+ */
 router.delete("/habitaciones/eliminar/:id", validator.validatorId, admin.eliminarHabitacion);
 
-// Actividades
+/**
+ * http://localhost:4001/api/hospedaje
+ * 
+ * Route get actividades
+ * @swagger
+ * /admin/actividades:
+ *     get:
+ *         tags:
+ *             - admin
+ *             - actividad
+ *         summary: "Obtener actividades"
+ *         description: "Ruta para obtener actividades"
+ *         responses:
+ *             '200':
+ *                 description: Listado de actividades
+ *             '401':
+ *                 description: No inicio session o no es administrador
+ *             '404':
+ *                 description: No hay actividades
+ *             '500':
+ *                 description: Error del servidor 
+ */
 router.get("/actividades", admin.getActividades);
+
+/**
+ * http://localhost:4001/api/admin
+ * 
+ * Route create actividad
+ * @swagger
+ * /admin/actividades/agregar:
+ *     post:
+ *         tags:
+ *             - admin
+ *             - actividad
+ *         summary: "Agregar actividad"
+ *         description: "Ruta para agregar actividad"
+ *         requestBody:
+ *             content:
+ *                 application/json:
+ *                     schema:
+ *                         $ref: "#/components/schemas/actividadNew"
+ * 
+ *         responses:
+ *             '201':
+ *                 description: actividad creada con exito
+ *             '401':
+ *                 description: No inicio session o no es administrador
+ *             '403':
+ *                 description: Datos incorrectos
+ *             '500':
+ *                 description: Error del servidor 
+ */
 router.post("/actividades/agregar", validator.validatorActividadNew, admin.agregarActividad);
+
+/**
+ * http://localhost:4001/api/admin
+ * 
+ * Route modify actividad
+ * @swagger
+ * /admin/actividades/modificar:
+ *     put:
+ *         tags:
+ *             - admin
+ *             - actividad
+ *         summary: "Modificar actividad"
+ *         description: "Ruta para modificar actividad"
+ *         requestBody:
+ *             content:
+ *                 application/json:
+ *                     schema:
+ *                         $ref: "#/components/schemas/actividadUpdate"
+ * 
+ *         responses:
+ *             '201':
+ *                 description: actividad creada con exito
+ *             '401':
+ *                 description: No inicio session o no es administrador
+ *             '403':
+ *                 description: Datos incorrectos
+ *             '404':
+ *                 description: Actividad no encontrada
+ *             '500':
+ *                 description: Error del servidor 
+ */
 router.put("/actividades/modificar", validator.validatorActividadUpdate, admin.modificarActividad);
+
+/**
+ * http://localhost:4001/api/admin
+ * 
+ * Route delete activity
+ * @swagger
+ * /admin/actividades/eliminar/{id}:
+ *     delete:
+ *         tags:
+ *             - admin
+ *             - actividad
+ *         summary: "Eliminar actividad"
+ *         description: "Ruta para eliminar actividad"
+ *         parameters:
+ *         - name: id
+ *           in: path
+ *           description: ID del actividad
+ *           required: true
+ *           schema:
+ *             type:string
+ * 
+ *         responses:
+ *             '200':
+ *                 description: Actividad eliminada
+ *             '401':
+ *                 description: No inicio session o no es administrador
+ *             '403':
+ *                 description: ID de actividad no valido
+ *             '500':
+ *                 description: Error del servidor 
+ */
 router.delete("/actividades/eliminar/:id", validator.validatorId, admin.eliminarActividad);
 
 export { router };

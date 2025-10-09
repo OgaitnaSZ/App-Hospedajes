@@ -97,7 +97,7 @@ export async function getHospedaje(req: Request, res: Response) {
       });
   
       if (!hospedaje) {
-        handleHttpError(res, "No se encuentra el hospedaje", 400)
+        handleHttpError(res, "No se encuentra el hospedaje", 404)
         return;
       }
           
@@ -115,7 +115,7 @@ export async function getHospedajesDestacados(req: Request, res: Response) {
       });
   
       if (!hospedajes) {
-        handleHttpError(res, "No hay hospedajes destacados", 400)
+        handleHttpError(res, "No hay hospedajes destacados", 404)
         return;
       }
 

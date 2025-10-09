@@ -76,7 +76,7 @@ export async function eliminarHospedaje(req: Request, res: Response) {
     });
 
     if (!hospedaje) {
-      handleHttpError(res, "No se encuentra el hospedaje", 400)
+      handleHttpError(res, "No se encuentra el hospedaje", 404)
       return;
     }
 
@@ -115,7 +115,7 @@ export async function getHabitaciones(req: Request, res: Response) {
     if(habitaciones.length > 0){
       res.status(200).json(habitaciones);
     }else{
-      return res.status(200).send("No se encontraron habitaciones para este hospedaje.")
+      return res.status(404).send("No se encontraron habitaciones para este hospedaje.")
     }
   } catch(error){
     handleHttpError(res, "Error al obtener habitaciones", 500);
@@ -193,17 +193,12 @@ export async function eliminarHabitacion(req: Request, res: Response) {
 // Actividades
 export async function getActividades(req: Request, res: Response) {
   try {
-    const data = req.params;
-    const idActividad = <string>data.id;
-
-    const actividades = await prisma.actividades.findMany({
-        where: { idActividad: idActividad }
-    })
+    const actividades = await prisma.actividades.findMany();
 
     if(actividades.length > 0){
       res.status(200).json(actividades);
     }else{
-      return res.status(200).send("No se encontraron actividades.")
+      return res.status(404).send("No se encontraron actividades.")
     }
   } catch(error){
     handleHttpError(res, "Error al intentar obtener actividades", 500);

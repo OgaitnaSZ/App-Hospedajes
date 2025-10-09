@@ -205,7 +205,7 @@ export async function resetPassword(req: Request, res: Response): Promise<void> 
     });
 
     if (!user) {
-      handleHttpError(res, "Usuario no encontrado", 400)
+      handleHttpError(res, "Usuario no encontrado", 404)
       return;
     }
 

@@ -58,7 +58,7 @@ const swaggerDefinition = {
             },
             userUpdatePassword:{
                 type:"object",
-                required:["idUsuario","password","nuevoPassword"],
+                required:["idUsuario","password","newPassword"],
                 properties:{
                     idUsuario:{
                         type:"string"
@@ -66,7 +66,7 @@ const swaggerDefinition = {
                     password:{
                         type:"string"
                     },
-                    nuevoPassword:{
+                    newPassword:{
                         type:"string"
                     }
                 }
@@ -131,24 +131,6 @@ const swaggerDefinition = {
                 properties:{
                     email:{
                         type:"string"
-                    }
-                }
-            },
-            getHospedajes:{
-                type:"object",
-                required:["ciudad","fechaInicio","fechaFin","capacidad"],
-                properties:{
-                    ciudad:{
-                        type:"string"
-                    },
-                    fechaInicio:{
-                        type:"date"
-                    },
-                    fechaFin:{
-                        type:"date"
-                    },
-                    capacidad:{
-                        type:"number"
                     }
                 }
             },
@@ -287,11 +269,11 @@ const swaggerDefinition = {
                     }
                 }
             },
-            reservasUsuario:{
+            tipoReserva:{
                 type:"object",
-                required:["idUsuario","tipo"],
+                required:["id","tipo"],
                 properties:{
-                    idUsuario:{
+                    id:{
                         type:"string"
                     },
                     tipo:{
@@ -307,6 +289,15 @@ const swaggerDefinition = {
                         type:"string"
                     },
                     tipo:{
+                        type:"string"
+                    }
+                }
+            },
+            verificarPago:{
+                type:"object",
+                required:["idPreferencia"],
+                properties:{
+                    idPreferencia:{
                         type:"string"
                     }
                 }
@@ -474,7 +465,7 @@ const swaggerDefinition = {
 const options: Options = {
     swaggerDefinition,
     apis:[
-        "./routes/*.ts"
+        "src/routes/*.ts"
     ]
 }
 

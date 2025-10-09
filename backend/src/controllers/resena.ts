@@ -39,6 +39,8 @@ export async function actualizarResena(req: Request, res: Response) {
         }
     })
 
+    if(!resenaActualizada) return handleHttpError(res, "No se encontró la reseña", 404);
+
     return res.status(200).json(resenaActualizada);
   } catch(error){
     handleHttpError(res, "Error al obtener servicios", 500);
@@ -57,6 +59,8 @@ export async function getResenasUsuario(req: Request, res: Response) {
             idHabitacion: String(idHabitacion), 
         }
     })
+
+    if(!resenaUsuario) return handleHttpError(res, "No se encontraron reseñas", 404);
     
     res.status(200).json(resenaUsuario);
   } catch(error){
@@ -89,6 +93,8 @@ export async function getMejoresResenas(req: Request, res: Response) {
       },
     });
 
+    if(!resenas) return handleHttpError(res, "No se encontraron reseñas de 5 o 4 estrellas", 404);
+
     const shuffled = resenas.sort(() => Math.random() - 0.5).slice(0, cantidad);
 
     const topResenas = shuffled.map((r) => ({
@@ -114,7 +120,7 @@ export async function eliminarResena(req: Request, res: Response) {
       where: { idResena: String(id) }
     });
 
-    res.json({ success: true, message: 'Reseña eliminada exitosamente' });
+    res.status(200).json({ success: true, message: 'Reseña eliminada exitosamente' });
   } catch(error){
     handleHttpError(res, "Error al obtener servicios", 500);
     return;

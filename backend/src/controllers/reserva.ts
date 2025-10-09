@@ -100,7 +100,7 @@ export async function obtenerReserva(req: Request, res: Response) {
           });
         }
     
-        if (!reserva) return handleHttpError(res, "No se encuentra la reserva", 400)
+        if (!reserva) return handleHttpError(res, "No se encuentra la reserva", 404)
             
         res.status(200).json(reserva);
     } catch(error){
@@ -268,7 +268,7 @@ export async function verificarPagoHospedaje(req: Request, res: Response) {
       if (!detalles.length) return res.status(404).json({ error: 'Detalles no encontrados' });
   
       //enviarNotificacion(detalles);
-      res.json({ estado: 'aprobado', detalles });
+      res.status(200).json({ estado: 'aprobado', detalles });
 
     } catch(error){
       console.log(error);
