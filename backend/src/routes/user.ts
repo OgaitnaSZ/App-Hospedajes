@@ -9,7 +9,7 @@ import { authMiddleware } from "../middleware/session";
  * 
  * Route get data user
  * @swagger
- * /user/update-password/{id}":
+ * /user/get-data/{id}":
  *     get:
  *         tags:
  *             - user
@@ -31,6 +31,8 @@ import { authMiddleware } from "../middleware/session";
  *                 description: ID de usuario no valido
  *             '401':
  *                 descripcion: No inicio session
+ *             '403':
+ *                 descripcion: No hay permisos
  *             '404':
  *                 description: Usuario no encontrado
  *             '500':
@@ -61,6 +63,8 @@ router.get("/get-data/:id", authMiddleware, validator.validatorUserData, user.ge
  *                  description: Usuario actualizado 
  *              '401':
  *                  description: No inicio session
+ *              '403':
+ *                  description: Formato incorrecto o no hay permisos
  *              '404':
  *                  description: Usuario no encontrado
  *              '500':
@@ -90,6 +94,8 @@ router.put("/update-data", authMiddleware, validator.validatorUserUpdate, user.u
  *                 description: Usuario suscripto
  *             '400':
  *                 description: El email ya está suscrito
+ *             '403':
+ *                 description: Formato de email incorrcto
  *             '500':
  *                 description: Error del servidor 
  */

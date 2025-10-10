@@ -5,7 +5,7 @@ import { userRegister, userLogin } from "./helper/helperData";
 import { usuario } from '@prisma/client';
 import crypto from 'crypto';
 let JWT_TOKEN = "";
-let user:usuario;
+let user:any;
 
 // Se ejecuta antes de las pruebas
 beforeAll(async ()=>{
@@ -26,6 +26,7 @@ describe("[AUTH] esta es la prueba de /api/auth/register", ()=>{
         .send(userRegister);
 
         const { body } = response;
+        console.log(body);
 
         expect(response.statusCode).toEqual(201);
         expect(body).toHaveProperty("data");
@@ -48,7 +49,7 @@ describe("[AUTH] esta es la prueba de /api/auth/register", ()=>{
     test("Esto deberia retornar 404", async ()=>{
         const response = await request(app)
         .post('/api/auth/register')
-        .send({ ...userRegister, email: "testing@gmail.com"});
+        .send({ ...userRegister, email: "testing123@gmail.com"});
 
         expect(response.statusCode).toEqual(404);
     })
@@ -91,7 +92,7 @@ describe("[AUTH] esta es la prueba de /api/auth/login", ()=>{
     test("Esto deberia retornar 404", async ()=>{
         const response = await request(app)
         .post('/api/auth/login')
-        .send({ ...userLogin, email: "testing@gmail.com"});
+        .send({ ...userLogin, email: "testin1g1543111@gmail.com"});
 
         expect(response.statusCode).toEqual(404);
     })
@@ -147,7 +148,7 @@ describe("[AUTH] esta es la prueba de /api/auth/recover-password", ()=>{
     test("Esto deberia retornar 200", async ()=>{
         const response = await request(app)
         .post('/api/auth/recover-password')
-        .send({email: "testttt123@gmail.com"});
+        .send({email: "test7535@gmail.com"});
 
         const { body } = response;
 

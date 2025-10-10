@@ -2,12 +2,12 @@
 export const userRegister = {
     "nombre": "Santiago",
     "apellido": "Zelaya",
-    "email": "admin@gmail.com",
+    "email": "admin4@gmail.com",
     "telefono": "12381923",
-    "password": "admin"
+    "password": "admin4"
 }
 
 export const userLogin = {
-    "email": "admin@gmail.com",
-    "password": "admin"
+    "email": "admin4@gmail.com",
+    "password": "admin4"
 }

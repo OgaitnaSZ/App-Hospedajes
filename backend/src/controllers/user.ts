@@ -7,7 +7,8 @@ const prisma = new PrismaClient()
 // Devolver datos del usuario
 export async function getData(req: Request, res: Response) {
   try {
-    const idUsuario = req.query.idUsuario;
+    const data = req.params;
+    const idUsuario = <string>data.id;
 
     if (req.user.idUsuario !== idUsuario) {
       return handleHttpError(res, "No tienes permiso para ver datos de este usuario", 403);
