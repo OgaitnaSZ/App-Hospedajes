@@ -204,16 +204,6 @@ export async function resetPassword(req: Request, res: Response): Promise<void> 
       return;
     }
 
-    // Buscar usuario por email
-    const user = await prisma.usuario.findUnique({
-      where: { email: resetEntry.email },
-    });
-
-    if (!user) {
-      handleHttpError(res, "Usuario no encontrado", 404)
-      return;
-    }
-
     // Hashear contraseña nueva
     const hashedPassword = await encrypt(data.password);
 

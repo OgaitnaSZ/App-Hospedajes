@@ -26,6 +26,8 @@ import { authMiddleware } from "../middleware/session";
  *                 description: Datos correctos
  *             '400':
  *                 description: Password invalido
+ *             '403':
+ *                 description: Datos incorrectos
  *             '404':
  *                 description: Usuario no existe 
  *             '500':
@@ -55,6 +57,8 @@ router.post("/login", validator.validatorLogin, auth.login);
  *                 description: Usuario registrado
  *             '400':
  *                 description: Password invalido o email ya existente
+ *             '403':
+ *                 description: Datos incorrectos
  *             '500':
  *                 description: Error del servidor 
  */
@@ -84,6 +88,8 @@ router.post("/register", validator.validatorRegister, auth.register);
  *                 description: Password cambiado
  *             '400':
  *                 description: Password invalido
+ *             '403':
+ *                 description: Datos incorrectos o no hay permisos
  *             '404':
  *                 description: Usuario no encontrado
  *             '500':
@@ -111,6 +117,8 @@ router.post("/update-password", authMiddleware, validator.validatorUpdatePasswor
  *         responses:
  *             '200':
  *                 description: Email enviado
+ *             '403':
+ *                 description: Formato de email incorrecto
  *             '500':
  *                 description: Error del servidor 
  */
@@ -138,8 +146,8 @@ router.post("/recover-password", validator.validatorRecoverPassword, auth.recove
  *                 description: Password cambiado
  *             '400':
  *                 description: Token inválido o expirado
- *             '404':
- *                 description: Usuario no encontrado
+ *             '403':
+ *                 description: Formato incorrecto
  *             '500':
  *                 description: Error del servidor 
  */
