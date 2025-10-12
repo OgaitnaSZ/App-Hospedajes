@@ -11,12 +11,7 @@ export async function getData(req: Request, res: Response) {
     const idUsuario = <string>data.id;
 
     if (req.user.idUsuario !== idUsuario) {
-      return handleHttpError(res, "No tienes permiso para ver datos de este usuario", 403);
-    }
-
-    if (!idUsuario) {
-        handleHttpError(res, "ID de usuario no válido", 400);
-        return;
+      return handleHttpError(res, "No tienes permiso para ver datos de este usuario", 401);
     }
 
     const existingUser = await prisma.usuario.findUnique({

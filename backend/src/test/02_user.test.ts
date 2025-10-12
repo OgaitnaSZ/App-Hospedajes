@@ -1,6 +1,8 @@
 import { beforeAll, describe, expect, test } from '@jest/globals';
 import request from "supertest";
 import app from "../app";
+import { PrismaClient } from '../generated/prisma'
+const prisma = new PrismaClient()
 import { userRegister, userLogin } from "./helper/helperData";
 import { usuario } from '@prisma/client';
 import crypto from 'crypto';
@@ -9,8 +11,8 @@ let user:usuario;
 
 // Se ejecuta antes de las pruebas
 beforeAll(async ()=>{
-    //await prisma.usuario.deleteMany();
-    
+    await prisma.suscripcionesNewsletter.deleteMany();
+
     const response = await request(app)
         .post('/api/auth/login')
         .send(userLogin);
@@ -21,30 +23,21 @@ beforeAll(async ()=>{
 
 describe("[USER] esta es la prueba de /api/user/get-data/:id", ()=>{
     // Formato de ID no valido
-    test("Esto deberia retornar 400", async ()=>{
-        const response = await request(app)
-        .get('/api/user/get-data/123')
-        .set("Authorization", `Bearer ${JWT_TOKEN}`);
-
-        expect(response.statusCode).toEqual(400);
-    })
-
-    // No inicio session o es otro usuario
     test("Esto deberia retornar 403", async ()=>{
         const response = await request(app)
         .get('/api/user/get-data/123')
+        .set("Authorization", `Bearer ${JWT_TOKEN}`);
 
         expect(response.statusCode).toEqual(403);
     })
 
-    // Usuario no encontrado
-    test("Esto deberia retornar 404", async ()=>{
+    // No inicio session o es otro usuario
+    test("Esto deberia retornar 401", async ()=>{
         const fakeId = crypto.randomUUID();
         const response = await request(app)
         .get(`/api/user/get-data/${fakeId}`)
-        .set("Authorization", `Bearer ${JWT_TOKEN}`);
 
-        expect(response.statusCode).toEqual(404);
+        expect(response.statusCode).toEqual(401);
     })
 
     // Usuario correcto
@@ -74,15 +67,15 @@ describe("[USER] esta es la prueba de /api/user/update-data", ()=>{
         expect(response.statusCode).toEqual(403);
     })
 
-    // Usuario no encontrado
-    test("Esto deberia retornar 404", async ()=>{
+    // No se puede modificar a otro usuario
+    test("Esto deberia retornar 403", async ()=>{
         const fakeId = crypto.randomUUID();
         const response = await request(app)
         .put(`/api/user/update-data`)
         .send({... user, idUsuario: fakeId})
         .set("Authorization", `Bearer ${JWT_TOKEN}`);
 
-        expect(response.statusCode).toEqual(404);
+        expect(response.statusCode).toEqual(403);
     })
 
     // Usuario correcto

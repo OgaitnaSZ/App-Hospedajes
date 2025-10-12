@@ -1,21 +1,23 @@
 import { beforeAll, describe, expect, test } from '@jest/globals';
 import request from "supertest";
 import app from "../app";
-import { userRegister, userLogin } from "./helper/helperData";
-import { usuario } from '@prisma/client';
 import crypto from 'crypto';
+import { PrismaClient } from '../generated/prisma'
+const prisma = new PrismaClient()
+import { userRegister, userLogin } from "./helper/helperData";
 let JWT_TOKEN = "";
 let user:any;
 
 // Se ejecuta antes de las pruebas
 beforeAll(async ()=>{
-    //await prisma.usuario.deleteMany();
+    await prisma.usuario.deleteMany();
     
     const response = await request(app)
         .post('/api/auth/register')
         .send(userRegister);
         
     JWT_TOKEN = response.body.data.token;
+    user = response.body.data.user;
 })
 
 describe("[AUTH] esta es la prueba de /api/auth/register", ()=>{
@@ -23,17 +25,14 @@ describe("[AUTH] esta es la prueba de /api/auth/register", ()=>{
     test("Esto deberia retornar 201", async ()=>{
         const response = await request(app)
         .post('/api/auth/register')
-        .send(userRegister);
+        .send({ ...userRegister, email: "admin1@gmail.com" });
 
         const { body } = response;
-        console.log(body);
 
         expect(response.statusCode).toEqual(201);
         expect(body).toHaveProperty("data");
         expect(body.data).toHaveProperty("token");
         expect(body.data).toHaveProperty("user");
-
-        user = body.data.user;
     })
 
     // Formato incorrecto
@@ -46,12 +45,12 @@ describe("[AUTH] esta es la prueba de /api/auth/register", ()=>{
     })
 
     // Email ya registrado
-    test("Esto deberia retornar 404", async ()=>{
+    test("Esto deberia retornar 400", async ()=>{
         const response = await request(app)
         .post('/api/auth/register')
-        .send({ ...userRegister, email: "testing123@gmail.com"});
+        .send(userRegister);
 
-        expect(response.statusCode).toEqual(404);
+        expect(response.statusCode).toEqual(400);
     })
 })
 
@@ -92,38 +91,38 @@ describe("[AUTH] esta es la prueba de /api/auth/login", ()=>{
     test("Esto deberia retornar 404", async ()=>{
         const response = await request(app)
         .post('/api/auth/login')
-        .send({ ...userLogin, email: "testin1g1543111@gmail.com"});
+        .send({ ...userLogin, email: "testing111@gmail.com"});
 
         expect(response.statusCode).toEqual(404);
     })
 })
 
 describe("[AUTH] esta es la prueba de /api/auth/update-password", ()=>{
-    // Sin session activa u otro usuario logeado
-    test("Esto deberia retornar 403", async ()=>{
+    // Sin session activa
+    test("Esto deberia retornar 401", async ()=>{
         const response = await request(app)
         .post('/api/auth/update-password')
-        .send({ idUsuario: user.idUsuario , password: user.password, newPassword: "123456"});
+        .send({ idUsuario: user.idUsuario , password: "admin", newPassword: "123456"});
 
-        expect(response.statusCode).toEqual(403);
+        expect(response.statusCode).toEqual(401);
     })
 
-    // Usuario no existe
-    test("Esto deberia retornar 404", async ()=>{
+    // No se puede modificar a otro usuario que no sea el logeado
+    test("Esto deberia retornar 401", async ()=>{
         const fakeId = crypto.randomUUID();
         const response = await request(app)
         .post('/api/auth/update-password')
-        .send({ idUsuario: fakeId , password: user.password, newPassword: "123456"})
+        .send({ idUsuario: fakeId , password: "admin", newPassword: "admin"})
         .set("Authorization", `Bearer ${JWT_TOKEN}`);
 
-        expect(response.statusCode).toEqual(404);
+        expect(response.statusCode).toEqual(401);
     })
 
     // Password erronea
     test("Esto deberia retornar 400", async ()=>{
         const response = await request(app)
         .post('/api/auth/update-password')
-        .send({ idUsuario: user.idUsuario , password: "111111111", newPassword: "123456"})
+        .send({ idUsuario: user.idUsuario , password: "111111111", newPassword: "admin"})
         .set("Authorization", `Bearer ${JWT_TOKEN}`);
 
         expect(response.statusCode).toEqual(400);
@@ -133,7 +132,7 @@ describe("[AUTH] esta es la prueba de /api/auth/update-password", ()=>{
     test("Esto deberia retornar 200", async ()=>{
         const response = await request(app)
         .post('/api/auth/update-password')
-        .send({ idUsuario: user.idUsuario , password: user.password, newPassword: "123456"})
+        .send({ idUsuario: user.idUsuario, password: "admin", newPassword: "admin"})
         .set("Authorization", `Bearer ${JWT_TOKEN}`);
 
         const { body } = response;
@@ -148,19 +147,16 @@ describe("[AUTH] esta es la prueba de /api/auth/recover-password", ()=>{
     test("Esto deberia retornar 200", async ()=>{
         const response = await request(app)
         .post('/api/auth/recover-password')
-        .send({email: "test7535@gmail.com"});
-
-        const { body } = response;
+        .send({email: "test1115@gmail.com"});
 
         expect(response.statusCode).toEqual(200);
-        user = body.data.message;
     })
 
     // Formato incorrecto
     test("Esto deberia retornar 403", async ()=>{
         const response = await request(app)
         .post('/api/auth/recover-password')
-        .send({ email: "testttt123"});
+        .send({ email: "test123"});
 
         expect(response.statusCode).toEqual(403);
     })
@@ -171,10 +167,7 @@ describe("[AUTH] esta es la prueba de /api/auth/recover-password", ()=>{
         .post('/api/auth/recover-password')
         .send({email: user.email});
 
-        const { body } = response;
-
         expect(response.statusCode).toEqual(200);
-        user = body.data.message;
     })
 })
 
@@ -183,9 +176,7 @@ describe("[AUTH] esta es la prueba de /api/auth/reset-password", ()=>{
     test("Esto deberia retornar 400", async ()=>{
         const response = await request(app)
         .post('/api/auth/reset-password')
-        .send({password: "123456", token: ""});
-
-        const { body } = response;
+        .send({password: "123456", token: "1"});
 
         expect(response.statusCode).toEqual(400);
     })

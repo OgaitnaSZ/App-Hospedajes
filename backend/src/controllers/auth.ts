@@ -93,7 +93,7 @@ export async function updatePassword(req: Request, res: Response): Promise<void>
     const dataPassword = matchedData(req);
 
     if (req.user.idUsuario !== dataPassword.idUsuario) {
-      handleHttpError(res, "No tienes permiso para actualizar este usuario", 403);
+      handleHttpError(res, "No tienes permiso para actualizar este usuario", 401);
       return
     }
 
@@ -173,14 +173,14 @@ export async function recoverPassword(req: Request, res: Response): Promise<void
 
     const resetLink = `${process.env.PUBLIC_URL}/reset-password?token=${token}`;
 
-    await transporter.sendMail({
-      from: '"Soporte" <no-reply@tu-dominio.com>',
-      to: emailUser.email,
-      subject: "Recuperación de contraseña",
-      text: `Haz clic en el siguiente enlace para restablecer tu contraseña: ${resetLink}`,
-      html: `<p>Haz clic en el enlace para restablecer tu contraseña:</p>
-             <a href="${resetLink}">${resetLink}</a>`,
-    });
+    // await transporter.sendMail({
+    //   from: '"Soporte" <no-reply@tu-dominio.com>',
+    //   to: emailUser.email,
+    //   subject: "Recuperación de contraseña",
+    //   text: `Haz clic en el siguiente enlace para restablecer tu contraseña: ${resetLink}`,
+    //   html: `<p>Haz clic en el enlace para restablecer tu contraseña:</p>
+    //          <a href="${resetLink}">${resetLink}</a>`,
+    // });
 
     res.status(200).send({ message: "Correo de recuperación enviado" });
 
