@@ -4,7 +4,6 @@ import { handleHttpError } from "../utils/handleError";
 import fs from 'fs';
 const prisma = new PrismaClient()
 
-const PUBLIC_URL = process.env.PUBLIC_URL;
 const MEDIA_PATH = `${__dirname}/../uploads`;
 
 export async function subirFotos(req: Request, res: Response) {
@@ -82,26 +81,23 @@ export async function eliminarFoto(req: Request, res: Response) {
         });
         
         if (!foto) return handleHttpError(res, "Archivo no encontrado en la base de datos", 404);
-    
-        const deleteResponse = await prisma.fotos.delete({
-            where: { idFoto: id }
-        });
         
         const filePath  = foto.path;
+        const fileName = filePath.split('/').pop();
 
         // Verificar si el archivo existe
-        if (fs.existsSync(filePath)) {
+        if (fs.existsSync(`${MEDIA_PATH}/${fileName}`)) {
             // Eliminar archivo físico
-            fs.unlinkSync(filePath);
+            fs.unlinkSync(`${MEDIA_PATH}/${fileName}`);
         } else {
-            res.json('El archivo físico no existía, pero se procederá a eliminar el registro de la BD');
+            //console.log('El archivo físico no existía, pero se procederá a eliminar el registro de la BD');
         }
-        const data = {
-            filePath,
-            deleted: true
-        };
-    
-        return res.status(200).json({ mensaje: 'Archivo eliminado con exito', data });
+
+        await prisma.fotos.delete({
+            where: { idFoto: id }
+        });
+
+        res.status(200).json({ success: true, message: 'Foto eliminada exitosamente' });
     } catch (error) {
         return handleHttpError(res, "Error al eliminar foto", 500);
     }

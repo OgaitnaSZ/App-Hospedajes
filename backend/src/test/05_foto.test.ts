@@ -8,7 +8,7 @@ import { hospedaje, userLoginAdmin } from './helper/helperData';
 let JWT_TOKEN = "";
 let idHospedaje: string;
 const filePath = `${__dirname}/dump/hotel.jpg`;
-let fotoSubida: string;
+let idFoto: string;
 
 // Se ejecuta antes de las pruebas
 beforeAll(async ()=>{
@@ -64,7 +64,7 @@ describe("[Foto] Pruebas de /api/foto/subir", () => {
         expect(response.body.data[0]).toHaveProperty("path");
         expect(response.body.data[0].idHospedaje).toEqual(idHospedaje);
 
-        fotoSubida = response.body.data[0];
+        idFoto = response.body.data[0].idFoto;
     });
 });
 
@@ -113,5 +113,46 @@ describe("[Foto] Pruebas de /api/foto/hospedaje/{id}", () => {
         expect(response.body[0]).toHaveProperty("idFoto");
         expect(response.body[0]).toHaveProperty("path");
         expect(response.body[0].idHospedaje).toEqual(idHospedaje);
+    });
+});
+
+describe("[Foto] Pruebas de /api/foto/eliminar/{id}", () => {
+    // ID formato de ID incorrecto
+    test("Debería retornar 403 - formato de ID no válido", async () => {
+        const response = await request(app)
+        .delete('/api/foto/eliminar/123')
+        .set("Authorization", `Bearer ${JWT_TOKEN}`)
+
+        expect(response.statusCode).toEqual(403);
+    });
+
+    // ID de foto no existe
+    test("Debería retornar 404 - no existe el hospedaje", async () => {
+        const fakeId = crypto.randomUUID();
+        const response = await request(app)
+        .delete(`/api/foto/eliminar/${fakeId}`)
+        .set("Authorization", `Bearer ${JWT_TOKEN}`)
+
+        expect(response.statusCode).toEqual(404);
+    });
+
+    // No inicio session o no es administrador
+    test("Debería retornar 401 - no inicio session o no es adminsitrador", async () => {
+        const response = await request(app)
+        .delete('/api/foto/eliminar/123')
+
+        expect(response.statusCode).toEqual(401);
+    });
+
+
+    // Foto eliminada
+    test("Debería retornar 200 - foto eliminada", async () => {
+        const response = await request(app)
+        .delete(`/api/foto/eliminar/${idFoto}`)
+        .set("Authorization", `Bearer ${JWT_TOKEN}`);
+        
+        expect(response.statusCode).toEqual(200);
+        expect(response.body.success).toBe(true);
+        expect(response.body.message).toContain("exitosamente");
     });
 });
