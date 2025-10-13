@@ -131,7 +131,7 @@ model reservas_actividades {
   idActividad       String                      @db.VarChar(36)
   fecha             DateTime                    @db.Date
   personas          Int
-  precioTotal       Decimal                     @db.Decimal(10, 2)
+  precioTotal       Float                       @db.Float
   estado            reservas_actividades_estado
   created_at        DateTime                    @default(now()) @db.Timestamp(0)
   updated_at        DateTime                    @default(now()) @db.Timestamp(0)
@@ -153,7 +153,7 @@ model pagos_actividades {
   direccion            String                   @db.Text
   email                String                   @db.Text
   telefono             String                   @db.Text
-  monto                Decimal                  @db.Decimal(10, 2)
+  monto                Float                    @db.Float
   idPreferencia        String                   @db.VarChar(64)
   estado               pagos_actividades_estado @default(pendiente)
   created_at           DateTime                 @default(now()) @db.Timestamp(0)
@@ -174,7 +174,7 @@ model pagos_hospedajes {
   direccion           String                  @db.Text
   email               String                  @db.Text
   telefono            String                  @db.Text
-  monto               Decimal                 @db.Decimal(10, 2)
+  monto               Float                   @db.Float
   idPreferencia       String                  @db.VarChar(64)
   estado              pagos_hospedajes_estado @default(pendiente)
   created_at          DateTime                @default(now()) @db.Timestamp(0)
@@ -194,7 +194,7 @@ model reservas_hospedajes {
   fechaInicio      DateTime                   @db.Date
   fechaFin         DateTime                   @db.Date
   personas         Int
-  precioTotal      Decimal                    @db.Decimal(10, 2)
+  precioTotal      Float                      @db.Float
   estado           reservas_hospedajes_estado
   created_at       DateTime                   @default(now()) @db.Timestamp(0)
   updated_at       DateTime                   @default(now()) @db.Timestamp(0)

@@ -12,13 +12,15 @@ let habitacionId: string;
 let actividadId: string;
 
 beforeAll(async () => {
-    // Limpiar datos de pruebas anteriores
-    await prisma.actividades.deleteMany();
+    await prisma.resena.deleteMany();
+    await prisma.pagos_actividades.deleteMany();
+    await prisma.pagos_hospedajes.deleteMany();
+    await prisma.reservas_hospedajes.deleteMany();
+    await prisma.reservas_actividades.deleteMany();
     await prisma.habitaciones.deleteMany();
     await prisma.fotos.deleteMany();
-    await prisma.reservas_hospedajes.deleteMany();
-    await prisma.resena.deleteMany();
     await prisma.hospedaje.deleteMany();
+    await prisma.actividades.deleteMany();
 
     // Login de usuario administrador
     const response = await request(app)

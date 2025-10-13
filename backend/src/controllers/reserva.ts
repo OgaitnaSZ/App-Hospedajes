@@ -56,27 +56,49 @@ export async function cancelarReserva(req: Request, res: Response) {
         let reservaCancelada:any = undefined;
 
         if (data.tipo == 'hospedaje'){
+          const reservaExistente = await prisma.reservas_hospedajes.findUnique({
+            where: { idReserva: String(data.id) }
+          });
+          
+          if (!reservaExistente) {
+            return handleHttpError(res, "ID de reserva no encontrada", 404)
+          }
+
           reservaCancelada = await prisma.reservas_hospedajes.update({
-              where: { idReserva: String(data.id) },
+              where: { 
+                idReserva: String(data.id),
+                idUsuario: req.user.idUsuario
+              },
               data: { 
                   estado: reservas_hospedajes_estado.pendiente_de_cancelacion,
               }
           });
         }else{
+            const reservaExistente = await prisma.reservas_actividades.findUnique({
+              where: { 
+                idReserva: String(data.id),
+              }
+            });
+            
+            if (!reservaExistente) {
+              return handleHttpError(res, "ID de reserva no encontrada", 404)
+            }
+
             reservaCancelada = await prisma.reservas_actividades.update({
-              where: { idReserva: String(data.id) },
+              where: { 
+                idReserva: String(data.id),
+                idUsuario: req.user.idUsuario
+              },
               data: { 
                   estado: reservas_actividades_estado.pendiente_de_cancelacion,
               }
-          });
+            });
+        }
+
+        if (!reservaCancelada) {
+          return handleHttpError(res, "No puedes cancelar la reserva de otro usuario", 401);
         }
         
-        if(!reservaCancelada){
-            handleHttpError(res, "Reserva no encontrada", 404)
-            return
-        }
-    
-    
         res.status(200).json(reservaCancelada);
 
     } catch(error){
@@ -91,17 +113,31 @@ export async function obtenerReserva(req: Request, res: Response) {
         let reserva:any = undefined;
 
         if (data.tipo == 'hospedaje'){
+          const reservaExistente = await prisma.reservas_hospedajes.findUnique({
+            where: { idReserva: String(data.id) }
+          });
+          
+          if (!reservaExistente) {
+            return handleHttpError(res, "ID de reserva no encontrada", 404)
+          }
+
           reserva = await prisma.reservas_hospedajes.findUnique({
               where: { idReserva: String(data.id) }
           });
         }else{
+          const reservaExistente = await prisma.reservas_actividades.findUnique({
+            where: { idReserva: String(data.id) }
+          });
+          
+          if (!reservaExistente) {
+            return handleHttpError(res, "ID de reserva no encontrada", 404)
+          }
+
           reserva = await prisma.reservas_actividades.findUnique({
               where: { idReserva: String(data.id) }
           });
         }
-    
-        if (!reserva) return handleHttpError(res, "No se encuentra la reserva", 404)
-            
+              
         res.status(200).json(reserva);
     } catch(error){
         return handleHttpError(res, "Error al obtener reserva", 500);
@@ -112,6 +148,11 @@ export async function obtenerReservasUsuario(req: Request, res: Response) {
     try{
         const data = matchedData(req);
         let reservasUsuario:any = undefined;
+
+        if (req.user.idUsuario !== data.id) {
+          handleHttpError(res, "No tienes permiso para ver esta reserva", 401);
+          return
+        }
 
         if (data.tipo == 'hospedaje'){
           reservasUsuario = await prisma.reservas_hospedajes.findMany({
@@ -252,8 +293,9 @@ export async function verificarPagoHospedaje(req: Request, res: Response) {
           select: { estado: true, idPago: true, idReserva: true, idUsuario: true },
       });
   
-      if (!pago) return res.status(404).json({ error: 'Pago no encontrado' });
-      if (pago.estado !== 'aprobado') return res.json({ estado: pago.estado });
+      if (!pago || pago.estado !== 'aprobado') {
+        return res.status(404).json({ error: 'Pago no aprobado o no encontrado' });
+      }
   
       // Detalles de la reserva
       const detalles = await prisma.reservas_hospedajes.findMany({
@@ -286,8 +328,9 @@ export async function verificarPagoActividad(req: Request, res: Response) {
             select: { estado: true, idPago: true, idReserva: true, idUsuario: true },
         });
     
-        if (!pago) return res.status(404).json({ error: 'Pago no encontrado' });
-        if (pago.estado !== 'aprobado') return res.json({ estado: pago.estado });
+        if (!pago || pago.estado !== 'aprobado') {
+          return res.status(404).json({ error: 'Pago no aprobado o no encontrado' });
+        }
     
         // Detalles de la reserva
         const detalles = await prisma.reservas_actividades.findMany({

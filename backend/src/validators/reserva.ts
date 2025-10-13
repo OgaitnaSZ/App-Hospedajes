@@ -108,7 +108,8 @@ export const validatorReservaActividad = [
     .notEmpty().withMessage('El teléfono no puede estar vacío.'),
 
   check("idPreferencia")
-    .isUUID().withMessage('El ID de preferencia debe ser un UUID válido.'),
+    .exists().withMessage('El ID de preferencia es obligatorio.')
+    .notEmpty().withMessage('El ID de preferencia no puede estar vacío.'),
 
   (req: Request, res: Response, next: NextFunction) => validateResults(req, res, next)
 ];
