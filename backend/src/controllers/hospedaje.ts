@@ -73,7 +73,7 @@ export async function getHospedajes(req: Request, res: Response) {
     
         const result = hospedajes.map((h) => {
           const capacidades = h.habitaciones.map((hab) => hab.capacidad);
-          const precios = h.habitaciones.map((hab) => hab.precio.toNumber());
+          const precios = h.habitaciones.map((hab) => hab.precio);
           return {
             ...h,
             Capacidad: Math.max(...capacidades),

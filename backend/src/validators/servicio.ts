@@ -6,7 +6,6 @@ export const validatorServicios = [
     query("tipo")
       .exists().withMessage("El Tipo es obligatorio")
       .notEmpty().withMessage("El Tipo no puede estar vacío")
-      .isLength({ max: 10 }).withMessage("El Tipo debe tener como máximo 10 caracteres")
       .isIn(['hospedaje', 'habitacion']).withMessage("Tipo no valido"),
 
 
