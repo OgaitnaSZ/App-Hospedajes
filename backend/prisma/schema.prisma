@@ -36,7 +36,7 @@ model habitaciones {
   idHospedaje         String?               @db.Char(36)
   numero              String                @db.VarChar(10)
   tipo                habitaciones_tipo
-  precio              Decimal               @db.Decimal(10, 2)
+  precio              Float                 @db.Float
   capacidad           Int
   servicios           String?               @db.VarChar(255)
   created_at          DateTime              @default(now()) @db.Timestamp(0)

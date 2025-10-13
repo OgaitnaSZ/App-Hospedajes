@@ -36,6 +36,14 @@ export async function agregarHospedaje(req: Request, res: Response) {
 export async function modificarHospedaje(req: Request, res: Response) {
   try {
     const dataHospedaje = matchedData(req);
+    
+    const hospedajeExistente = await prisma.hospedaje.findUnique({
+      where: { idHospedaje: String(dataHospedaje.idHospedaje) }
+    });
+    
+    if (!hospedajeExistente) {
+      return handleHttpError(res, "ID de hospedaje no encontrado", 404)
+    }
 
     const updatedHospedaje = await prisma.hospedaje.update({
       where: { idHospedaje: String(dataHospedaje.idHospedaje) },
@@ -53,11 +61,6 @@ export async function modificarHospedaje(req: Request, res: Response) {
       } 
     });
 
-    if(!updatedHospedaje){
-      handleHttpError(res, "ID de hospedaje incorrecto", 404)
-      return
-    }
-
     res.status(200).json(updatedHospedaje);
   } catch(error){
     handleHttpError(res, "Error al obtener datos del hospedaje", 500);
@@ -69,7 +72,6 @@ export async function eliminarHospedaje(req: Request, res: Response) {
   try {
     const data = req.params;
     const id = <string>data.id;
-    console.log(data.id);
 
     const hospedaje = await prisma.hospedaje.findUnique({
         where: { idHospedaje: String(id)}
@@ -93,10 +95,9 @@ export async function eliminarHospedaje(req: Request, res: Response) {
       where: { idHospedaje: String(id) }
     });
 
-    res.json({ success: true, message: 'Hospedaje eliminado exitosamente' });
+    res.status(200).json({ success: true, message: 'Hospedaje eliminado exitosamente' });
 
   } catch(error){
-    console.log(error);
     handleHttpError(res, "Error al intentar eliminar el hospedaje", 500);
     return;
   }
@@ -107,6 +108,14 @@ export async function getHabitaciones(req: Request, res: Response) {
   try {
     const data = req.params;
     const IdHospedaje = <string>data.id;
+
+    const habitacionExistente = await prisma.hospedaje.findUnique({
+      where: { idHospedaje: String(IdHospedaje) }
+    });
+    
+    if (!habitacionExistente) {
+      return handleHttpError(res, "ID de hospedaje no encontrado", 404)
+    }
 
     const habitaciones = await prisma.habitaciones.findMany({
         where: { idHospedaje: IdHospedaje }
@@ -127,17 +136,25 @@ export async function agregarHabitacion(req: Request, res: Response) {
   try {
     const dataHabitacion = matchedData(req);
 
+    const hospedajeExistente = await prisma.hospedaje.findUnique({
+      where: { idHospedaje: String(dataHabitacion.idHospedaje) }
+    });
+    
+    if (!hospedajeExistente) {
+      return handleHttpError(res, "ID de hospedaje no encontrado", 404)
+    }
+
     const nuevaHabitacion = await prisma.habitaciones.create({ 
       data: { 
-        idHospedaje: String(dataHabitacion.IdHospedaje),
-        numero: String(dataHabitacion.Numero), 
-        tipo: dataHabitacion.Tipo as habitaciones_tipo,
-        precio: Number(dataHabitacion.Precio),
-        capacidad: Number(dataHabitacion.Capacidad),
-        servicios: String(dataHabitacion.Servicios)
+        idHospedaje: String(dataHabitacion.idHospedaje),
+        numero: String(dataHabitacion.numero), 
+        tipo: dataHabitacion.tipo as habitaciones_tipo,
+        precio: Number(dataHabitacion.precio),
+        capacidad: Number(dataHabitacion.capacidad),
+        servicios: String(dataHabitacion.servicios)
       } 
     });
-        
+  
     return res.status(201).json(nuevaHabitacion);
   } catch(error){
     handleHttpError(res, "Error al agregar habitacion", 500);
@@ -149,25 +166,28 @@ export async function modificarHabitacion(req: Request, res: Response) {
   try {
     const dataHabitacion = matchedData(req);
 
+    const habitacionExistente = await prisma.habitaciones.findUnique({
+      where: { idHabitacion: String(dataHabitacion.idHabitacion) }
+    });
+    
+    if (!habitacionExistente) {
+      return handleHttpError(res, "ID de habitacion no encontrado", 404)
+    }
+
     const updatedHabitacion = await prisma.habitaciones.update({
-      where: { idHabitacion: String(dataHabitacion.IdHabitacion) },
+      where: { idHabitacion: String(dataHabitacion.idHabitacion) },
       data: { 
-        idHospedaje: String(dataHabitacion.IdHospedaje),
-        numero: String(dataHabitacion.Numero), 
+        idHospedaje: String(dataHabitacion.idHospedaje),
+        numero: String(dataHabitacion.numero), 
         tipo: dataHabitacion.tipo as habitaciones_tipo,
-        precio: Number(dataHabitacion.Precio),
-        capacidad: Number(dataHabitacion.Capacidad),
-        servicios: String(dataHabitacion.Servicios)
+        precio: Number(dataHabitacion.precio),
+        capacidad: Number(dataHabitacion.capacidad),
+        servicios: String(dataHabitacion.servicios)
       } 
     });
 
-    if(!updatedHabitacion){
-      handleHttpError(res, "ID de habitacion incorrecto", 404)
-      return
-    }
     res.status(200).json(updatedHabitacion);
   } catch(error){
-    console.log(error);
     handleHttpError(res, "Error al modificar la habitacion", 500);
     return;
   }
@@ -178,12 +198,20 @@ export async function eliminarHabitacion(req: Request, res: Response) {
     const data = req.params;
     const id = <string>data.id;
 
+    const habitacionExistente = await prisma.habitaciones.findUnique({
+      where: { idHabitacion: String(id) }
+    });
+    
+    if (!habitacionExistente) {
+      return handleHttpError(res, "ID de habitacion no encontrado", 404)
+    }
+
     // Eliminar habitacion
     await prisma.habitaciones.delete({
       where: { idHabitacion: String(id) }
     });
 
-    res.json({ success: true, message: 'Habitacion eliminada exitosamente' });
+    res.status(200).json({ success: true, message: 'Habitacion eliminada exitosamente' });
   } catch(error){
     handleHttpError(res, "Error al intentar eliminar la habitacion", 500);
     return;
@@ -231,6 +259,14 @@ export async function modificarActividad(req: Request, res: Response) {
   try {
     const dataActividad = matchedData(req);
 
+    const actividadExistente = await prisma.actividades.findUnique({
+      where: { idActividad: String(dataActividad.idActividad) }
+    });
+    
+    if (!actividadExistente) {
+      return handleHttpError(res, "ID de actividad no encontrado", 404)
+    }
+
     const updatedActividad = await prisma.actividades.update({
       where: { idActividad: String(dataActividad.idActividad) },
       data: { 
@@ -243,10 +279,6 @@ export async function modificarActividad(req: Request, res: Response) {
       } 
     });
 
-    if(!updatedActividad){
-      handleHttpError(res, "ID de habitacion incorrecto", 404)
-      return
-    }
     res.status(200).json(updatedActividad);
   } catch(error){
     handleHttpError(res, "Error al intentar eliminar la habitacion", 500);
@@ -262,7 +294,7 @@ export async function eliminarActividad(req: Request, res: Response) {
     await prisma.actividades.delete({
       where: { idActividad: String(id) }
     });
-    res.json({ success: true, message: 'Actividad eliminada exitosamente' });
+    res.status(200).json({ success: true, message: 'Actividad eliminada exitosamente' });
   } catch(error){
     handleHttpError(res, "Error al intentar eliminar la actividad", 500);
     return;

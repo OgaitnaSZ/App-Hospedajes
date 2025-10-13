@@ -10,7 +10,13 @@ let user:any;
 
 // Se ejecuta antes de las pruebas
 beforeAll(async ()=>{
-    await prisma.usuario.deleteMany();
+    await prisma.usuario.deleteMany({
+      where: {
+        rol: {
+          not: 'administrador'
+        }
+      }
+    });
     
     const response = await request(app)
         .post('/api/auth/register')
@@ -25,7 +31,7 @@ describe("[AUTH] esta es la prueba de /api/auth/register", ()=>{
     test("Esto deberia retornar 201", async ()=>{
         const response = await request(app)
         .post('/api/auth/register')
-        .send({ ...userRegister, email: "admin1@gmail.com" });
+        .send({ ...userRegister, email: "test1234@gmail.com" });
 
         const { body } = response;
 
@@ -102,7 +108,7 @@ describe("[AUTH] esta es la prueba de /api/auth/update-password", ()=>{
     test("Esto deberia retornar 401", async ()=>{
         const response = await request(app)
         .post('/api/auth/update-password')
-        .send({ idUsuario: user.idUsuario , password: "admin", newPassword: "123456"});
+        .send({ idUsuario: user.idUsuario , password: "test123", newPassword: "test1234"});
 
         expect(response.statusCode).toEqual(401);
     })
@@ -112,7 +118,7 @@ describe("[AUTH] esta es la prueba de /api/auth/update-password", ()=>{
         const fakeId = crypto.randomUUID();
         const response = await request(app)
         .post('/api/auth/update-password')
-        .send({ idUsuario: fakeId , password: "admin", newPassword: "admin"})
+        .send({ idUsuario: fakeId , password: "test123", newPassword: "test123"})
         .set("Authorization", `Bearer ${JWT_TOKEN}`);
 
         expect(response.statusCode).toEqual(401);
@@ -122,7 +128,7 @@ describe("[AUTH] esta es la prueba de /api/auth/update-password", ()=>{
     test("Esto deberia retornar 400", async ()=>{
         const response = await request(app)
         .post('/api/auth/update-password')
-        .send({ idUsuario: user.idUsuario , password: "111111111", newPassword: "admin"})
+        .send({ idUsuario: user.idUsuario , password: "111111111", newPassword: "test123"})
         .set("Authorization", `Bearer ${JWT_TOKEN}`);
 
         expect(response.statusCode).toEqual(400);
@@ -132,7 +138,7 @@ describe("[AUTH] esta es la prueba de /api/auth/update-password", ()=>{
     test("Esto deberia retornar 200", async ()=>{
         const response = await request(app)
         .post('/api/auth/update-password')
-        .send({ idUsuario: user.idUsuario, password: "admin", newPassword: "admin"})
+        .send({ idUsuario: user.idUsuario, password: "test123", newPassword: "test123"})
         .set("Authorization", `Bearer ${JWT_TOKEN}`);
 
         const { body } = response;
@@ -176,7 +182,7 @@ describe("[AUTH] esta es la prueba de /api/auth/reset-password", ()=>{
     test("Esto deberia retornar 400", async ()=>{
         const response = await request(app)
         .post('/api/auth/reset-password')
-        .send({password: "123456", token: "1"});
+        .send({password: "test123", token: "1"});
 
         expect(response.statusCode).toEqual(400);
     })

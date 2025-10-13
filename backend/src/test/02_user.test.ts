@@ -1,21 +1,27 @@
 import { beforeAll, describe, expect, test } from '@jest/globals';
 import request from "supertest";
 import app from "../app";
+import crypto from 'crypto';
 import { PrismaClient } from '../generated/prisma'
 const prisma = new PrismaClient()
 import { userRegister, userLogin } from "./helper/helperData";
-import { usuario } from '@prisma/client';
-import crypto from 'crypto';
 let JWT_TOKEN = "";
-let user:usuario;
+let user:any;
 
 // Se ejecuta antes de las pruebas
 beforeAll(async ()=>{
     await prisma.suscripcionesNewsletter.deleteMany();
+    await prisma.usuario.deleteMany({
+      where: {
+        rol: {
+          not: 'administrador'
+        }
+      }
+    });
 
     const response = await request(app)
-        .post('/api/auth/login')
-        .send(userLogin);
+        .post('/api/auth/register')
+        .send(userRegister);
         
     user = response.body.data.user;
     JWT_TOKEN = response.body.data.token;
