@@ -12,21 +12,40 @@ export async function subirFotos(req: Request, res: Response) {
         const { body, files } = req;
         
         if (!files || files.length === 0) return handleHttpError(res, "No se recibieron archivos", 400);
+
+        const hospedajeExistente = await prisma.hospedaje.findUnique({
+            where: { idHospedaje: String(body.idHospedaje) }
+        });
+        
+        if (!hospedajeExistente) {
+            return handleHttpError(res, "ID de hospedaje no encontrado", 404)
+        }
         
         // Mapear todos los archivos subidos
         const archivosData = (files as Express.Multer.File[]).map(file => ({
-            idHospedaje: body.IdHospedaje,
-            path: `${PUBLIC_URL}/uploads/${file.filename}`
+            idHospedaje: body.idHospedaje,
+            path: `${MEDIA_PATH}/uploads/${file.filename}`
         }));
         
         // Guardar en la db
         const data = await prisma.fotos.createMany({
             data: archivosData
         });
+
+        // Obtener las fotos recién creadas
+        const fotos = await prisma.fotos.findMany({
+            where: {
+                idHospedaje: body.idHospedaje
+            },
+            orderBy: {
+                idFoto: 'desc' // o como sea que se ordenen
+            },
+            take: archivosData.length
+        });
         
         return res.status(201).send({ 
           mensaje: `${data.count} fotos fueron agregadas`, 
-          data 
+          data: fotos
         });
     } catch (error) {
         console.log(error);

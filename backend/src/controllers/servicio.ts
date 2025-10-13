@@ -7,7 +7,7 @@ const prisma = new PrismaClient()
 export async function getServicios(req: Request, res: Response) {
   try {
     const data = matchedData(req);
-    const tipo = data.Tipo;
+    const tipo = data.tipo;
 
     const servicios = await prisma.servicios.findMany({
         where: { tipo: tipo }

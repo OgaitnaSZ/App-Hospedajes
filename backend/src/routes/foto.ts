@@ -64,6 +64,8 @@ router.get("/hospedaje/:id", validator.validatorId, foto.getFotos);
  *                 description: No se recibieron archivos
  *             '401':
  *                 description: No inicio session o no es administrador
+ *             '404':
+ *                 description: Hospedaje no existe
  *             '500':
  *                 description: Error del servidor 
  */

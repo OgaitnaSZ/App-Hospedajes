@@ -15,6 +15,9 @@ beforeAll(async () => {
     // Limpiar datos de pruebas anteriores
     await prisma.actividades.deleteMany();
     await prisma.habitaciones.deleteMany();
+    await prisma.fotos.deleteMany();
+    await prisma.reservas_hospedajes.deleteMany();
+    await prisma.resena.deleteMany();
     await prisma.hospedaje.deleteMany();
 
     // Login de usuario administrador
