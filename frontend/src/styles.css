@@ -1,2 +1,29 @@
 @import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;}
+
+main{padding-top: 8vh !important;}
+
+/* Tipografias */
+h1{
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  line-height: 1.2;
+}
+h2, h3, h4, h5, h6, .form-label{
+  font-family: "Poppins", sans-serif;
+}
+p, a{
+  font-family: "Open Sans", sans-serif;
+}
+
+/* Iconos Google */
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 1,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 24
+}

@@ -1,0 +1,140 @@
+<div class="relative h-screen bg-cover bg-center" style="background-image: url('http://localhost:4001/uploads/assets/home-img.jpg')">
+  <main class="flex flex-col justify-between items-center h-full bg-black/40 text-white px-4">
+    <div></div>
+    <div class="space-y-6">
+      <h1 class="text-4xl md:text-5xl font-bold text-center">Armemos tu próximo viaje.</h1>
+
+      <form
+        (ngSubmit)="buscarHospedajes()"
+        class="backdrop-blur-md bg-white/10 border border-white/40 rounded-2xl p-6 md:p-8 max-w-4xl mx-auto grid md:grid-cols-2 lg:grid-cols-3 gap-4"
+      >
+        <!-- Destino -->
+        <div>
+          <label class="block text-sm mb-1">Destino</label>
+          <select
+            [ngModel]="destino()"
+            (ngModelChange)="destino.set($event)"
+            name="destino"
+            class="w-full bg-transparent border border-white rounded-md px-3 py-2 text-white"
+          >
+            <option value="">¿A dónde quieres ir?</option>
+            <option value="termas">Termas de Río Hondo (SDE)</option>
+            <option value="salta">Salta</option>
+            <option value="tucuman">Tucumán</option>
+            <option value="jujuy">Jujuy</option>
+          </select>
+        </div>
+
+        <!-- Desde -->
+        <div>
+          <label class="block text-sm mb-1">Desde</label>
+          <input
+            type="date"
+            class="w-full bg-transparent border border-white rounded-md px-3 py-2 text-white"
+            [min]="fechaActual"
+            [disabled]="cualquierFecha()"
+            [ngModel]="desde()"
+            (ngModelChange)="onCheckInChange($event)"
+            name="checkIn"
+          />
+          <label class="flex items-center mt-2 text-sm gap-2">
+            <input
+              type="checkbox"
+              [ngModel]="cualquierFecha()"
+              (ngModelChange)="cualquierFecha.set($event)"
+              name="cualquierFecha"
+              (change)="onCualquierFechaChange()"
+              class="accent-sky-500"
+            />
+            Cualquier fecha
+          </label>
+        </div>
+
+        <!-- Hasta -->
+        <div>
+          <label class="block text-sm mb-1">Hasta</label>
+          <input
+            type="date"
+            class="w-full bg-transparent border border-white rounded-md px-3 py-2 text-white"
+            [min]="checkOutMinDate()!"
+            [disabled]="!desde() || cualquierFecha()"
+            [ngModel]="hasta()"
+            (ngModelChange)="onCheckOutChange($event)"
+            name="checkOut"
+          />
+        </div>
+
+        <!-- Personas -->
+        <div>
+          <label class="block text-sm mb-1">Cantidad de personas</label>
+          <select
+            [ngModel]="personas()"
+            (ngModelChange)="personas.set($event)"
+            name="personas"
+            class="w-full bg-transparent border border-white rounded-md px-3 py-2 text-white"
+          >
+            <option value="1">1 Persona</option>
+            <option value="2">2 Personas</option>
+            <option value="3">3 Personas</option>
+            <option value="4">4 Personas</option>
+            <option value="5">5 o más</option>
+          </select>
+        </div>
+
+        <!-- Buscar -->
+        <div class="md:col-span-2 lg:col-span-2 flex flex-col justify-end">
+          <button
+            type="submit"
+            [disabled]="(!desde() || !hasta()) && !cualquierFecha()"
+            class="w-full bg-blue-400 hover:bg-blue-500 text-white font-semibold px-3 py-2 rounded-md transition"
+          >
+            Buscar
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <div class="flex flex-col md:flex-row justify-evenly items-center w-full mb-6 text-sm md:text-base">
+      <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-white">verified</span>
+        <p>Los mejores hospedajes y actividades</p>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-white">support_agent</span>
+        <p>Atención al cliente 24/7</p>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-white">paid</span>
+        <p>Precios finales</p>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Secciones -->
+<section class="my-10 text-center max-w-4xl mx-auto px-4">
+  <h2 class="text-blue-500 text-3xl font-bold mb-6">Bienvenidos a tu próximo destino</h2>
+  <p class="text-gray-700 dark:text-gray-300">
+    <strong>Descubre una selección única de alojamientos</strong> diseñados para brindarte experiencias
+    inolvidables. Somos una agencia en crecimiento, apasionada por ayudarte a vivir momentos únicos.
+  </p>
+</section>
+
+<section class="container mx-auto my-10">
+  <app-hospedajes-destacados></app-hospedajes-destacados>
+</section>
+
+<section class="my-10 flex flex-col justify-center items-center">
+  <app-resenas [page]="'home'"></app-resenas>
+</section>
+
+<section class="relative my-10 text-center text-white">
+  <img src="http://localhost:4001/uploads/assets/cta.jpg" class="w-full h-[500px] object-cover brightness-75" alt="Explora Destinos" />
+  <div class="absolute inset-0 flex flex-col items-center justify-center">
+    <h2 class="text-4xl font-bold mb-4">Explora Destinos Inolvidables</h2>
+    <p class="text-lg mb-6">Descubre lugares fascinantes y vive experiencias únicas.</p>
+    <a routerLink="/temporada" class="bg-blue-500 hover:bg-blue-400 text-white font-semibold py-3 px-6 rounded-md">
+      Explorar destinos
+    </a>
+  </div>
+</section>
