@@ -8,6 +8,11 @@ export async function crearResena(req: Request, res: Response) {
   try {
     const dataResena = matchedData(req);
 
+    if (req.user.idUsuario !== dataResena.idUsuario) {
+      handleHttpError(res, "No tienes permiso para crear esta resena", 401);
+      return
+    }
+
     const nuevaResena = await prisma.resena.create({
         data: {
             idHospedaje: dataResena.idHospedaje,
@@ -15,6 +20,14 @@ export async function crearResena(req: Request, res: Response) {
             idHabitacion: dataResena.idHabitacion,
             calificacion: dataResena.calificacion,
             comentario: dataResena.comentario
+        },
+        select: {
+            idResena: true,
+            idHospedaje: true,
+            idUsuario: true,
+            idHabitacion: true,
+            calificacion: true,
+            comentario: true
         }
     })
 
@@ -29,6 +42,19 @@ export async function actualizarResena(req: Request, res: Response) {
   try {
     const dataResena = matchedData(req);
 
+    if (req.user.idUsuario !== dataResena.idUsuario) {
+      handleHttpError(res, "No tienes permiso para crear esta resena", 401);
+      return
+    }
+
+    const resenaExostemte = await prisma.resena.findUnique({
+      where: { idResena: String(dataResena.idResena) }
+    });
+    
+    if (!resenaExostemte) {
+      return handleHttpError(res, "ID de reseña no encontrada", 404)
+    }
+
     const resenaActualizada = await prisma.resena.update({
         where:{ 
             idResena: String(dataResena.idResena)
@@ -38,8 +64,6 @@ export async function actualizarResena(req: Request, res: Response) {
             comentario: dataResena.comentario
         }
     })
-
-    if(!resenaActualizada) return handleHttpError(res, "No se encontró la reseña", 404);
 
     return res.status(200).json(resenaActualizada);
   } catch(error){
@@ -51,6 +75,11 @@ export async function actualizarResena(req: Request, res: Response) {
 export async function getResenasUsuario(req: Request, res: Response) {
   try {
     const { idUsuario, idHospedaje, idHabitacion } = req.params;
+
+    if (req.user.idUsuario !== idUsuario) {
+      handleHttpError(res, "No tienes permiso para ver esta resena", 401);
+      return
+    }
 
     const resenaUsuario = await prisma.resena.findFirst({
         where:{
@@ -71,10 +100,9 @@ export async function getResenasUsuario(req: Request, res: Response) {
 
 export async function getMejoresResenas(req: Request, res: Response) {
   try {
-    const cantidad = parseInt(req.query.cantidad as string) || 10;
+    const cantidad = parseInt(req.query.cantidad as string) || 5;
 
     const resenas = await prisma.resena.findMany({
-
       where: {
         calificacion: {
           in: [4, 5],
@@ -93,7 +121,7 @@ export async function getMejoresResenas(req: Request, res: Response) {
       },
     });
 
-    if(!resenas) return handleHttpError(res, "No se encontraron reseñas de 5 o 4 estrellas", 404);
+    if(resenas.length === 0) return handleHttpError(res, "No se encontraron reseñas de 5 o 4 estrellas", 404);
 
     const shuffled = resenas.sort(() => Math.random() - 0.5).slice(0, cantidad);
 
@@ -104,7 +132,7 @@ export async function getMejoresResenas(req: Request, res: Response) {
       usuario: r.usuario.nombre,
     }));
 
-    res.json(topResenas);
+    res.status(200).json(topResenas);
   } catch(error){
     handleHttpError(res, "Error al obtener servicios", 500);
     return;
@@ -115,6 +143,19 @@ export async function eliminarResena(req: Request, res: Response) {
   try {
     const data = req.params;
     const id = <string>data.id;
+
+    const resenaExistente = await prisma.resena.findUnique({
+      where: { idResena: String(id) }
+    });
+    
+    if (!resenaExistente) {
+      return handleHttpError(res, "ID de resena no encontrado", 404)
+    }
+
+    if (req.user.idUsuario !== resenaExistente.idUsuario) {
+      handleHttpError(res, "No tienes permiso para eliminar esta resena", 401);
+      return
+    }
 
     await prisma.resena.delete({
       where: { idResena: String(id) }

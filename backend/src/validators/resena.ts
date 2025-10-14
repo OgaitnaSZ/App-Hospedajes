@@ -12,7 +12,8 @@ export const validatorId = [
 export const validatorCantidad = [
     param("cantidad")
     .exists().withMessage("La cantidad es obligatoria")
-    .notEmpty().withMessage("La cantidad no puede estar vacía"),
+    .notEmpty().withMessage("La cantidad no puede estar vacía")
+    .isInt({ min: 1, max: 5 }).withMessage("El valor debe estar entre 1 y 5"),
 
   (req: Request, res: Response, next: NextFunction) => validateResults(req, res, next)
 ];

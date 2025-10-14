@@ -159,8 +159,12 @@ router.get("/mejores/:cantidad", validator.validatorCantidad, resena.getMejoresR
  *         responses:
  *             '200':
  *                 description: Reseña eliminada correctamente
+ *             '401':
+ *                 description: No inicio session o no es tu reseña
  *             '403':
  *                 description: Datos incorrectos
+ *             '404':
+ *                 description: Reseña no existe
  *             '500':
  *                 description: Error del servidor 
  */
