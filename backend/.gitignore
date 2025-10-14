@@ -14,4 +14,4 @@ npm-debug.log*
 /uploads
 
 # Test
-coverage
+/coverage

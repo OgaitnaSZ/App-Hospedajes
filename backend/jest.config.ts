@@ -1,9 +1,13 @@
 /** @type {import('ts-jest').JestConfigWithTsJest} */
-module.exports = {
+export default {
   preset: 'ts-jest',
   testEnvironment: 'node',
   transform: {
     '^.+\\.ts?$': 'ts-jest',
   },
-  testMatch: ['**/test/**/*.test.ts'], // Ajusta esto a tu estructura
+  testMatch: ['**/test/**/*.test.ts'],
+  coveragePathIgnorePatterns: [
+    '/node_modules/', 
+    '/src/generated/prisma/'
+  ],
 };
