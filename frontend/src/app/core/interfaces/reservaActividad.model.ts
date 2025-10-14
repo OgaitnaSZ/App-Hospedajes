@@ -1,6 +1,6 @@
 import { EstadoReserva } from "./reservaHospedaje.model";
 
-export interface ReservaHospedaje {
+export interface ReservaActividad {
     idReserva: string;
     idUsuario: string;
     idActividad: string;
