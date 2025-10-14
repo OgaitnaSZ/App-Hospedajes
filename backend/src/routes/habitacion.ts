@@ -39,7 +39,7 @@ import * as validator from "../validators/habitacion";
  *             '200':
  *                 description: Listado de habitaciones del hospedaje
  *             '404':
- *                 description: No hay habitaciones disponibles con los filtros
+ *                 description: No hay habitaciones disponibles con los filtros o el ID del hospedaje es incorrecto
  *             '500':
  *                 description: Error del servidor 
  */

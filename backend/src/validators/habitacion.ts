@@ -4,19 +4,22 @@ import { validateResults } from "../utils/handleValidator";
 
 export const validatorHabitaciones = [
     query("idHospedaje")
+      .exists().withMessage("El campo es obligatorio")
+      .notEmpty().withMessage("El campo no puede estar vacío")
       .isUUID().withMessage('El ID debe ser un UUID válido.'),
 
     query("desde")
-      .exists().withMessage("El campo 'Desde' es obligatorio")
-      .notEmpty().withMessage("El campo 'Desde' no puede estar vacío"),
+      .optional()
+      .isLength({ max: 20 }).withMessage("El campo debe tener como máximo 20 caracteres"),
 
     query("hasta")
-      .exists().withMessage("El campo 'Hasta' es obligatorio")
-      .notEmpty().withMessage("El campo 'Hasta' no puede estar vacío"),
+      .optional()
+      .isLength({ max: 20 }).withMessage("El campo debe tener como máximo 20 caracteres"),
 
     query("capacidad")
-      .exists().withMessage("El campo 'Capacidad' es obligatorio")
-      .notEmpty().withMessage("El campo 'Capacidad' no puede estar vacío"),
+      .optional()
+      .isLength({ max: 9 }).withMessage("El campo debe tener como máximo 1 caracter"),
+
 
   (req: Request, res: Response, next: NextFunction) => validateResults(req, res, next)
 ];
