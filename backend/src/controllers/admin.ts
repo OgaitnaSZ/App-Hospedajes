@@ -7,6 +7,21 @@ import { handleHttpError } from "../utils/handleError";
 const prisma = new PrismaClient()
 
 // Hospedajes
+export async function getHospedajes(req: Request, res: Response) {
+  try {
+    const hospedajes = await prisma.hospedaje.findMany({})
+
+    if(hospedajes.length > 0){
+      res.status(200).json(hospedajes);
+    }else{
+      return res.status(404).send("No se encontraron hospedajes.")
+    }
+  } catch(error){
+    handleHttpError(res, "Error al obtener habitaciones", 500);
+    return;
+  }
+}
+
 export async function agregarHospedaje(req: Request, res: Response) {
   try {
     const dataHospedaje = matchedData(req);

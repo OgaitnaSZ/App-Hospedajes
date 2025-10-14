@@ -12,6 +12,30 @@ router.use(checkRol([usuario_rol.administrador]));
 /**
  * http://localhost:4001/api/admin
  * 
+ * Route get habitaciones hospedaje
+ * @swagger
+ * /admin/hospedajes/hospedajes:
+ *     get:
+ *         tags:
+ *             - admin
+ *             - habitacion
+ *         summary: "Obtener habitaciones del hospedaje"
+ *         description: "Ruta para obtener habitaciones de un hospedaje"
+ *         responses:
+ *             '200':
+ *                 description: Listado de hospedajes
+ *             '401':
+ *                 description: No inicio session o no es administrador
+ *             '404':
+ *                 description: No hay hospedajes
+ *             '500':
+ *                 description: Error del servidor 
+ */
+router.get("/hospedajes/hospedajes", admin.getHospedajes);
+
+/**
+ * http://localhost:4001/api/admin
+ * 
  * Route create hospedaje
  * @swagger
  * /admin/hospedajes/agregar:
@@ -106,7 +130,7 @@ router.put("/hospedajes/modificar", validator.validatorHospedajeUpdate, admin.mo
 router.delete("/hospedajes/eliminar/:id", validator.validatorId, admin.eliminarHospedaje);
 
 /**
- * http://localhost:4001/api/hospedaje
+ * http://localhost:4001/api/admin
  * 
  * Route get habitaciones hospedaje
  * @swagger
@@ -230,7 +254,7 @@ router.put("/habitaciones/modificar", validator.validatorHabitacionUpdate, admin
 router.delete("/habitaciones/eliminar/:id", validator.validatorId, admin.eliminarHabitacion);
 
 /**
- * http://localhost:4001/api/hospedaje
+ * http://localhost:4001/api/admin
  * 
  * Route get actividades
  * @swagger

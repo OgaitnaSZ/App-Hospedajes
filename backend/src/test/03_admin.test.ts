@@ -57,14 +57,46 @@ describe("[ADMIN] Pruebas de /api/admin/hospedajes/agregar", () => {
             .send(hospedaje)
             .set("Authorization", `Bearer ${JWT_TOKEN}`);
 
-        hospedajeId = response.body.idHospedaje;
-
         expect(response.statusCode).toEqual(201);
         expect(response.body).toHaveProperty("idHospedaje");
         expect(response.body).toHaveProperty("titulo");
         expect(response.body.titulo).toEqual("Hotel en Santiago");
         expect(response.body.estrellas).toEqual(4);
         expect(response.body.ciudad).toEqual("Santiago");
+    });
+});
+
+describe("[ADMIN] Pruebas de /api/admin/hospedajes/hospedajes", () => {
+    // No hay hospedajes
+    test("Debería retornar 404 - no hay hospedajes", async () => {
+        // Eliminar hospedajes para prueba
+        await prisma.hospedaje.deleteMany();
+
+        const response = await request(app)
+            .get(`/api/admin/hospedajes/hospedajes`)
+            .set("Authorization", `Bearer ${JWT_TOKEN}`);
+
+        expect(response.statusCode).toEqual(404);
+    });
+
+    // Obtener hospedajes
+    test("Debería retornar 200 - listado de hospedajes", async () => {
+        // Volver a crear hospedaje para prueba
+        const responseHospedaje = await request(app)
+        .post('/api/admin/hospedajes/agregar')
+        .send(hospedaje)
+        .set("Authorization", `Bearer ${JWT_TOKEN}`);
+        hospedajeId = responseHospedaje.body.idHospedaje;
+
+        const response = await request(app)
+            .get(`/api/admin/hospedajes/hospedajes`)
+            .set("Authorization", `Bearer ${JWT_TOKEN}`);
+
+        expect(response.statusCode).toEqual(200);
+        expect(Array.isArray(response.body)).toBe(true);
+        expect(response.body.length).toBeGreaterThan(0);
+        expect(response.body[0]).toHaveProperty("idHospedaje");
+        expect(response.body[0]).toHaveProperty("titulo");
     });
 });
 
