@@ -1,21 +1,21 @@
-import { check, param } from "express-validator";
+import { param, query } from "express-validator";
 import { Request, Response, NextFunction } from "express";
 import { validateResults } from "../utils/handleValidator";
 
 export const validatorHospedajesFiltro = [
-    param("ciudad")
+    query("ciudad")
     .optional()
     .isLength({ max: 20 }).withMessage("El campo debe tener como máximo 20 caracteres"),
 
-    param("fechaInicio")
+    query("fechaInicio")
     .optional()
     .isLength({ max: 20 }).withMessage("El campo debe tener como máximo 20 caracteres"),
 
-    param("fechaFin")
+    query("fechaFin")
     .optional()
     .isLength({ max: 20 }).withMessage("El campo debe tener como máximo 20 caracteres"),
 
-    param("capacidad")
+    query("capacidad")
     .optional()
     .isLength({ max: 20 }).withMessage("El campo debe tener como máximo 20 caracteres"),
 

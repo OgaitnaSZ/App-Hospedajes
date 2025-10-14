@@ -6,31 +6,26 @@ const prisma = new PrismaClient()
 
 export async function getHospedajes(req: Request, res: Response) {
     try{
-        const { Ciudad, FechaInicio, FechaFin, Capacidad } = req.query;
+        const { ciudad, fechaInicio, fechaFin, capacidad } = req.query;
 
         /*
             Busca hospedajes que tengan habitaciones con las siguientes condiciones:
                 - Hospedaje de la ciudad seleccionada
                 - NO reservadas entre las fechas seleccionadas
-                - Capacidad mayor o igual a la seleccionada
+                - capacidad mayor o igual a la seleccionada
         */
         const hospedajes = await prisma.hospedaje.findMany({
           where: {
-            ...(Ciudad && { ciudad: String(Ciudad) }),
+            ...(ciudad && { ciudad: String(ciudad) }),
             habitaciones: {
               some: {
-                ...(Capacidad && { capacidad: { gte: Number(Capacidad) } }),
-                ...(FechaInicio && FechaFin
+                ...(capacidad && { capacidad: { gte: Number(capacidad) } }),
+                ...(fechaInicio && fechaFin
                   ? {
-                      reservas: {
+                      reservas_hospedajes: {
                         none: {
-                          estado: "Aprobado",
-                          OR: [
-                            {
-                              fechaInicio: { lte: new Date(String(FechaFin)) },
-                              fechaFin: { gte: new Date(String(FechaInicio)) },
-                            },
-                          ],
+                          fechaInicio: { lte: new Date(String(fechaFin)) },
+                          fechaFin: { gte: new Date(String(fechaInicio)) },
                         },
                       },
                     }
@@ -41,18 +36,12 @@ export async function getHospedajes(req: Request, res: Response) {
           include: {
             habitaciones: {
               where: {
-                ...(Capacidad && { capacidad: { gte: Number(Capacidad) } }),
-                ...(FechaInicio && FechaFin
+                ...(capacidad && { capacidad: { gte: Number(capacidad) } }),
+                ...(fechaInicio && fechaFin
                   ? {
-                      reservas: {
+                      reservas_hospedajes: {
                         none: {
-                          estado: "Aprobado",
-                          OR: [
-                            {
-                              fechaInicio: { lte: new Date(String(FechaFin)) },
-                              fechaFin: { gte: new Date(String(FechaInicio)) },
-                            },
-                          ],
+                          fechaInicio: { lte: new Date(String(fechaFin)) }
                         },
                       },
                     }
@@ -67,7 +56,7 @@ export async function getHospedajes(req: Request, res: Response) {
           },
         });
     
-        if (!hospedajes.length) {
+        if (hospedajes.length === 0) {
           return res.status(404).json({ message: "No hay hospedajes disponibles." });
         }
     
@@ -76,7 +65,7 @@ export async function getHospedajes(req: Request, res: Response) {
           const precios = h.habitaciones.map((hab) => hab.precio);
           return {
             ...h,
-            Capacidad: Math.max(...capacidades),
+            capacidad: Math.max(...capacidades),
             PrecioMinimo: Math.min(...precios),
           };
         });
@@ -114,10 +103,7 @@ export async function getHospedajesDestacados(req: Request, res: Response) {
         where: { destacado: true }
       });
   
-      if (!hospedajes) {
-        handleHttpError(res, "No hay hospedajes destacados", 404)
-        return;
-      }
+      if (hospedajes.length === 0) return handleHttpError(res, "No hay hospedajes destacados", 404)
 
       return res.status(200).json(hospedajes);
     }catch(error){

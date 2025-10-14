@@ -188,8 +188,6 @@ describe("[Reseña] Pruebas de /resena/usuario/{idUsuario}/hospedaje/{idHospedaj
             .get(`/api/resena/usuario/${user.idUsuario}/hospedaje/${fakeId}/habitacion/${fakeId}`)
             .set("Authorization", `Bearer ${JWT_TOKEN}`);
 
-        console.log("Obtener reseña no existente:", response.body);
-
         expect(response.statusCode).toEqual(404);
     });
 
@@ -198,8 +196,6 @@ describe("[Reseña] Pruebas de /resena/usuario/{idUsuario}/hospedaje/{idHospedaj
         const response = await request(app)
             .get(`/api/resena/usuario/${user.idUsuario}/hospedaje/${hospedajeId}/habitacion/${habitacionId}`)
             .set("Authorization", `Bearer ${JWT_TOKEN}`);
-
-        console.log("Obtener reseña correcta:", response.body);
 
         expect(response.statusCode).toEqual(200);
     });

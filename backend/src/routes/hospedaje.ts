@@ -65,6 +65,8 @@ router.get("/hospedajes", validator.validatorHospedajesFiltro, hospedaje.getHosp
  *         responses:
  *             '200':
  *                 description: Datos del hospedajes
+ *             '403':
+ *                 description: Formato de ID incorrecto
  *             '404':
  *                 description: No hospedajes asociado a ese id
  *             '500':
