@@ -14,7 +14,7 @@ export class Soporte {
   questions = [
     {
       title: '¿Problemas con las reservas?',
-      body: 'Si tuviste algún problema por favor envíanos un email con el título de - Incidencias - al email: consultas.vamos&#64;gmail.com y te respondemos en la brevedad.'
+      body: 'Si tuviste algún problema por favor envíanos un email con el título de - Incidencias - al email: consultas.vamos@gmail.com y te respondemos en la brevedad.'
     },
     {
       title: '¿Puedo organizar un tour personalizado?',
