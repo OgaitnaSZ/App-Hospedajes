@@ -1,0 +1,100 @@
+<footer class="flex flex-col bg-blue-400 text-white px-6 py-10">
+  <div class="container mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
+    <!-- Redes sociales -->
+    <div>
+      <p class="text-lime-500 font-semibold text-lg mb-2">Síguenos:</p>
+      <div class="flex flex-row gap-3">
+        <a
+          href="https://www.facebook.com/profile.php?id=61567550991438"
+          target="_blank"
+          class="hover:opacity-80 transition"
+        >
+          <img src="http://localhost:4001/uploads/assets/facebook-vamos-logo.png" alt="Facebook" class="w-8 h-8" />
+        </a>
+        <a
+          href="https://www.instagram.com/vamos.agenciadeturismo"
+          target="_blank"
+          class="hover:opacity-80 transition"
+        >
+          <img src="http://localhost:4001/uploads/assets/instagram-vamos-logo.png" alt="Instagram" class="w-8 h-8" />
+        </a>
+      </div>
+    </div>
+
+    <!-- Logo -->
+    <figure class="w-28 md:w-40">
+      <img src="https://vamos.fullbusiness.io/assets/vamos-logo.png" alt="Logo" class="w-full h-auto" />
+    </figure>
+
+    <!-- Contacto -->
+    <div>
+      <p class="text-lime-500 font-semibold text-lg">Llámanos:</p>
+      <a href="https://api.whatsapp.com/send?phone=543855889378" target="_blank" class="hover:underline">
+        +54 385 588-9378
+      </a>
+
+      <p class="text-lime-500 font-semibold text-lg mt-3">Reservas:</p>
+      <a href="mailto:vamos.agencia.tur@gmail.com" class="hover:underline">
+        vamos.agencia.tur&#64;gmail.com
+      </a>
+    </div>
+  </div>
+
+  <hr class="my-8 border-sky-600" />
+
+  <div class="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+    <!-- Destinos -->
+    <div>
+      <p class="text-lime-500 font-semibold text-lg mb-2">Destinos:</p>
+      <ul class="space-y-1 text-gray-950">
+        <li>Termas de Río Hondo</li>
+        <li>Salta</li>
+        <li>Tucumán</li>
+        <li>Jujuy</li>
+      </ul>
+    </div>
+
+    <!-- Menú -->
+    <div>
+      <p class="text-lime-500 font-semibold text-lg mb-2">Menú:</p>
+      <ul class="space-y-1 text-gray-950">
+        <li><a class="hover:underline" routerLink="/">Inicio</a></li>
+        <li><a class="hover:underline" routerLink="/hospedajes">Hospedajes</a></li>
+        <li><a class="hover:underline" routerLink="/actividades">Actividades</a></li>
+        <li><a class="hover:underline" routerLink="/paquetes">Paquetes</a></li>
+        <li><a class="hover:underline" routerLink="/blog">Blog</a></li>
+        <li><a class="hover:underline" routerLink="/temporada">Temporada</a></li>
+      </ul>
+    </div>
+
+    <!-- Newsletter -->
+    <div>
+      <p class="text-lime-500 font-semibold text-lg mb-1">Suscríbete al Newsletter:</p>
+      <p class="text-sm text-gray-950 mb-3">Recibe noticias, ofertas y más.</p>
+      <form (submit)="subscribe()" class="flex flex-col sm:flex-row gap-2">
+        <input
+          type="email"
+          [ngModel]="email()"
+          (ngModelChange)="email.set($event)"
+          name="email"
+          required
+          placeholder="Tu correo"
+          class="flex-1 text-white px-3 py-2 rounded-md border border-blue-600 focus:outline-none focus:ring-2 focus:ring-sky-700"
+        />
+        <button
+          type="submit"
+          class="bg-lime-500 text-gray-50 px-4 py-2 rounded-md hover:bg-lime-400 transition"
+        >
+          Suscribirse
+        </button>
+      </form>
+      <p class="text-green-400 mt-2">{{ mensaje() }}</p>
+    </div>
+  </div>
+
+  <hr class="my-8 border-sky-600" />
+
+  <p class="text-center text-sm text-gray-300">
+    © 2025 - Vamos Agencia de Turismo. Todos los derechos reservados.
+  </p>
+</footer>
