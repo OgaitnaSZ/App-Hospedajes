@@ -6,6 +6,7 @@ import { Login } from './pages/auth/login/login';
 import { Register } from './pages/auth/register/register';
 import { Admin } from './pages/admin/admin';
 import { Cuenta } from './pages/cuenta/cuenta';
+import { Error } from './layout/error/error';
 
 export const routes: Routes = [
     { path: '', component: Home },
