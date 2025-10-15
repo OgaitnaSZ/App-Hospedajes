@@ -1,0 +1,54 @@
+<main class="flex flex-col justify-center items-center">
+  <div class="container-fluid p-0 w-full">
+    <!-- Imagen de portada -->
+    <div class="bg-cover bg-center" style="background-image: url('https://vamos.fullbusiness.io/assets/cerro-de-los-7-colores-jujuy.jpg'); height: 400px;">
+      <div class="flex justify-center items-center h-full text-white">
+        <h1 class="text-4xl font-extrabold">Soporte</h1>
+      </div>
+    </div>
+  </div>
+
+  <div class="container my-12">
+    <!-- Sección de contacto -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div>
+        <h3 class="text-2xl font-semibold">Contáctanos</h3>
+        <p class="mt-2">Si necesitas ayuda, no dudes en contactarnos a través de los siguientes medios:</p>
+        <ul class="list-none mt-4">
+          <li>
+            <strong>Teléfono: </strong> <a class="text-blue-500" href="tel:+543855889378">+54 385 588-9378</a>
+          </li>
+          <li>
+            <strong>Email: </strong> <a class="text-blue-500" href="mailto:vamos.agencia.tur&#64;gmail.com">vamos.agencia.tur&#64;gmail.com</a>
+          </li>
+          <li>
+            <strong>WhatsApp: </strong> <a class="text-blue-500" href="https://api.whatsapp.com/send?phone=543855889378" target="_blank">Chatear con nosotros</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Sección de preguntas frecuentes -->
+      <div>
+        <h3 class="text-2xl font-semibold">Preguntas Frecuentes</h3>
+
+        <!-- Acordeón -->
+        <div class="space-y-4 mt-4">
+        @for(question of questions; track question; let i = $index){
+          <div>
+            <button 
+              (click)="toggle(i)"
+              class="w-full text-left py-4 px-6 bg-gray-100 hover:bg-gray-200 focus:outline-none">
+              {{ question.title }}
+            </button>
+            @if(openIndex === i){
+                <div class="px-6 py-2 text-gray-700">
+                  {{ question.body }}
+                </div>
+            }
+          </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

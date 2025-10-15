@@ -1,0 +1,4 @@
+/* Si deseas agregar animación */
+.accordion-transition {
+  transition: all 0.3s ease-in-out;
+}
