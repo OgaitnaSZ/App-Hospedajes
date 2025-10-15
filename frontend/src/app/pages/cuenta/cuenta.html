@@ -1,0 +1,11 @@
+<main class="container mx-auto flex flex-col md:flex-row min-h-8/12">
+    <aside class="w-full md:w-1/4 p-4">
+        <div class="flex flex-col space-y-4" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+            <a class="nav-link text-gray-800 hover:text-blue-600" routerLink="/cuenta/perfil" routerLinkActive="active">Mi Perfil</a>
+            <a class="nav-link text-gray-800 hover:text-blue-600" routerLink="/cuenta/historial" routerLinkActive="active">Historial de Reservas</a>
+            <a class="nav-link text-gray-800 hover:text-blue-600" routerLink="/cuenta/cambiar-contrasena">Cambiar Contraseña</a>
+            <a class="nav-link text-gray-800 hover:text-blue-600 cursor-pointer" (click)="cerrarSesion()" routerLinkActive="active">Cerrar Sesión</a>
+        </div>
+    </aside>
+    <router-outlet class="flex-1 p-4"></router-outlet>
+</main>
