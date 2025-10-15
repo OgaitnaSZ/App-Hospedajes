@@ -23,7 +23,7 @@
 
     <!-- Logo -->
     <figure class="w-28 md:w-40">
-      <img src="https://vamos.fullbusiness.io/assets/vamos-logo.png" alt="Logo" class="w-full h-auto" />
+      <img src="http://localhost:4001/uploads/assets/vamos-logo-black.png" alt="Logo" class="w-full h-auto" />
     </figure>
 
     <!-- Contacto -->
@@ -85,10 +85,10 @@
           type="submit"
           class="bg-lime-500 text-gray-50 px-4 py-2 rounded-md hover:bg-lime-400 transition"
         >
-          Suscribirse
+          {{ isLoading() ? 'Suscribiendo...' : 'Suscribirse' }}
         </button>
       </form>
-      <p class="text-green-400 mt-2">{{ mensaje() }}</p>
+      <p class="text-green-500 mt-2">{{ message() }}</p>
     </div>
   </div>
 

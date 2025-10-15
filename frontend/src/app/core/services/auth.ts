@@ -17,12 +17,12 @@ interface LoginResponse {
 export class AuthService {
   private apiUrl = 'http://localhost:4001/api/auth/';
 
-  // 🔹 Signals de estado
+  // Signals de estado
   private _isLoading = signal(false);
   private _token = signal<string | null>(localStorage.getItem('token'));
   private _user = signal<User | null>(this.getStoredUser());
 
-  // 🔹 Computed (derivados)
+  // Computed (derivados)
   readonly isLoading = computed(() => this._isLoading());
   readonly isLoggedIn = computed(() => !!this._token());
   readonly currentUser = computed(() => this._user());
@@ -32,7 +32,7 @@ export class AuthService {
     private router: Router,
     private tokenService: TokenService
   ) {
-    // 🔁 Efecto para mantener sincronizado localStorage
+    //  Efecto para mantener sincronizado localStorage
     effect(() => {
       const token = this._token();
       const user = this._user();
@@ -46,7 +46,7 @@ export class AuthService {
     });
   }
 
-  // 🧠 Login
+  // Login
   async login(email: string, password: string): Promise<boolean> {
     this._isLoading.set(true);
     try {
@@ -68,7 +68,7 @@ export class AuthService {
     }
   }
 
-  // 🧩 Registro
+  // Registro
   async register(usuario: UserRegister): Promise<any> {
     this._isLoading.set(true);
     try {
@@ -78,14 +78,14 @@ export class AuthService {
     }
   }
 
-  // 🚪 Logout
+  // Logout
   logout() {
     this._token.set(null);
     this._user.set(null);
     this.router.navigate(['/login']);
   }
 
-  // 🔑 Cambiar contraseña
+  // Cambiar contraseña
   async actualizarPassword(password: string, newPassword: string) {
     const user = this._user();
     if (!user) throw new Error('Usuario no autenticado');
@@ -98,23 +98,23 @@ export class AuthService {
       .toPromise();
   }
 
-  // 📧 Recuperar contraseña
+  // Recuperar contraseña
   async recuperarPassword(email: string) {
     return await this.http.post<any>(`${this.apiUrl}recover-password`, { email }).toPromise();
   }
 
-  // 🔄 Resetear contraseña
+  // Resetear contraseña
   async resetearPassword(password: string, token: string) {
     return await this.http.post<any>(`${this.apiUrl}reset-password`, { password, token }).toPromise();
   }
 
-  // ⚙️ Helpers
+  // Helpers
   private getStoredUser(): User | null {
     const stored = localStorage.getItem('user');
     return stored ? JSON.parse(stored) : null;
   }
 
-  // 🔒 Accesores públicos (solo lectura)
+  // Accesores públicos (solo lectura)
   get token() {
     return this._token.asReadonly();
   }

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal, computed, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
@@ -10,13 +10,27 @@ import { AuthService } from '../../../core/services/auth';
   imports: [FormsModule, RouterModule, CommonModule],
   templateUrl: './login.html',
 })
-export class Login {
+export class Login implements OnInit {
   // Campos del formulario
-  email = '';
-  pass = '';
-  error = '';
-  recuperar = false;
-  emailRec = '';
+  email = signal('');
+  pass = signal('');
+  error = signal('');
+  recuperar = signal(false);
+  emailRec = signal('');
+  isLoading = signal(false);
+
+  // Computed properties (reactivos)
+  canLogin = computed(() => {
+    return this.email().trim().length > 0 && 
+           this.pass().trim().length > 0 && 
+           !this.isLoading();
+  });
+
+  canRecover = computed(() => {
+    const email = this.emailRec().trim();
+    const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    return isValidEmail && !this.isLoading();
+  });
 
   // Servicios
   auth = inject(AuthService);
@@ -26,33 +40,51 @@ export class Login {
   ngOnInit(): void {
     // Detecta si el usuario desea recuperar el password
     this.route.queryParamMap.subscribe(params => {
-      this.recuperar = params.get('recuperar') === 'si';
+      this.recuperar.set(params.get('recuperar') === 'si');
     });
   }
 
   async onLogin() {
-    this.error = '';
-    const ok = await this.auth.login(this.email, this.pass);
-    if (ok) {
-      this.router.navigate(['/']);
-    } else {
-      this.error = 'Datos incorrectos o error de conexión.';
+    if (!this.canLogin()) return;
+    
+    this.isLoading.set(true);
+    this.error.set('');
+    
+    try {
+      const ok = await this.auth.login(this.email(), this.pass());
+      if (ok) {
+        this.router.navigate(['/']);
+      } else {
+        this.error.set('Datos incorrectos o error de conexión.');
+      }
+    } catch (err: any) {
+      this.error.set(err.message || 'Error desconocido al iniciar sesión.');
+    } finally {
+      this.isLoading.set(false);
     }
   }
 
   async recuperarPassword() {
-    this.error = '';
+    if (!this.canRecover()) return;
+    
+    this.isLoading.set(true);
+    this.error.set('');
+    
     try {
-      const res = await this.auth.recuperarPassword(this.emailRec);
+      const res = await this.auth.recuperarPassword(this.emailRec());
       if (res?.status === 200) {
-        this.error = 'Te enviamos un correo de recuperación.';
-        this.router.navigate(['/login']);
+        this.error.set('✅ Te enviamos un correo de recuperación.');
+        setTimeout(() => {
+          this.router.navigate(['/login']);
+        }, 2000);
       } else {
-        this.error = res?.message || 'No se pudo enviar el correo.';
+        this.error.set(res?.message || '❌ No se pudo enviar el correo.');
       }
     } catch (err: any) {
       console.error('Error en la solicitud:', err);
-      this.error = err.message || 'Error desconocido.';
+      this.error.set(err.message || '❌ Error desconocido.');
+    } finally {
+      this.isLoading.set(false);
     }
   }
 }

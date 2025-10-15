@@ -46,12 +46,12 @@
     </form>
 
     <!-- Error -->
-     @if(error){
-       <p class="text-red-500 text-sm mt-4 text-center">{{ error }}</p>
+     @if(error()){
+       <p class="text-red-500 text-sm mt-4 text-center">{{ error() }}</p>
      }
 
     <!-- Recuperar contraseña -->
-     @if(recuperar){
+     @if(recuperar()){
        <div class="mt-8 border-t border-gray-300 dark:border-gray-700 pt-6">
          <h2 class="text-lg font-semibold mb-2 text-gray-800 dark:text-white">
            Recuperar Contraseña
