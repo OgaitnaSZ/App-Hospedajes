@@ -1,0 +1,16 @@
+/* En tu archivo CSS del componente */
+:host ::ng-deep .swiper-pagination-bullet {
+  background: white;
+  opacity: 0.5;
+}
+
+:host ::ng-deep .swiper-pagination-bullet-active {
+  background: white;
+  opacity: 1;
+}
+
+:host ::ng-deep .swiper-button-prev,
+:host ::ng-deep .swiper-button-next {
+    color: white;
+    opacity: 0.8;
+}

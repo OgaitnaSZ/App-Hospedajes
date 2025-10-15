@@ -4,10 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HospedajesDestacados } from './hospedajes-destacados/hospedajes-destacados';
 import { Resenas } from './resenas/resenas';
+import { Carrucel } from '../../layout/shared/carrucel/carrucel';
+import { BlogResume } from '../../layout/shared/blog-resume/blog-resume';
 
 @Component({
   selector: 'app-home',
-  imports: [CommonModule, FormsModule, HospedajesDestacados, Resenas],
+  imports: [CommonModule, FormsModule, HospedajesDestacados, Resenas, Carrucel, BlogResume],
   templateUrl: './home.html',
   styleUrl: './home.css'
 })

@@ -2,7 +2,7 @@ import { Injectable, signal, computed, effect } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { TokenService } from './token';
-import { User } from '../interfaces/user.model';
+import { User, UserRegister } from '../interfaces/user.model';
 
 interface LoginResponse {
   data: {
@@ -69,7 +69,7 @@ export class AuthService {
   }
 
   // 🧩 Registro
-  async register(usuario: User): Promise<any> {
+  async register(usuario: UserRegister): Promise<any> {
     this._isLoading.set(true);
     try {
       return await this.http.post(`${this.apiUrl}register`, usuario).toPromise();

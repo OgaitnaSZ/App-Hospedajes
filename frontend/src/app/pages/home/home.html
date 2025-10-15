@@ -73,7 +73,7 @@
             name="personas"
             class="w-full bg-transparent border border-white rounded-md px-3 py-2 text-white"
           >
-            <option value="1">1 Persona</option>
+            <option value="1" selected>1 Persona</option>
             <option value="2">2 Personas</option>
             <option value="3">3 Personas</option>
             <option value="4">4 Personas</option>
@@ -112,29 +112,52 @@
 </div>
 
 <!-- Secciones -->
-<section class="my-10 text-center max-w-4xl mx-auto px-4">
-  <h2 class="text-blue-500 text-3xl font-bold mb-6">Bienvenidos a tu próximo destino</h2>
+<section class="my-10 text-center max-w-7xl mx-auto px-4">
+  <h2 class="h1 text-lime-500 text-3xl font-bold mb-6">Bienvenidos a tu próximo destino</h2>
+  <p class="text-gray-700 dark:text-gray-300 mb-5">
+    <strong>Descubre una selección única de alojamientos que combinan confort, estilo y accesibilidad,</strong> diseñados para brindarte la mejor experiencia durante tu estancia. Somos una agencia en crecimiento, apasionada por ayudarte a vivir los momentos más especiales de tu vida. Nos dedicamos a trabajar con confianza, respeto y humildad para ofrecerte siempre lo mejor.
+  </p>
+  <p class="text-gray-700 dark:text-gray-300 mb-5">
+    Ya sea que busques un retiro tranquilo en la naturaleza, una escapada romántica junto al mar o una aventura en una ciudad vibrante, aquí encontrarás la opción perfecta para ti. Nuestra plataforma te ofrece una amplia variedad de alojamientos, desde apartamentos modernos hasta acogedoras cabañas y lujosos resorts, cuidadosamente seleccionados para garantizar una estancia inolvidable.
+  </p>
+  <p class="text-gray-700 dark:text-gray-300 mb-5">
+    Porque sabemos que<strong>"El tiempo que se disfruta es el verdadero tiempo vivido"</strong> - Jorge Bucay.
+  </p>
+  <p class="text-gray-700 dark:text-gray-300 mb-5">
+    Además de encontrar el lugar ideal para hospedarte, te ayudamos a descubrir los mejores destinos turísticos, actividades locales y recomendaciones de expertos, diseñados para que aproveches cada instante de tu viaje. Desde visitas culturales hasta excursiones al aire libre, hay algo para todos los gustos.
+  </p>
   <p class="text-gray-700 dark:text-gray-300">
-    <strong>Descubre una selección única de alojamientos</strong> diseñados para brindarte experiencias
-    inolvidables. Somos una agencia en crecimiento, apasionada por ayudarte a vivir momentos únicos.
+    <strong>Tu viaje comienza aquí. ¡Explora, reserva y vive momentos únicos con nosotros!</strong>
   </p>
 </section>
 
-<section class="container mx-auto my-10">
+<section class="my-10 text-center max-w-7xl mx-auto px-4">
+  <h2 class="text-gray-800 h1 text-3xl font-bold mb-6">No te podés perder estos destinos</h2>
+  <app-carrucel></app-carrucel>
+</section>
+
+<section class="my-10 text-center max-w-7xl mx-auto px-4">
+  <h2 class="text-gray-800 h1 text-3xl font-bold mb-6">Hospedajes Destacados</h2>
   <app-hospedajes-destacados></app-hospedajes-destacados>
 </section>
 
-<section class="my-10 flex flex-col justify-center items-center">
+<section class="my-10 text-center max-w-7xl mx-auto px-4">
+  <h2 class="text-gray-800 h1 text-3xl font-bold mb-6">Reseñas de nuestros clientes</h2>
   <app-resenas [page]="'home'"></app-resenas>
 </section>
 
 <section class="relative my-10 text-center text-white">
   <img src="http://localhost:4001/uploads/assets/cta.jpg" class="w-full h-[500px] object-cover brightness-75" alt="Explora Destinos" />
   <div class="absolute inset-0 flex flex-col items-center justify-center">
-    <h2 class="text-4xl font-bold mb-4">Explora Destinos Inolvidables</h2>
+    <h2 class="text-5xl font-extrabold mb-4">Explora Destinos Inolvidables</h2>
     <p class="text-lg mb-6">Descubre lugares fascinantes y vive experiencias únicas.</p>
-    <a routerLink="/temporada" class="bg-blue-500 hover:bg-blue-400 text-white font-semibold py-3 px-6 rounded-md">
+    <a routerLink="/temporada" class="bg-lime-500 hover:bg-lime-400 text-white py-3 px-6 rounded-md">
       Explorar destinos
     </a>
   </div>
+</section>
+
+<section class="my-10 text-center max-w-7xl mx-auto px-4">
+  <h2 class="text-gray-800 h1 text-3xl font-bold mb-6">Últimos artículos del blog</h2>
+  <app-blog-resume></app-blog-resume>
 </section>
