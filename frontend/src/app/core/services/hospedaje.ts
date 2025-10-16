@@ -10,6 +10,7 @@ export class HospedajeService {
   private apiUrl = 'http://localhost:4001/api/hospedaje/';
 
   // Estado base del servicio
+  private _hospedaje = signal<Hospedaje[]>([]);
   private _hospedajesDestacados = signal<HospedajeListado[]>([]);
   private _isLoading = signal(false);
   private _error = signal<string | null>(null);
@@ -17,6 +18,7 @@ export class HospedajeService {
   private http = inject(HttpClient);
 
   // Computed (expuestos como solo lectura)
+  readonly hospedaje = computed(() => this._hospedaje());
   readonly hospedajesDestacados = computed(() => this._hospedajesDestacados());
   readonly isLoading = computed(() => this._isLoading());
   readonly error = computed(() => this._error());
@@ -26,24 +28,25 @@ export class HospedajeService {
     this._error.set(null);
     try {
       const params = `ciudad=${ciudad}&fechaInicio=${fechaInicio}&fechaFin=${fechaFin}&capacidad=${capacidad}`;
-      const data = await this.http.get<Hospedaje[]>(`${this.apiUrl}hospedajes?${params}`).toPromise();
+      const data = await this.http.get<HospedajeListado[]>(`${this.apiUrl}hospedajes?${params}`).toPromise();
       return data ?? [];
-    } catch (err: any) {
-      this._error.set(err.message || 'Error al obtener hospedajes');
+    } catch (error: any) {
+      this._error.set(error.message || 'Error al obtener hospedajes');
       return [];
     } finally {
       this._isLoading.set(false);
     }
   }
 
-  async getHospedaje(idHospedaje: number): Promise<Hospedaje | null> {
+  async getHospedaje(idHospedaje: number): Promise<Hospedaje | any> {
     this._isLoading.set(true);
     this._error.set(null);
     try {
       const hospedaje = await this.http.get<Hospedaje>(`${this.apiUrl}hospedaje/${idHospedaje}`).toPromise();
-      return hospedaje ?? null;
-    } catch (err: any) {
-      this._error.set(err.message || 'Error al obtener hospedaje');
+      if (!hospedaje) this._hospedaje.set(hospedaje ?? []);
+
+    } catch (error: any) {
+      this._error.set(error.message || 'Error al obtener hospedaje');
       return null;
     } finally {
       this._isLoading.set(false);
@@ -56,8 +59,8 @@ export class HospedajeService {
       const data = await this.http.get<HospedajeListado[]>(`${this.apiUrl}destacados`).toPromise();
       this._hospedajesDestacados.set(data ?? []);
       return this._hospedajesDestacados();
-    } catch (err: any) {
-      this._error.set(err.message || 'Error al obtener hospedajes destacados');
+    } catch (error: any) {
+      this._error.set(error.message || 'Error al obtener hospedajes destacados');
       this._hospedajesDestacados.set([]);
       return [];
     } finally {

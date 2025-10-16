@@ -47,8 +47,8 @@ export class ResenaService {
             const data = await this.http.get<Resena[]>(`${this.apiUrl}/usuario/${idUsuario}/hospedaje/${idHospedaje}/habitacion/${idHabitacion}`, { headers: this.tokenService.createAuthHeaders() }).toPromise();
             this._resenasUsuario.set(data ?? []);
             return this._resenasUsuario();
-        } catch (err: any) {
-            this._error.set(err.message || 'Error al obtener mejores reseñas');
+        } catch (error: any) {
+            this._error.set(error.message || 'Error al obtener reseñas');
             this._resenasUsuario.set([]);
             return [];
         } finally {
@@ -57,18 +57,59 @@ export class ResenaService {
     }
 
     async getResenasHospedaje(idHospedaje: string){
+        this._isLoading.set(true);
+        this._error.set(null);
 
+        try {
+            const data = await this.http.get<ResenaHome[]>(`${this.apiUrl}/hospedaje/${idHospedaje}`).toPromise();
+            this._resenasHospedaje.set(data ?? []);
+            return this._resenasHospedaje();
+        } catch (error: any) {
+            this._error.set(error.message || 'Error al obtener reseñas');
+            this._resenasHospedaje.set([]);
+            return [];
+        } finally {
+            this._isLoading.set(false);
+        }
     }
 
-    agregarResena(resena: Resena){
-        return this.http.post(`${this.apiUrl}agregar`, resena, { headers: this.tokenService.createAuthHeaders() });
+    async agregarResena(resena: Resena): Promise<any> {
+        this._isLoading.set(true);
+        this._error.set(null);
+
+        try {
+          return await this.http.post(`${this.apiUrl}agregar`, resena, { headers: this.tokenService.createAuthHeaders()}).toPromise();
+        } catch (err: any) {
+            this._error.set(err.message || 'Error al crear reseña');
+        } finally {
+          this._isLoading.set(false);
+        }
     }
 
-    modificarResena(resena: Resena) {
-        return this.http.put(`${this.apiUrl}modificar`, resena, { headers: this.tokenService.createAuthHeaders() });
+    // Actualizar datos del usuario
+    async modificarResena(resena: Resena): Promise<any> {
+       this._isLoading.set(true);
+       this._error.set(null);
+    
+        try {
+            return this.http.put(`${this.apiUrl}modificar`, resena, { headers: this.tokenService.createAuthHeaders() }). toPromise();
+        } catch (error: any) {
+            this._error.set(error.message || 'Error al modificar reseña');
+        } finally {
+          this._isLoading.set(false);
+        }
     }
 
-    eliminarResena(idResena: string) {
-        return this.http.delete(`${this.apiUrl}eliminar/${idResena}`, { headers: this.tokenService.createAuthHeaders() });
+    async eliminarResena(idResena: string) {
+        this._isLoading.set(true);
+        this._error.set(null);
+
+        try {
+            return this.http.delete(`${this.apiUrl}eliminar/${idResena}`, { headers: this.tokenService.createAuthHeaders() }). toPromise();
+        } catch (error: any) {
+            this._error.set(error.message || 'Error al eliminar reseña');
+        } finally {
+          this._isLoading.set(false);
+        }
     }
 }
