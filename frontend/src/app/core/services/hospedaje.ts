@@ -1,6 +1,7 @@
 import { Injectable, signal, computed, effect } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Hospedaje } from '../interfaces/hospedaje.model';
+import { HospedajeListado } from '../interfaces/hospedaje.model';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,7 @@ export class HospedajeService {
   private apiUrl = 'http://localhost:4001/api/hospedaje/';
 
   // Estado base del servicio
-  private _hospedajesDestacados = signal<Hospedaje[]>([]);
+  private _hospedajesDestacados = signal<HospedajeListado[]>([]);
   private _isLoading = signal(false);
   private _error = signal<string | null>(null);
 
@@ -18,21 +19,7 @@ export class HospedajeService {
   readonly isLoading = computed(() => this._isLoading());
   readonly error = computed(() => this._error());
 
-  constructor(private http: HttpClient) {
-    // Sincronizar automáticamente con localStorage (opcional)
-    effect(() => {
-      const data = this._hospedajesDestacados();
-      if (data.length > 0) {
-        localStorage.setItem('hospedajesDestacados', JSON.stringify(data));
-      } else {
-        localStorage.removeItem('hospedajesDestacados');
-      }
-    });
-  }
-
-  /* ===========================================================
-     MÉTODOS PÚBLICOS
-  =========================================================== */
+  constructor(private http: HttpClient) {}
 
   async getHospedajes(ciudad?: string, fechaInicio?: string, fechaFin?: string, capacidad?: string) {
     this._isLoading.set(true);
@@ -66,7 +53,7 @@ export class HospedajeService {
     this._isLoading.set(true);
     this._error.set(null);
     try {
-      const data = await this.http.get<Hospedaje[]>(`${this.apiUrl}destacados`).toPromise();
+      const data = await this.http.get<HospedajeListado[]>(`${this.apiUrl}destacados`).toPromise();
       this._hospedajesDestacados.set(data ?? []);
       return this._hospedajesDestacados();
     } catch (err: any) {
