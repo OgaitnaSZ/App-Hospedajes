@@ -33,9 +33,7 @@
         <li><a routerLink="/" class="font-medium hover:opacity-80">Inicio</a></li>
         <li><a routerLink="/hospedajes" class="font-medium hover:opacity-80">Hospedajes</a></li>
         <li><a routerLink="/actividades" class="font-medium hover:opacity-80">Actividades</a></li>
-        <li><a routerLink="/paquetes" class="font-medium hover:opacity-80">Paquetes</a></li>
         <li><a routerLink="/blog" class="font-medium hover:opacity-80">Blog</a></li>
-        <li><a routerLink="/temporada" class="font-medium hover:opacity-80">Temporada</a></li>
       </ul>
     </div>
 
@@ -93,9 +91,7 @@
     <a routerLink="/" class="text-lg hover:text-blue-600">Inicio</a>
     <a routerLink="/hospedajes" class="hover:text-blue-600">Hospedajes</a>
     <a routerLink="/actividades" class="hover:text-blue-600">Actividades</a>
-    <a routerLink="/paquetes" class="hover:text-blue-600">Paquetes</a>
     <a routerLink="/blog" class="hover:text-blue-600">Blog</a>
-    <a routerLink="/temporada" class="hover:text-blue-600">Temporada</a>
 
     @if (isLoggedIn()) {
       @if (isAdmin()) {
@@ -104,7 +100,6 @@
         <a routerLink="/cuenta/perfil" class="hover:text-blue-600">Mi Cuenta</a>
         <a routerLink="/cuenta/historial" class="hover:text-blue-600">Mis Alojamientos</a>
       }
-      <button (click)="logout()" class="text-red-600 hover:underline">Cerrar Sesión</button>
     } @else {
       <a routerLink="/login" class="hover:text-blue-600">Iniciar Sesión</a>
     }

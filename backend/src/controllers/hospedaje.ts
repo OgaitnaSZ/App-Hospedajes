@@ -102,10 +102,25 @@ export async function getHospedajesDestacados(req: Request, res: Response) {
       const hospedajes = await prisma.hospedaje.findMany({
         where: { destacado: true }
       });
-  
+
       if (hospedajes.length === 0) return handleHttpError(res, "No hay hospedajes destacados", 404)
 
-      return res.status(200).json(hospedajes);
+      const hospedajesConPrecioMinimo = await Promise.all(
+        hospedajes.map(async (hospedaje) => {
+          const habitacionMasBarata = await prisma.habitaciones.findFirst({
+            where: { idHospedaje: hospedaje.idHospedaje },
+            orderBy: { precio: 'asc' },
+            select: { precio: true },
+          });
+      
+          return {
+            ...hospedaje,
+            precioMinimo: habitacionMasBarata?.precio ?? null,
+          };
+        })
+      );
+
+      return res.status(200).json(hospedajesConPrecioMinimo);
     }catch(error){
         handleHttpError(res, "Error al obtener hospedajes", 500);
         return;
