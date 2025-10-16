@@ -100,7 +100,7 @@ export class ResenaService {
         }
     }
 
-    async eliminarResena(idResena: string) {
+    async eliminarResena(idResena: string) : Promise<any> {
         this._isLoading.set(true);
         this._error.set(null);
 

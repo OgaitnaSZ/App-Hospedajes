@@ -8,11 +8,14 @@ import { Admin } from './pages/admin/admin';
 import { Cuenta } from './pages/cuenta/cuenta';
 import { Soporte } from './pages/soporte/soporte';
 import { Error } from './layout/error/error';
+import { Hospedajes } from './pages/hospedajes/hospedajes';
 
 export const routes: Routes = [
     { path: '', component: Home },
     { path: 'login', component: Login},
     { path: 'registro', component: Register},
+    { path: 'hospedajes', component: Hospedajes},
+    //{ path: 'hospedaje/:id', component: Hospedaje },
     { path: 'soporte', component: Soporte},
     { path: 'cuenta', component: Cuenta, canActivate: [authGuard],  
       children: [

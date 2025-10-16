@@ -15,7 +15,7 @@ export interface HospedajeListado {
     idHospedaje: string;
     titulo: string;
     descripcion: string;
-    servicios: number[];
+    servicios: ServiciosHospedaje[];
     estrellas: number;
     telefono: string;
     ciudad: string;
@@ -30,4 +30,8 @@ interface HabitacionHospedaje {
     idHabitacion: string;
     capacidad: number;
     precio: number;
+}
+interface ServiciosHospedaje {
+    nombre: string;
+    descripcion: string;
 }

@@ -86,7 +86,7 @@
           <button
             type="submit"
             [disabled]="(!desde() || !hasta()) && !cualquierFecha()"
-            class="w-full bg-blue-400 hover:bg-blue-500 text-white font-semibold px-3 py-2 rounded-md transition"
+            class="w-full bg-blue-400 hover:bg-blue-500 text-white font-semibold px-3 py-2 rounded-md transition cursor-pointer"
           >
             Buscar
           </button>
@@ -151,7 +151,7 @@
   <div class="absolute inset-0 flex flex-col items-center justify-center">
     <h2 class="text-5xl font-extrabold mb-4">Explora Destinos Inolvidables</h2>
     <p class="text-lg mb-6">Descubre lugares fascinantes y vive experiencias únicas.</p>
-    <a routerLink="/temporada" class="bg-lime-500 hover:bg-lime-400 text-white py-3 px-6 rounded-md">
+    <a routerLink="/temporada" class="bg-lime-500 hover:bg-lime-400 text-white py-3 px-6 rounded-md cursor-pointer">
       Explorar destinos
     </a>
   </div>

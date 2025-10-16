@@ -60,15 +60,30 @@ export async function getHospedajes(req: Request, res: Response) {
           return res.status(404).json({ message: "No hay hospedajes disponibles." });
         }
     
-        const result = hospedajes.map((h) => {
-          const capacidades = h.habitaciones.map((hab) => hab.capacidad);
-          const precios = h.habitaciones.map((hab) => hab.precio);
-          return {
-            ...h,
-            capacidad: Math.max(...capacidades),
-            PrecioMinimo: Math.min(...precios),
-          };
-        });
+        const result = await Promise.all(
+          hospedajes.map(async (h) => {
+            const capacidades = h.habitaciones.map((hab) => hab.capacidad);
+            const precios = h.habitaciones.map((hab) => hab.precio);
+    
+            let serviciosData = [];
+            if (typeof h.servicios === 'string') {
+              const ids = h.servicios.split(',').map((id) => Number(id));
+              serviciosData = await prisma.servicios.findMany({
+                where: { idServicio: { in: ids } },
+                select: { nombre: true, descripcion: true },
+              });
+            } else {
+              serviciosData = h.servicios || [];
+            }
+    
+            return {
+              ...h,
+              capacidad: Math.max(...capacidades),
+              precioMinimo: Math.min(...precios),
+              servicios: serviciosData,
+            };
+          })
+        );
     
         return res.status(200).json(result);
     }catch(error){

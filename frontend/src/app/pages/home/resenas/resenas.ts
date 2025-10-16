@@ -25,7 +25,6 @@ export class Resenas {
   async ngOnInit() {
     if(this.page == 'home'){
       this.resenasCargadas.set(await this.resenaService.getMejoresResenas(4));
-      console.log(this.resenasCargadas());
     }else if(this.page == 'hospedaje' && this.idHospedaje != null && this.idHospedaje != undefined){
       this.resenasCargadas.set(await this.resenaService.getMejoresResenas(4));
     }

@@ -23,7 +23,7 @@ export class HospedajeService {
   readonly isLoading = computed(() => this._isLoading());
   readonly error = computed(() => this._error());
 
-  async getHospedajes(ciudad?: string, fechaInicio?: string, fechaFin?: string, capacidad?: string): Promise< HospedajeListado | any> {
+  async getHospedajes(ciudad?: string, fechaInicio?: string, fechaFin?: string, capacidad?: number): Promise< HospedajeListado | any> {
     this._isLoading.set(true);
     this._error.set(null);
     try {

@@ -1,0 +1,135 @@
+<main class="max-w-3/4 mx-auto px-4 sm:px-6 lg:px-8">
+  <!-- Migas de pan -->
+  <p class="text-sm text-gray-600 mb-6">América del Sur > Argentina > Norte de Argentina > {{ destino() }}</p>
+  
+  <!-- Formulario de filtros -->
+  <form class="flex flex-wrap gap-4 bg-gray-50 p-6 rounded-lg shadow-md">
+    <!-- Destino -->
+    <div class="flex-1 md:flex-none">
+      <label for="filterDestino" class="block text-sm font-medium text-gray-700 mb-1">Destino</label>
+      <select 
+        id="filterDestino" 
+        class="w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+        [(ngModel)]="destino" 
+        name="destino">
+        <option value="">Todos los destinos</option>
+        <option value="termas">Termas de Río Hondo (SDE)</option>
+        <option value="salta">Salta</option>
+        <option value="tucuman">Tucumán</option>
+        <option value="jujuy">Jujuy</option>
+      </select>
+    </div>
+
+    <!-- Fecha Desde -->
+    <div class="flex-1 md:flex-none">
+      <label for="filterDesde" class="block text-sm font-medium text-gray-700 mb-1">Desde</label>
+      <input 
+        type="date" 
+        id="filterDesde" 
+        class="w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+        min="{{fechaActual}}"
+        [(ngModel)]="desde" 
+        name="desde" 
+        [disabled]="cualquierFecha()">
+      
+      <!-- Checkbox Cualquier Fecha -->
+      <div class="mt-2">
+        <div class="flex items-center">
+          <input 
+            class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500" 
+            type="checkbox" 
+            id="filtercualquierFecha" 
+            [(ngModel)]="cualquierFecha" 
+            name="cualquierFecha" 
+            (change)="onCualquierFechaChange()">
+          <label class="ml-2 text-sm text-gray-700" for="filtercualquierFecha">
+            Cualquier Fecha
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fecha Hasta -->
+    <div class="flex-1 md:flex-none">
+      <label for="filterHasta" class="block text-sm font-medium text-gray-700 mb-1">Hasta</label>
+      <input 
+        type="date" 
+        id="filterHasta" 
+        class="w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+        [(ngModel)]="hasta" 
+        name="hasta" 
+        [disabled]="cualquierFecha() || !desde()" 
+        [min]="desde()">
+    </div>
+
+    <!-- Personas -->
+    <div class="flex-1 md:flex-none">
+      <label for="filterPersonas" class="block text-sm font-medium text-gray-700 mb-1">Personas</label>
+      <select 
+        id="filterPersonas" 
+        class="w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+        [(ngModel)]="personas" 
+        name="personas">
+        <option value="0">Cualquier cantidad</option>
+        <option value="1">1 Persona</option>
+        <option value="2">2 Personas</option>
+        <option value="3">3 Personas</option>
+        <option value="4">4 Personas</option>
+        <option value="5">5 Personas o más</option>
+      </select>
+    </div>
+
+    <!-- Botón Aplicar -->
+    <div class="flex-1 md:flex-none flex items-center">
+      <button 
+        type="button" 
+        class="w-full bg-blue-400 hover:bg-blue-500 text-white font-medium py-2 px-4 rounded-md transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        (click)="aplicarFiltros()">
+        Aplicar Filtros
+      </button>
+    </div>
+  </form>
+
+  <!-- Lista de hospedajes -->
+  @if (hayHospedajes()) {
+    <section class="flex flex-col items-center mt-6">        
+      @for(hospedaje of hospedajes(); track $index) {
+        <div class="flex flex-col md:flex-row w-full mb-6 bg-white rounded-lg shadow-md overflow-hidden">
+          <!-- Imagen -->
+          <figure class="w-full md:w-1/3">
+            <img 
+              [src]="hospedaje.imagen" 
+              class="w-full h-48 md:h-full object-cover" 
+              alt="Hospedaje">
+          </figure>
+          
+          <!-- Información -->
+          <div class="w-full md:w-1/2 p-4">
+            <div class="flex flex-row items-center flex-wrap">
+              <h3 class="text-lg font-semibold text-gray-900 mr-2">{{ hospedaje.titulo }}</h3>
+              <div class="flex">
+                @for (star of obtenerEstrellas(hospedaje.estrellas) ; track $index){
+                    <i class="material-icons text-blue-500 text-base">star</i>
+                }
+              </div>
+            </div>
+            <p class="font-bold text-blue-500 text-sm mb-2">{{hospedaje.ciudad}}</p>
+            <p class="text-gray-600 text-sm">{{ hospedaje.descripcion | slice:0:130 }}</p>
+          </div>
+          
+          <!-- Precio y botón -->
+          <div class="w-full md:w-1/5 p-4 flex flex-col items-end justify-end">
+            <p class="font-bold text-gray-900 mb-2">Desde: ${{ hospedaje.precioMinimo | number:'1.0-0' }}</p>
+            <a 
+              [routerLink]="['/hospedaje', hospedaje.idHospedaje]" 
+              class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md text-sm transition duration-200">
+              Ver Disponibilidad
+            </a>
+          </div>
+        </div>
+      }
+    </section>
+  } @else {
+    <h2 class="text-center text-gray-500 mt-8">No hay hospedajes disponibles para los filtros seleccionados</h2>
+  }
+</main>
