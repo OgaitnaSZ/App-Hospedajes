@@ -111,6 +111,36 @@ router.get("/usuario/:idUsuario/hospedaje/:idHospedaje/habitacion/:idHabitacion"
 /**
  * http://localhost:4001/api/resena
  * 
+ * Obtener reseñas de una reserva de un hospedaje
+ * @swagger
+ * /resena/hospedaje/{id}:
+ *     get:
+ *         tags:
+ *             - resena
+ *         summary: "Obtener reseñas de un hospedaje"
+ *         description: "Ruta para ver reseñas de un hospedaje"
+ *         parameters:
+ *         - name: id
+ *           in: path
+ *           description: ID del hospedaje
+ *           required: true
+ *           schema:
+ *             type:string
+ *         responses:
+ *             '200':
+ *                 description: Listado de reseñas
+ *             '403':
+ *                 description: Datos incorrectos
+ *             '404':
+ *                 description: No existe el hospedaje o no hay reseñas
+ *             '500':
+ *                 description: Error del servidor 
+ */
+router.get("/hospedaje/:id", validator.validatorId, resena.getResenasHospedaje);
+
+/**
+ * http://localhost:4001/api/resena
+ * 
  * Obtener mejores reseñas
  * @swagger
  * /resena/mejores/{cantidad}:

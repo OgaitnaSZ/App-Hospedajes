@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { HospedajeService } from '../../../core/services/hospedaje';
@@ -14,13 +14,13 @@ import { HospedajeListado } from '../../../core/interfaces/hospedaje.model';
 export class HospedajesDestacados {
   readonly hospedajeService = inject(HospedajeService);
 
-  hospedajesCargados:HospedajeListado[] = [];
+  hospedajesCargados = signal<HospedajeListado[]>([]);
 
-  readonly hospedajes = computed(() => this.hospedajesCargados);
+  readonly hospedajes = computed(() => this.hospedajesCargados());
   readonly totalHospedajes = computed(() => this.hospedajes().length);
-  readonly hasHospedajes = computed(() => this.totalHospedajes() > 0);
+  readonly hayHospedajes = computed(() => this.totalHospedajes() > 0);
 
   async ngOnInit() {
-    this.hospedajesCargados = await this.hospedajeService.getHospedajesDestacados();
+    this.hospedajesCargados.set(await this.hospedajeService.getHospedajesDestacados());
   }
 }

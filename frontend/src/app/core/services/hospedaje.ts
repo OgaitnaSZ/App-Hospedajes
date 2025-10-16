@@ -1,4 +1,4 @@
-import { Injectable, signal, computed, effect } from '@angular/core';
+import { Injectable, signal, computed, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Hospedaje } from '../interfaces/hospedaje.model';
 import { HospedajeListado } from '../interfaces/hospedaje.model';
@@ -14,14 +14,14 @@ export class HospedajeService {
   private _isLoading = signal(false);
   private _error = signal<string | null>(null);
 
+  private http = inject(HttpClient);
+
   // Computed (expuestos como solo lectura)
   readonly hospedajesDestacados = computed(() => this._hospedajesDestacados());
   readonly isLoading = computed(() => this._isLoading());
   readonly error = computed(() => this._error());
 
-  constructor(private http: HttpClient) {}
-
-  async getHospedajes(ciudad?: string, fechaInicio?: string, fechaFin?: string, capacidad?: string) {
+  async getHospedajes(ciudad?: string, fechaInicio?: string, fechaFin?: string, capacidad?: string): Promise< HospedajeListado | any> {
     this._isLoading.set(true);
     this._error.set(null);
     try {
@@ -49,7 +49,7 @@ export class HospedajeService {
       this._isLoading.set(false);
     }
   }
-  async getHospedajesDestacados(): Promise<any> {
+  async getHospedajesDestacados(): Promise< HospedajeListado | any> {
     this._isLoading.set(true);
     this._error.set(null);
     try {

@@ -6,3 +6,10 @@ export interface Resena {
     calificacion: number;
     comentario: string;
 }
+
+export interface ResenaHome {
+    idHospedaje: string;
+    calificacion: number;
+    comentario: string;
+    usuario: string;
+}

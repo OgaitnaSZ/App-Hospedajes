@@ -98,6 +98,34 @@ export async function getResenasUsuario(req: Request, res: Response) {
   }
 }
 
+export async function getResenasHospedaje(req: Request, res: Response) {
+  try {
+    const data = req.params;
+    const id = <string>data.id;
+
+    const hospedajeExistente = await prisma.hospedaje.findUnique({
+      where: { idHospedaje: String(id) }
+    });
+    
+    if (!hospedajeExistente) {
+      return handleHttpError(res, "ID de hospedaje no encontrado", 404)
+    }
+
+    const resenasHospedaje = await prisma.resena.findMany({
+        where:{
+            idHospedaje: String(id),
+        }
+    })
+
+    if(resenasHospedaje.length === 0) return handleHttpError(res, "No se encontraron reseñas", 404);
+    
+    res.status(200).json(resenasHospedaje);
+  } catch(error){
+    handleHttpError(res, "Error al obtener reseña", 500);
+    return;
+  }
+}
+
 export async function getMejoresResenas(req: Request, res: Response) {
   try {
     const cantidad = parseInt(req.query.cantidad as string) || 5;

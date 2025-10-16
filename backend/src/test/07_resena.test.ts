@@ -201,6 +201,52 @@ describe("[Reseña] Pruebas de /resena/usuario/{idUsuario}/hospedaje/{idHospedaj
     });
 });
 
+describe("[Reseña] Pruebas de /resena/hospedaje/:id", () => {
+    // Formato de datos incorrecto
+    test("Debería retornar 403 - formato incorrecto", async () => {
+        const response = await request(app)
+            .get('/api/resena/hospedaje/10')
+
+        expect(response.statusCode).toEqual(403);
+    });
+
+    // No existe el hospedaje
+    test("Debería retornar 404 ", async () => {
+        const fakeId = crypto.randomUUID();
+        const response = await request(app)
+            .get(`/api/resena/hospedaje/${fakeId}`)
+
+        expect(response.statusCode).toEqual(404);
+    });
+
+    // Hospedaje sin resenas
+    test("Debería retornar 404 ", async () => {
+        const hospedajeResponse = await request(app)
+        .post('/api/admin/hospedajes/agregar')
+        .send(hospedaje)
+        .set("Authorization", `Bearer ${JWT_TOKEN}`);
+
+        const hospedajeId = hospedajeResponse.body.idHospedaje;
+        
+        const response = await request(app)
+            .get(`/api/resena/hospedaje/${hospedajeId}`)
+
+        expect(response.statusCode).toEqual(404);
+    });
+
+    // Obtener resenas
+    test("Debería retornar 200", async () => {
+        const response = await request(app)
+            .get(`/api/resena/hospedaje/${hospedajeId}`)
+
+        expect(response.statusCode).toEqual(200);
+        expect(Array.isArray(response.body)).toBe(true);
+        expect(response.body[0]).toHaveProperty("idHospedaje");
+        expect(response.body[0].idHospedaje).toEqual(hospedajeId);
+    });
+});
+
+
 describe("[Reseña] Pruebas de /resena/mejores/:cantidad", () => {
     // Formato de datos incorrecto
     test("Debería retornar 403 - formato incorrecto", async () => {

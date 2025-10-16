@@ -1,25 +1,63 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal, computed, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { TokenService } from './token';
-import { Resena } from '../interfaces/resena.model';
+import { Resena, ResenaHome } from '../interfaces/resena.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ResenaService {
-      private apiUrl = 'http://localhost:4001/api/resena/';
-    
-      constructor(
-                    private http: HttpClient,
-                    private tokenService: TokenService
-                  ) {}
+    private apiUrl = 'http://localhost:4001/api/resena/';
 
-    getResenasUsuario(idUsuario:string, idHospedaje: string, idHabitacion: string) {
-        return this.http.get(`${this.apiUrl}/usuario/${idUsuario}/hospedaje/${idHospedaje}/habitacion/${idHabitacion}`, { headers: this.tokenService.createAuthHeaders() });
+    // Estado base del servicio
+    private _resenasUsuario = signal<Resena[]>([]);
+    private _resenasDestacadas = signal<ResenaHome[]>([]);
+    private _resenasHospedaje = signal<ResenaHome[]>([]);
+    private _isLoading = signal(false);
+    private _error = signal<string | null>(null);
+
+    private http = inject(HttpClient);
+    private tokenService = inject(TokenService);
+
+    readonly resenasDestacadas = computed(() => this._resenasDestacadas());
+    readonly isLoading = computed(() => this._isLoading());
+    readonly error = computed(() => this._error());
+                          
+
+    async getMejoresResenas(cantidad: number): Promise< ResenaHome | any> {
+        this._isLoading.set(true);
+        this._error.set(null);
+        try {
+            const data = await this.http.get<ResenaHome[]>(`${this.apiUrl}mejores/${cantidad}`).toPromise();
+            this._resenasDestacadas.set(data ?? []);
+            return this._resenasDestacadas();
+        } catch (err: any) {
+            this._error.set(err.message || 'Error al obtener mejores reseñas');
+            this._resenasDestacadas.set([]);
+            return [];
+        } finally {
+            this._isLoading.set(false);
+        }
     }
 
-    getMejoresResenas(cantidad: number) {
-        return this.http.get(`${this.apiUrl}mejores/${cantidad}`);
+    async getResenasUsuario(idUsuario:string, idHospedaje: string, idHabitacion: string): Promise< Resena | any> {
+        this._isLoading.set(true);
+        this._error.set(null);
+        try {
+            const data = await this.http.get<Resena[]>(`${this.apiUrl}/usuario/${idUsuario}/hospedaje/${idHospedaje}/habitacion/${idHabitacion}`, { headers: this.tokenService.createAuthHeaders() }).toPromise();
+            this._resenasUsuario.set(data ?? []);
+            return this._resenasUsuario();
+        } catch (err: any) {
+            this._error.set(err.message || 'Error al obtener mejores reseñas');
+            this._resenasUsuario.set([]);
+            return [];
+        } finally {
+            this._isLoading.set(false);
+        }
+    }
+
+    async getResenasHospedaje(idHospedaje: string){
+
     }
 
     agregarResena(resena: Resena){
