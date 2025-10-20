@@ -2,6 +2,7 @@ import { Component, computed, ElementRef, inject, Input, signal, ViewChild } fro
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ResenaService } from '../../../core/services/resena';
+import { UtilsService } from '../../../core/services/utils';
 import { ResenaHome } from '../../../core/interfaces/resena.model';
 
 @Component({
@@ -12,10 +13,11 @@ import { ResenaHome } from '../../../core/interfaces/resena.model';
 })
 export class Resenas {
   @Input() page: string | undefined; // pagina del componente padre
-  @Input() idHospedaje: number | undefined; // pagina del componente padre
+  @Input() idHospedaje: string | undefined; // pagina del componente padre
   @ViewChild('calificaciones') calificaciones!: ElementRef;
 
   readonly resenaService = inject(ResenaService);
+  readonly utilsService = inject(UtilsService);
   resenasCargadas = signal<ResenaHome[]>([]);
 
   readonly resenas = computed(() => this.resenasCargadas());
@@ -28,16 +30,6 @@ export class Resenas {
     }else if(this.page == 'hospedaje' && this.idHospedaje != null && this.idHospedaje != undefined){
       this.resenasCargadas.set(await this.resenaService.getMejoresResenas(4));
     }
-  }
-
-  obtenerEstrellas(cantidad: number) : number[]{
-    let estrellas: number[] = [];
-    if(cantidad != null && cantidad != undefined){
-      for(let i=0 ; i<cantidad ; i++){
-        estrellas.push(1);
-      }
-    }
-    return estrellas;
   }
 
   scrollToCalificaciones() {

@@ -1,3 +1,5 @@
+import { Habitacion } from "./habitacion.model";
+
 export interface Hospedaje {
     idHospedaje: string;
     titulo: string;
@@ -24,12 +26,23 @@ export interface HospedajeListado {
     imagen: string;
     destacado: boolean;
     precioMinimo: number;
-    habitaciones: HabitacionHospedaje[];
+    habitaciones: Habitacion[];
 }
-interface HabitacionHospedaje {
-    idHabitacion: string;
-    capacidad: number;
-    precio: number;
+export interface HospedajeDetalles {
+    idHospedaje: string;
+    titulo: string;
+    descripcion: string;
+    servicios: ServiciosHospedaje[];
+    estrellas: number;
+    telefono: string;
+    ciudad: string;
+    direccion: string;
+    coordenadas: string;
+    fotos: string[];
+    destacado: boolean;
+    precioMinimo: number;
+    habitaciones: Habitacion[];
+    calificacionPromedio: number;
 }
 interface ServiciosHospedaje {
     nombre: string;

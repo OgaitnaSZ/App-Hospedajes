@@ -72,7 +72,7 @@ router.get("/hospedajes", validator.validatorHospedajesFiltro, hospedaje.getHosp
  *             '500':
  *                 description: Error del servidor 
  */
-router.get("/hospedaje/:id", validator.validatorId, hospedaje.getHospedaje);
+router.get("/hospedaje/:id", validator.validatorId, hospedaje.getHospedajeDetalle);
 
 /**
  * http://localhost:4001/api/hospedaje

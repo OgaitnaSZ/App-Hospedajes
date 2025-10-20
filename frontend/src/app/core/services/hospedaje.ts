@@ -38,13 +38,12 @@ export class HospedajeService {
     }
   }
 
-  async getHospedaje(idHospedaje: number): Promise<Hospedaje | any> {
+  async getHospedaje(idHospedaje: string): Promise<Hospedaje | any> {
     this._isLoading.set(true);
     this._error.set(null);
     try {
       const hospedaje = await this.http.get<Hospedaje>(`${this.apiUrl}hospedaje/${idHospedaje}`).toPromise();
-      if (!hospedaje) this._hospedaje.set(hospedaje ?? []);
-
+      return hospedaje;
     } catch (error: any) {
       this._error.set(error.message || 'Error al obtener hospedaje');
       return null;

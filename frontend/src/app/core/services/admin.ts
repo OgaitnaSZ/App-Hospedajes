@@ -4,6 +4,7 @@ import { Hospedaje } from '../interfaces/hospedaje.model';
 import { Habitacion } from '../interfaces/habitacion.model';
 import { Actividad } from '../interfaces/actividad.model';
 import { TokenService } from './token';
+import { Foto } from '../interfaces/foto.model';
 
 @Injectable({
   providedIn: 'root'
@@ -55,8 +56,13 @@ export class AdminService {
         return this.http.post(`${this.apiUrl}foto/subir`, formData, { headers: this.tokenService.createAuthHeaders() });
     }
 
-    getFotos(idHospedaje: string){
-        return this.http.get(`${this.apiUrl}foto/hospedaje/${idHospedaje}`, { headers: this.tokenService.createAuthHeaders() });
+    async getFotos(idHospedaje: string) : Promise<Foto | any> {
+        try {
+            const fotos = await this.http.get(`http://localhost:4001/api/foto/hospedaje/${idHospedaje}`).toPromise();
+            return fotos;
+        } catch (error: any) {
+            return null;
+        }
     }
 
     eliminarFoto(idFoto: string){

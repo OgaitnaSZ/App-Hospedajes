@@ -108,7 +108,7 @@
             <div class="flex flex-row items-center flex-wrap">
               <h3 class="text-lg font-semibold text-gray-900 mr-2">{{ hospedaje.titulo }}</h3>
               <div class="flex">
-                @for (star of obtenerEstrellas(hospedaje.estrellas) ; track $index){
+                @for (star of utilsService.obtenerEstrellas(hospedaje.estrellas) ; track $index){
                     <i class="material-icons text-blue-500 text-base">star</i>
                 }
               </div>

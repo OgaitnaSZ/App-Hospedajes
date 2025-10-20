@@ -112,6 +112,66 @@ export async function getHospedaje(req: Request, res: Response) {
     }
 }
 
+export async function getHospedajeDetalle(req: Request, res: Response) {
+    try{
+      const hospedaje = await prisma.hospedaje.findUnique({
+        where: { idHospedaje: String(req.params.id) }
+      });
+  
+      // Obtener hospedaje
+      if (!hospedaje) {
+        handleHttpError(res, "No se encuentra el hospedaje", 404)
+        return;
+      }
+
+      // Obtener fotos
+      const fotos = await prisma.fotos.findMany({
+        where: { idHospedaje: String(req.params.id) },
+        select: { path: true }
+      });
+  
+      // Obtener servicios
+      const serviciosIds = hospedaje.servicios
+        .split(',')
+        .map(id => Number(id.trim())); // trim() por si hay espacios
+      
+      const servicios = await prisma.servicios.findMany({
+        where: { 
+          idServicio: { in: serviciosIds }
+        },
+        select: { 
+          nombre: true,
+          descripcion: true
+        }
+      });
+
+      // reseñas
+      const resenas = await prisma.resena.findMany({
+        where: {
+          idHospedaje: String(req.params.id)
+        }
+      })
+
+      const calificacionPromedio = resenas.length > 0
+      ? resenas.reduce((acc, r) => acc + (r.calificacion ?? 0), 0) / resenas.length
+      : 0;
+
+      const { imagen, ...hospedajeSinFoto } = hospedaje;
+
+      const data = {
+        ...hospedajeSinFoto,
+        fotos: fotos.map(f => f.path),
+        servicios,
+        calificacionPromedio
+      };
+    
+      res.status(200).json(data);
+    }catch(error){
+        handleHttpError(res, "Error al obtener hospedajes", 500);
+        return;
+    }
+}
+
 export async function getHospedajesDestacados(req: Request, res: Response) {
     try{
       const hospedajes = await prisma.hospedaje.findMany({

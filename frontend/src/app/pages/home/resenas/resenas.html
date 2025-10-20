@@ -5,7 +5,7 @@
         <div class="bg-white rounded shadow">
           <div class="p-4">
             <h5 class="text-lg font-semibold mb-2">
-                @for (star of obtenerEstrellas(resena.calificacion) ; track $index){
+                @for (star of utilsService.obtenerEstrellas(resena.calificacion) ; track $index){
                     <i class="material-icons text-blue-500">star</i>
                 }
             </h5>

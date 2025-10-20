@@ -3,6 +3,7 @@ import { RouterModule, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HospedajeService } from '../../core/services/hospedaje';
+import { UtilsService } from '../../core/services/utils';
 import { Title, Meta } from '@angular/platform-browser';
 import { HospedajeListado } from '../../core/interfaces/hospedaje.model';
 
@@ -18,6 +19,7 @@ export class Hospedajes {
   readonly route = inject(ActivatedRoute);
   readonly titleService = inject(Title);
   readonly metaService = inject(Meta);
+  readonly utilsService = inject(UtilsService);
 
   // Signals del formulario y URL
   readonly destino = signal<string>('');
@@ -90,9 +92,5 @@ export class Hospedajes {
       this.desde.set('');
       this.hasta.set('');
     }
-  }
-
-  obtenerEstrellas(cantidad: number): number[] {
-    return Array.from({ length: cantidad ?? 0 }, () => 1);
   }
 }

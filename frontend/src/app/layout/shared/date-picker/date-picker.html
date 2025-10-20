@@ -1,0 +1,37 @@
+<div class="datepicker-container">
+  <!-- Header -->
+  <div class="datepicker-header">
+    <button type="button" (click)="prevMonth($event)">Anterior</button>
+    <h3>{{ monthName() }}</h3>
+    <button type="button" (click)="nextMonth($event)">Siguiente</button>
+  </div>
+
+  <!-- Mensaje -->
+  <div class="datepicker-message">
+    <p>{{ message() }}</p>
+  </div>
+
+  <!-- Calendario -->
+  <div class="calendar">
+    <div
+      *ngFor="let day of days()"
+      class="col-1"
+      [ngClass]="{
+        'excluded': isExcluded(day),
+        'range-hovered': isHovered(day),
+        'selected': isSelected(day)
+      }"
+      (click)="selectDate(day)"
+      (mouseenter)="onMouseEnter(day)"
+      (mouseleave)="onMouseLeave()"
+    >
+      {{ day | date: 'dd' }}
+    </div>
+  </div>
+
+  <!-- Fechas seleccionadas -->
+  <div *ngIf="selectedRange()">
+    <p>Fecha de Inicio: {{ selectedRange()?.start | date: 'longDate' }}</p>
+    <p>Fecha de Salida: {{ selectedRange()?.end | date: 'longDate' }}</p>
+  </div>
+</div>
