@@ -42,7 +42,35 @@ export async function getHabitaciones(req: Request, res: Response) {
         });
 
         if(habitaciones.length > 0){
-          return res.status(200).json(habitaciones);
+          // Obtener servicios para habitaciones
+          const habitacionesConServicios = await Promise.all(
+            habitaciones.map(async (h) => {
+              let servicios = [{}];
+          
+              if (typeof h.servicios === 'string') {
+                const serviciosIds = h.servicios
+                  .split(',')
+                  .map(id => Number(id.trim()));
+          
+                servicios = await prisma.servicios.findMany({
+                  where: {
+                    idServicio: { in: serviciosIds }
+                  },
+                  select: {
+                    nombre: true,
+                    descripcion: true
+                  }
+                });
+              }
+          
+              return {
+                ...h,
+                servicios
+              };
+            })
+          );
+          
+          return res.status(200).json(habitacionesConServicios);
         }else{
           return res.status(404).send("No se encontraron habitaciones disponibles con los filtros seleccionados.")
         }

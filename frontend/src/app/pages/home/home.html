@@ -86,7 +86,7 @@
           <button
             type="submit"
             [disabled]="(!desde() || !hasta()) && !cualquierFecha()"
-            class="w-full bg-blue-400 hover:bg-blue-500 text-white font-semibold px-3 py-2 rounded-md transition cursor-pointer"
+            class="w-full bg-blue-400 hover:bg-blue-500 text-white font-semibold px-3 py-2 rounded-md transition"
           >
             Buscar
           </button>
@@ -133,7 +133,14 @@
 
 <section class="my-10 text-center max-w-7xl mx-auto px-4">
   <h2 class="text-gray-800 text-center text-3xl font-bold mb-6">No te podés perder estos destinos</h2>
-  <app-carrucel></app-carrucel>
+  <app-carrucel
+    [images]="[
+      { url: 'http://localhost:4001/uploads/assets/termas-de-rio-hondo.jpg', title: 'Termas de Río Hondo (SDE)' },
+      { url: 'http://localhost:4001/uploads/assets/tucuman.jpg', title: 'Tucumán' },
+      { url: 'http://localhost:4001/uploads/assets/salta.jpg', title: 'Salta' },
+      { url: 'http://localhost:4001/uploads/assets/jujuy.jpg', title: 'Jujuy' }
+    ]">
+  </app-carrucel>
 </section>
 
 <section class="my-10 max-w-7xl mx-auto px-4">
@@ -151,7 +158,7 @@
   <div class="absolute inset-0 flex flex-col items-center justify-center">
     <h2 class="text-5xl font-extrabold mb-4">Explora Destinos Inolvidables</h2>
     <p class="text-lg mb-6">Descubre lugares fascinantes y vive experiencias únicas.</p>
-    <a routerLink="/temporada" class="bg-lime-500 hover:bg-lime-400 text-white py-3 px-6 rounded-md cursor-pointer">
+    <a routerLink="/temporada" class="bg-lime-500 hover:bg-lime-400 text-white py-3 px-6 rounded-md">
       Explorar destinos
     </a>
   </div>

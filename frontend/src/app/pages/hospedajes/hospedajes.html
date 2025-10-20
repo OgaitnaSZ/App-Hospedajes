@@ -1,11 +1,11 @@
-<main class="max-w-3/4 mx-auto px-4 sm:px-6 lg:px-8">
+<main class="lg:max-w-3/4 mx-auto px-4 sm:px-6 lg:px-8">
   <!-- Migas de pan -->
   <p class="text-sm text-gray-600 mb-6">América del Sur > Argentina > Norte de Argentina > {{ destino() }}</p>
   
   <!-- Formulario de filtros -->
   <form class="flex flex-wrap gap-4 bg-gray-50 p-6 rounded-lg shadow-md">
     <!-- Destino -->
-    <div class="flex-1 md:flex-none">
+    <div class="w-full md:w-auto flex flex-col justify-around md:flex-none">
       <label for="filterDestino" class="block text-sm font-medium text-gray-700 mb-1">Destino</label>
       <select 
         id="filterDestino" 
@@ -21,49 +21,19 @@
     </div>
 
     <!-- Fecha Desde -->
-    <div class="flex-1 md:flex-none">
-      <label for="filterDesde" class="block text-sm font-medium text-gray-700 mb-1">Desde</label>
-      <input 
-        type="date" 
-        id="filterDesde" 
-        class="w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
-        min="{{fechaActual}}"
-        [(ngModel)]="desde" 
-        name="desde" 
-        [disabled]="cualquierFecha()">
-      
-      <!-- Checkbox Cualquier Fecha -->
-      <div class="mt-2">
-        <div class="flex items-center">
-          <input 
-            class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500" 
-            type="checkbox" 
-            id="filtercualquierFecha" 
-            [(ngModel)]="cualquierFecha" 
-            name="cualquierFecha" 
-            (change)="onCualquierFechaChange()">
-          <label class="ml-2 text-sm text-gray-700" for="filtercualquierFecha">
-            Cualquier Fecha
-          </label>
-        </div>
-      </div>
-    </div>
-
-    <!-- Fecha Hasta -->
-    <div class="flex-1 md:flex-none">
-      <label for="filterHasta" class="block text-sm font-medium text-gray-700 mb-1">Hasta</label>
-      <input 
-        type="date" 
-        id="filterHasta" 
-        class="w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
-        [(ngModel)]="hasta" 
-        name="hasta" 
-        [disabled]="cualquierFecha() || !desde()" 
-        [min]="desde()">
+    <div class="w-full md:w-auto flex flex-col justify-around md:flex-none">
+      <label for="filterDesde" class="block text-sm font-medium text-gray-700 mb-1">Fechas</label>
+      <p class="w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed" (click)="mostrarDatepicker.set(true)">
+        {{
+            desde() && hasta()
+            ? (desde() | date:'dd/MM/yyyy':'UTC') + ' - ' + (hasta() | date:'dd/MM/yyyy':'UTC')
+            : 'Fecha de entrada - Fecha de salida'
+        }}
+      </p>
     </div>
 
     <!-- Personas -->
-    <div class="flex-1 md:flex-none">
+    <div class="w-full md:w-auto flex flex-col justify-around md:flex-none">
       <label for="filterPersonas" class="block text-sm font-medium text-gray-700 mb-1">Personas</label>
       <select 
         id="filterPersonas" 
@@ -80,7 +50,7 @@
     </div>
 
     <!-- Botón Aplicar -->
-    <div class="flex-1 md:flex-none flex items-center">
+    <div class="flex-1 md:flex-none flex items-end">
       <button 
         type="button" 
         class="w-full bg-blue-400 hover:bg-blue-500 text-white font-medium py-2 px-4 rounded-md transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
@@ -88,11 +58,17 @@
         Aplicar Filtros
       </button>
     </div>
+    @if (mostrarDatepicker()){
+    <app-datepicker
+        (datesSelected)="onDatesSelected($event)"
+        class="flex flex-row justify-end">
+    </app-datepicker>
+    }
   </form>
 
   <!-- Lista de hospedajes -->
   @if (hayHospedajes()) {
-    <section class="flex flex-col items-center mt-6">        
+    <section class="w-full md:w-auto flex flex-col items-center mt-6">        
       @for(hospedaje of hospedajes(); track $index) {
         <div class="flex flex-col md:flex-row w-full mb-6 bg-white rounded-lg shadow-md overflow-hidden">
           <!-- Imagen -->

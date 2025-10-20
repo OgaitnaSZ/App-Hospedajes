@@ -30,8 +30,10 @@
   </div>
 
   <!-- Fechas seleccionadas -->
-  <div *ngIf="selectedRange()">
-    <p>Fecha de Inicio: {{ selectedRange()?.start | date: 'longDate' }}</p>
-    <p>Fecha de Salida: {{ selectedRange()?.end | date: 'longDate' }}</p>
-  </div>
+   @if (selectedRange()){
+     <div>
+       <p>Fecha de Inicio: {{ selectedRange()?.start | date:'dd/MM/yyyy':'UTC' }}</p>
+       <p>Fecha de Salida: {{ selectedRange()?.end | date:'dd/MM/yyyy':'UTC' }}</p>
+     </div>
+   }
 </div>

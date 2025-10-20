@@ -5,10 +5,10 @@
 @import 'swiper/css/navigation';
 @import 'swiper/css/pagination';
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;}
+html, body { height: 100% }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif }
 
-main{padding-top: 10vh !important;}
+main{ padding-top: 10vh !important }
 
 /* Tipografias */
 h1{
@@ -16,12 +16,10 @@ h1{
   font-weight: 500;
   line-height: 1.2;
 }
-h2, h3, h4, h5, h6, .form-label{
-  font-family: "Poppins", sans-serif;
-}
-p, a{
-  font-family: "Open Sans", sans-serif;
-}
+h2, h3, h4, h5, h6, .form-label{ font-family: "Poppins", sans-serif }
+p, a{ font-family: "Open Sans", sans-serif }
+
+a, button { cursor: pointer; }
 
 /* Iconos Google */
 .material-symbols-outlined {

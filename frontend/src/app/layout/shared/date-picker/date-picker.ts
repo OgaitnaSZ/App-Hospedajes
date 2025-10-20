@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter, signal, computed, effect, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReservaService } from '../../../core/services/reserva';
+import { DatesService } from '../../../core/services/dates';
 
 @Component({
   selector: 'app-datepicker',
@@ -11,7 +12,8 @@ import { ReservaService } from '../../../core/services/reserva';
 })
 export class Datepicker {
   readonly reservaService = inject(ReservaService);
-  
+  readonly datesService = inject(DatesService);
+
   // Inputs y Outputs
   @Input() idHospedaje: string | undefined;
   @Output() datesSelected = new EventEmitter<{ start: Date, end: Date }>();
@@ -44,6 +46,12 @@ export class Datepicker {
   ngOnInit(): void {
     this.initExcludedDates();
     this.generateMonth();
+  
+    const saved = this.datesService.currentDates();
+    if (saved) {
+      this.startDate.set(new Date(saved.data.fechaInicio));
+      this.endDate.set(new Date(saved.data.fechaSalida));
+    }
   }
 
   private initExcludedDates(): void {
@@ -105,27 +113,21 @@ export class Datepicker {
   // Eventos
   selectDate(date: Date): void {
     if (this.isExcluded(date)) return;
-
     const start = this.startDate();
     const end = this.endDate();
-
+  
     if (!start || (start && end)) {
       this.startDate.set(date);
       this.endDate.set(null);
       this.message.set('Selecciona una fecha de salida');
       return;
     }
-
-    if (date > start) {
-      if (this.isRangeValid(start, date)) {
-        this.endDate.set(date);
-        this.message.set('');
-        this.datesSelected.emit({ start, end: date });
-      } else {
-        this.message.set('El rango incluye días reservados. Selecciona otro rango.');
-        this.startDate.set(null);
-        this.endDate.set(null);
-      }
+  
+    if (date > start && this.isRangeValid(start, date)) {
+      this.endDate.set(date);
+      this.message.set('');
+      this.datesSelected.emit({ start, end: date });
+      this.datesService.setDates(start, date); // actua
     }
   }
 

@@ -1,4 +1,4 @@
-import { Component, computed, ElementRef, inject, Input, signal, ViewChild } from '@angular/core';
+import { Component, computed, inject, Input, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ResenaService } from '../../../core/services/resena';
@@ -14,7 +14,6 @@ import { ResenaHome } from '../../../core/interfaces/resena.model';
 export class Resenas {
   @Input() page: string | undefined; // pagina del componente padre
   @Input() idHospedaje: string | undefined; // pagina del componente padre
-  @ViewChild('calificaciones') calificaciones!: ElementRef;
 
   readonly resenaService = inject(ResenaService);
   readonly utilsService = inject(UtilsService);
@@ -30,9 +29,5 @@ export class Resenas {
     }else if(this.page == 'hospedaje' && this.idHospedaje != null && this.idHospedaje != undefined){
       this.resenasCargadas.set(await this.resenaService.getMejoresResenas(4));
     }
-  }
-
-  scrollToCalificaciones() {
-    this.calificaciones.nativeElement.scrollIntoView({ behavior: 'smooth' });
   }
 }

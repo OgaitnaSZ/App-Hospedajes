@@ -1,0 +1,83 @@
+<section class="space-y-4">
+    <h2 class="text-2xl font-semibold m-0">Disponibilidad</h2>
+    <div class="flex items-center text-red-400">
+        <span class="material-symbols-outlined me-3 !text-sm">error</span>
+        <p class="!text-sm">Indica las fechas para ver la disponibilidad y los precios del hospedaje</p>
+    </div>
+
+    <div class="flex items-stretch gap-1">
+      <!-- Fecha -->
+      <div class="flex items-center rounded border p-0.5">
+        <span class="material-symbols-outlined me-3 !text-3xl text-gray-500">calendar_month</span>
+        <p class="pe-3" (click)="mostrarDatepicker.set(true)">
+        {{
+            desde() && hasta()
+            ? (desde() | date:'dd/MM/yyyy':'UTC') + ' | ' + (hasta() | date:'dd/MM/yyyy':'UTC')
+            : 'Fecha de entrada | Fecha de salida'
+        }}
+        </p>
+      </div>
+
+      <!-- Personas -->
+      <div class="flex items-center rounded border p-0.5">
+        <span class="material-symbols-outlined me-3 !text-3xl text-gray-500">people</span>
+        <select [(ngModel)]="personas" name="personas" class="w-full rounded p-2">
+          <option [value]="1">1 Persona</option>
+          <option [value]="2">2 Personas</option>
+          <option [value]="3">3 Personas</option>
+          <option [value]="4">4 Personas</option>
+          <option [value]="5">5 Personas o más</option>
+        </select>
+      </div>
+
+      <!-- Buscar -->
+      <div class="flex items-end">
+        <button
+          class="w-full h-full bg-blue-500 hover:bg-blue-600 text-white rounded p-2"
+          (click)="cargarHabitaciones()">
+          Ver Disponibilidad
+        </button>
+      </div>
+    </div>
+    @if (mostrarDatepicker()){
+      <app-datepicker
+          [idHospedaje]="idHospedaje"
+          (datesSelected)="onDatesSelected($event)"
+          class="flex flex-row justify-end">
+      </app-datepicker>
+    }
+
+    @if(hayHabitaciones()){
+      <div class="space-y-4 mt-4">
+        @for(habitacion of habitaciones() ; track $index){
+          <div
+            class="flex flex-col lg:flex-row justify-between items-start lg:items-center rounded-lg p-4 shadow">
+            <div>
+              <h5 class="text-lg font-semibold">Habitación {{ habitacion.numero }} - {{ habitacion.tipo }}</h5>
+              <p class="text-sm text-gray-600"><strong>Capacidad:</strong> {{ habitacion.capacidad }} personas</p>
+              <p class="text-sm text-gray-600"><strong>Precio por noche:</strong> ${{ habitacion.precio }}</p>
+              <ul class="flex flex-row flex-wrap items-center">
+              @for (servicio of habitacion.servicios ; track $index){
+                <li class="text-sm">
+                  <span class="material-symbols-outlined align-middle m-0">check</span>
+                  <span>{{ servicio.nombre }}</span>
+                </li>
+              }
+            </ul>  
+            </div>
+            <div class="text-right mt-3 lg:mt-0">
+              <p class="text-gray-500">Total: <strong>${{ habitacion.precio * noches() }}</strong></p>
+              <p class="text-sm text-gray-500">Precio por <strong>{{ noches() }}</strong> noches</p>
+              <button
+                class="mt-2 bg-blue-600 hover:bg-blue-700 text-white py-1 px-3 rounded"
+                (click)="reservar(habitacion.idHabitacion, habitacion.precio, habitacion.numero)">
+                Reservar
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+    } @else {
+      <p class="text-center text-gray-500 mt-6">No hay habitaciones disponibles con tus requerimientos</p>
+    }
+  </section>

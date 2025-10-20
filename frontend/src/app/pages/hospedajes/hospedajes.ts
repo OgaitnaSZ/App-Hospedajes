@@ -4,12 +4,14 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HospedajeService } from '../../core/services/hospedaje';
 import { UtilsService } from '../../core/services/utils';
+import { DatesService } from '../../core/services/dates';
+import { Datepicker } from '../../layout/shared/date-picker/date-picker';
 import { Title, Meta } from '@angular/platform-browser';
 import { HospedajeListado } from '../../core/interfaces/hospedaje.model';
 
 @Component({
   selector: 'app-hospedajes',
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule, Datepicker],
   templateUrl: './hospedajes.html',
   styleUrl: './hospedajes.css'
 })
@@ -20,10 +22,11 @@ export class Hospedajes {
   readonly titleService = inject(Title);
   readonly metaService = inject(Meta);
   readonly utilsService = inject(UtilsService);
+  readonly datesService = inject(DatesService);
 
   // Signals del formulario y URL
   readonly destino = signal<string>('');
-  readonly desde = signal<string>('');
+  readonly desde = signal<string>(this.formatDate(new Date()));
   readonly hasta = signal<string>('');
   readonly personas = signal<number>(1);
   readonly cualquierFecha = signal<boolean>(false);
@@ -37,6 +40,8 @@ export class Hospedajes {
   readonly hayHospedajes = computed(() => this.totalHospedajes() > 0);
   readonly fechaActual = new Date().toISOString().split('T')[0];
 
+  mostrarDatepicker = signal<boolean>(false);
+
   constructor() {
     // Sincroniza parámetros de URL -> signals
     effect(() => {
@@ -45,6 +50,15 @@ export class Hospedajes {
       this.desde.set(params['desde'] || '');
       this.hasta.set(params['hasta'] || '');
       this.personas.set(params['personas'] ? parseInt(params['personas'], 10) : 1);
+      
+      const saved = this.datesService.currentDates();
+  
+      // espera a tener ambos antes de ejecutar
+      if (saved?.data) {
+        this.desde.set(saved.data.fechaInicio.split('T')[0]);
+        this.hasta.set(saved.data.fechaSalida.split('T')[0]);
+        //this.cargarHabitaciones();
+      }
     });
 
     // Reacciona a cambios de filtros y actualiza hospedajes automáticamente
@@ -85,6 +99,16 @@ export class Hospedajes {
   aplicarFiltros(): void {
     // Este método solo es necesario si querés forzar un reload manual,
     // pero con los signals y effects ya se actualiza automáticamente.
+  }
+  
+  formatDate(date: Date): string {
+    return date.toISOString().split('T')[0];
+  }
+
+  onDatesSelected(dates: { start: Date; end: Date }): void {
+    this.desde.set(this.formatDate(dates.start));
+    this.hasta.set(this.formatDate(dates.end));
+    this.mostrarDatepicker.set(false);
   }
 
   onCualquierFechaChange(): void {

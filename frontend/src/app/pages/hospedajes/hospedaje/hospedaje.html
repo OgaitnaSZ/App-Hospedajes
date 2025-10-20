@@ -1,6 +1,6 @@
-<main class="md:max-w-3/4 mx-auto px-4 sm:px-6 lg:px-8">
+<main class="lg:max-w-3/4 mx-auto px-4 sm:px-6 lg:px-8">
   <!-- Título -->
-  <section class="flex flex-col md:flex-row pb-2">
+  <section class="flex flex-col lg:flex-row pb-2">
     <h1 class="text-3xl font-semibold text-gray-900">{{ hospedaje()?.titulo }}</h1>
     <div class="flex items-center space-x-1 text-blue-500 text-2xl">
       @for (star of utilsService.obtenerEstrellas(hospedaje()?.estrellas) ; track $index){
@@ -16,27 +16,31 @@
     <span class="bg-blue-500 text-white rounded px-2 py-1 ml-2 text-xs font-semibold">{{ hospedaje()?.ciudad  }}</span>
   </div>
 
-  <div class="flex flex-col xl:flex-row m-0 mt-2 mb-2 gap-4">
-    <!-- Carrusel de imágenes -->
-    <div class="relative w-full overflow-hidden">
-      <div class="swiper hospedaje-swiper">
-        <div class="swiper-wrapper">
-          @for(foto of hospedaje()?.fotos; track $index){
-            <div class="swiper-slide">
-              <img src="{{foto}}" class="w-full xl:h-[600px] object-cover" />
-            </div>
-          }
-        </div>
-        <div class="swiper-button-prev text-white w-10 h-10"></div>
-        <div class="swiper-button-next text-white w-10 h-10"></div>
-        <div class="swiper-pagination"></div>
-      </div>
+  <div class="flex flex-col lg:flex-row m-0 mt-2 mb-2 gap-4">
+
+    <div class="w-full lg:w-2/3">
+       <!-- Carrusel de imágenes -->
+      <app-carrucel
+        [images]="fotos">
+      </app-carrucel>
+
+      <!-- Servicios -->
+      <ul class="flex flex-row flex-wrap items-center">
+        @for(servicio of hospedaje()?.servicios ; track $index){
+          <li class="text-sm">
+            <span class="material-symbols-outlined align-middle m-0">check</span>
+            <span>{{ servicio.nombre }}</span>
+          </li>
+        }
+      </ul>            
+
+      <!-- Descripcion -->
       <p class="text-gray-700 text-base leading-relaxed">
         {{ hospedaje()?.descripcion }}
       </p>
-    </div>
+     </div>
 
-    <div class="w-full md:w-1/3 flex flex-col gap-4">
+    <div class="w-full lg:w-1/3 flex flex-col gap-4">
     <!-- Calificacion promedio -->
       <div class="p-3 rounded shadow">
         @if(hospedaje() && hospedaje()!.calificacionPromedio > 3){
@@ -49,12 +53,9 @@
             <span class="mr-2 text-4xl">
               {{ hospedaje()?.calificacionPromedio }}
             </span>
-            <a
-              (click)="scrollToSection('verCalificaciones')"
-              class="text-blue-600 hover:underline cursor-pointer"
-            >
-              | Ver calificaciones
-            </a>
+          <a class="text-blue-600 hover:underline" (click)="scrollTo('resenas')">
+            | Ver calificaciones
+          </a>
           </p>
         } @else {
           <p class="text-center text-gray-500 mb-4">No hay calificaciones disponibles</p>
@@ -77,88 +78,17 @@
         </div>
       </div>
       <!-- Botón de disponibilidad -->
-      <a (click)="scrollToSection('verHabitaciones')" class="w-full bg-blue-500 hover:bg-blue-600 text-white text-center rounded p-3" >Ver Disponibilidad</a>
-
-      <!-- Servicios del hospedaje -->
-      <div class="p-3 rounded shadow">
-        <h5 class="mb-3">Servicios del hospedaje</h5>
-        <ul class="list-inline text-center mb-0">
-          @for(servicio of hospedaje()?.servicios ; track $index){
-            <li class="list-inline-item me-3">
-              <span class="material-symbols-outlined text-success align-middle">check</span>
-              <span class="ms-1 text-sm">{{ servicio.nombre }}</span>
-            </li>
-          }
-        </ul>            
-      </div>
+      <a class="w-full bg-blue-500 hover:bg-blue-600 text-white text-center rounded p-3" (click)="scrollTo('disponibilidad')">Ver Disponibilidad</a>
     </div>
   </div>
 
   <!-- Disponibilidad -->
-  <section class="rounded-lg p-4 shadow space-y-4" #verHabitaciones>
-    <h2 class="text-2xl font-semibold">Disponibilidad</h2>
+  <app-disponibilidad 
+  [idHospedaje]="hospedaje()?.idHospedaje"
+  id="disponibilidad"
+  ></app-disponibilidad>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <!-- Fecha -->
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Fechas</label>
-        <p class="cursor-pointer text-blue-600" (click)="mostrarDatepicker.set(true)">
-          {{ desde() | date }} | {{ hasta() | date }}
-        </p>
-        <app-datepicker
-          *ngIf="mostrarDatepicker()"
-          [idHospedaje]="`asdarfsad`"
-          (datesSelected)="onDatesSelected($event)">
-        </app-datepicker>
-      </div>
-
-      <!-- Personas -->
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Personas</label>
-        <select [(ngModel)]="personas" name="personas" class="w-full rounded p-2">
-          <option [value]="1">1 Persona</option>
-          <option [value]="2">2 Personas</option>
-          <option [value]="3">3 Personas</option>
-          <option [value]="4">4 Personas</option>
-          <option [value]="5">5 Personas o más</option>
-        </select>
-      </div>
-
-      <!-- Buscar -->
-      <div class="flex items-end">
-        <button
-          class="w-full bg-blue-500 hover:bg-blue-600 text-white rounded p-2"
-          (click)="cargarHabitaciones()">
-          Ver Disponibilidad
-        </button>
-      </div>
-    </div>
-
-    @if(hayHabitaciones()){
-      <div class="space-y-4 mt-4">
-        @for(habitacion of hospedaje()?.habitaciones ; track $index){
-          <div
-            class="flex flex-col md:flex-row justify-between items-start md:items-center rounded-lg p-4 shadow">
-            <div>
-              <h5 class="text-lg font-semibold">Habitación {{ habitacion.numero }} - {{ habitacion.tipo }}</h5>
-              <p class="text-sm text-gray-600">Capacidad: {{ habitacion.capacidad }} personas</p>
-              <p class="text-sm text-gray-600">Precio por noche: ${{ habitacion.precio }}</p>
-            </div>
-            <div class="text-right mt-3 md:mt-0">
-              <p class="text-sm text-gray-500">Total: <strong>${{ habitacion.precio * noches() }}</strong></p>
-              <button
-                class="mt-2 bg-blue-600 hover:bg-blue-700 text-white py-1 px-3 rounded"
-                (click)="reservar(habitacion.idHabitacion, habitacion.precio, habitacion.numero)">
-                Reservar
-              </button>
-            </div>
-          </div>
-        }
-      </div>
-    } @else {
-      <p class="text-center text-gray-500 mt-6">No hay habitaciones disponibles con tus requerimientos</p>
-    }
-  </section>
-
-  <app-resenas [page]="'hospedaje'"  #verCalificaciones></app-resenas>
+  <!-- Reseñas -->
+  <h2 class="text-2xl font-semibold m-0" id="resenas">Comentarios de los clientes</h2>
+  <app-resenas [page]="'hospedaje'"></app-resenas>
 </main>

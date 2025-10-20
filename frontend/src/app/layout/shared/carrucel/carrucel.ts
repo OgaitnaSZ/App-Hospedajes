@@ -1,4 +1,4 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, Input, SimpleChanges } from '@angular/core';
 import { Swiper } from 'swiper';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 
@@ -9,7 +9,9 @@ import { Navigation, Pagination, Autoplay } from 'swiper/modules';
   styleUrl: './carrucel.css'
 })
 export class Carrucel implements AfterViewInit{
-ngAfterViewInit() {
+   @Input() images: { url: string; title?: string; alt?: string }[] = [];
+
+  ngAfterViewInit() {
     // Inicializar Swiper
     new Swiper('.destinations-swiper', {
       // Configuración del carrusel
@@ -27,11 +29,15 @@ ngAfterViewInit() {
         el: '.swiper-pagination',
         clickable: true,
       },
-      // Efectos opcionales
       effect: 'fade',
       fadeEffect: {
         crossFade: true
       },
     });
+  }
+    ngOnChanges(changes: SimpleChanges) {
+    if (changes['images']) {
+      setTimeout(() => this.ngAfterViewInit(), 100);
+    }
   }
 }
