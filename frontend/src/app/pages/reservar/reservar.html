@@ -1,0 +1,76 @@
+<main>
+  <div class="max-w-7xl mx-auto my-10 px-4">
+    <h1 class="text-3xl font-bold text-center mb-8">Checkout</h1>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      
+      <!-- Columna izquierda: Datos del Pago -->
+      <div class="bg-white shadow rounded-lg p-6">
+        <h4 class="text-xl font-semibold mb-4">Datos del Pago</h4>
+        <form id="datosPagoForm" class="space-y-4">
+          <div>
+            <label for="nombre" class="block text-sm font-medium">Nombre</label>
+            <input type="text" id="nombre" class="mt-1 block w-full border border-gray-300 rounded px-3 py-2" [(ngModel)]="detallesPago().nombre" name="nombre" required>
+          </div>
+          <div>
+            <label for="apellido" class="block text-sm font-medium">Apellido</label>
+            <input type="text" id="apellido" class="mt-1 block w-full border border-gray-300 rounded px-3 py-2" [(ngModel)]="detallesPago().apellido" name="apellido" required>
+          </div>
+          <div>
+            <label for="dni" class="block text-sm font-medium">DNI</label>
+            <input type="text" id="dni" class="mt-1 block w-full border border-gray-300 rounded px-3 py-2" [(ngModel)]="detallesPago().dni" name="dni" required>
+          </div>
+          <div>
+            <label for="direccion" class="block text-sm font-medium">Dirección</label>
+            <input type="text" id="direccion" class="mt-1 block w-full border border-gray-300 rounded px-3 py-2" [(ngModel)]="detallesPago().direccion" name="direccion" required>
+          </div>
+          <div>
+            <label for="email" class="block text-sm font-medium">Email</label>
+            <input type="email" id="email" class="mt-1 block w-full border border-gray-300 rounded px-3 py-2" [(ngModel)]="detallesPago().email" name="email" required>
+          </div>
+          <div>
+            <label for="Telefono" class="block text-sm font-medium">Teléfono</label>
+            <input type="tel" id="Telefono" class="mt-1 block w-full border border-gray-300 rounded px-3 py-2" [(ngModel)]="detallesPago().telefono" name="telefono" required>
+          </div>
+        </form>
+      </div>
+
+      <!-- Columna derecha: Detalles de la Reserva -->
+      <div class="bg-white shadow rounded-lg p-6">
+        <h4 class="text-xl font-semibold mb-4">Detalles de la Reserva</h4>
+        @if(parametros.tipoReserva == 'hospedaje') {
+          <figure class="mb-4">
+            <img src="{{parametros.imagen}}">
+          </figure>
+          <div>
+            <p>Alojamiento: <strong>{{ [parametros.tituloHospedaje] }}</strong></p>
+            <p>Habitación: <strong>{{ parametros.habitacion }}</strong></p>
+            <p>Fecha de Entrada: <strong>{{ parametros.fechaInicio }}</strong></p>
+            <p>Fecha de Salida: <strong>{{ parametros.fechaFin }}</strong></p>
+            <p>Cantidad de Personas: <strong>{{ parametros.personas }}</strong></p>
+            <p>Precio por noche: <strong>$ {{ parametros.precio }}</strong></p>
+          </div>
+        } @else if(parametros.tipoReserva == 'actividad'){
+          <p>Actividad: <strong>{{ [parametros.titulo] }}</strong></p>
+          <p>Precio por persona: <strong>$ {{ [subtotal] }}</strong></p>
+          <div class="mt-4">
+            <label for="fecha" class="block text-sm font-medium">Fecha de Reserva:</label>
+            <input type="date" class="mt-1 w-1/2 border border-gray-300 rounded px-3 py-2" [min]="minDate" [(ngModel)]="parametros.fecha" required>
+          </div>
+          <div class="mt-4">
+            <label for="personas" class="block text-sm font-medium">Cantidad de Personas:</label>
+            <input type="number" class="mt-1 w-1/2 border border-gray-300 rounded px-3 py-2" max="10" min="1" [(ngModel)]="parametros.personas" (change)="calcularTotal()" required>
+          </div>
+        } @else{
+          <p>Reserva no valida</p>
+        }
+        <hr class="my-4 border-gray-300">
+        <p class="text-lg">Total: <strong>$ {{ parametros.precioTotal }}</strong></p>
+
+        <!-- Botón de pagar -->
+        <div class="mt-6">
+          <button type="button" class="w-full bg-blue-600 text-white py-3 rounded hover:bg-blue-700 transition" (click)="pagar()">Pagar con MercadoPago</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

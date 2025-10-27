@@ -11,6 +11,7 @@ import { Error } from './layout/error/error';
 import { Hospedajes } from './pages/hospedajes/hospedajes';
 import { Datepicker } from './layout/shared/date-picker/date-picker';
 import { Hospedaje } from './pages/hospedajes/hospedaje/hospedaje';
+import { Reservar } from './pages/reservar/reservar';
 
 export const routes: Routes = [
     { path: '', component: Home },
@@ -19,16 +20,16 @@ export const routes: Routes = [
     { path: 'hospedajes', component: Hospedajes},
     { path: 'hospedaje/:id', component: Hospedaje },
     { path: 'date', component: Datepicker},
-    //{ path: 'hospedaje/:id', component: Hospedaje },
     { path: 'soporte', component: Soporte},
     { path: 'cuenta', component: Cuenta, canActivate: [authGuard],  
       children: [
         // Proximamente
       ]
     },
+    { path: 'reservar', component: Reservar, canActivate: [authGuard]},
     { path: 'administrador', component: Admin, canActivate: [adminGuard],
       children: [
-        // Proximamente
+        
       ]
      },
     { path: '**', component:Error },

@@ -24,9 +24,7 @@ export class HabitacionService {
   async getHabitaciones(idHospedaje: string, desde: string, hasta: string, capacidad: number): Promise< HabitacionDetalle | any> {
     try {
       const params = `idHospedaje=${idHospedaje}&desde=${desde}&hasta=${hasta}&capacidad=${capacidad}`;
-      console.log(`${this.apiUrl}hospedaje?${params}`);
       const data = await this.http.get<HabitacionDetalle[]>(`${this.apiUrl}hospedaje?${params}`).toPromise();
-      console.log(data);
       return data ?? [];
     } catch (error: any) {
       this._error.set(error.message || 'Error al obtener hospedajes');

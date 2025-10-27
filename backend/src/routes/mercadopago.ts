@@ -5,7 +5,8 @@ import { mpPreference } from "../lib/mercadopago";
 import { PrismaClient } from '../generated/prisma'
 const prisma = new PrismaClient()
 
-
+// Admin
+// Pagos
 router.post("/crear-preferencia", async (req: Request, res: Response) => {
   try {
     const { idReserva } = req.body;
@@ -38,9 +39,9 @@ router.post("/crear-preferencia", async (req: Request, res: Response) => {
           },
         ],
         back_urls: {
-          success: "localhost:4001/cuenta?pago=completado",
-          failure: "localhost:4001/cuenta?pago=fallido",
-          pending: "localhost:4001/cuenta?pago=pendiente",
+          success: "http://localhost:4200/cuenta?pago=completado",
+          failure: "http://localhost:4200/cuenta?pago=fallido",
+          pending: "http://localhost:4200/cuenta?pago=pendiente",
         },
         auto_return: "approved",
         external_reference: String(reserva.idReserva),

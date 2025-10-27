@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { PrismaClient } from '../generated/prisma'
-import { matchedData } from "express-validator";
 import { handleHttpError } from "../utils/handleError";
 const prisma = new PrismaClient()
 
@@ -41,7 +40,8 @@ export async function getHospedajes(req: Request, res: Response) {
                   ? {
                       reservas_hospedajes: {
                         none: {
-                          fechaInicio: { lte: new Date(String(fechaFin)) }
+                          fechaInicio: { lte: new Date(String(fechaFin)) },
+                          fechaFin: { gte: new Date(String(fechaInicio)) },
                         },
                       },
                     }
@@ -53,7 +53,7 @@ export async function getHospedajes(req: Request, res: Response) {
                 precio: true,
               },
             },
-          },
+          }
         });
     
         if (hospedajes.length === 0) {
@@ -64,7 +64,7 @@ export async function getHospedajes(req: Request, res: Response) {
           hospedajes.map(async (h) => {
             const capacidades = h.habitaciones.map((hab) => hab.capacidad);
             const precios = h.habitaciones.map((hab) => hab.precio);
-    
+
             let serviciosData = [];
             if (typeof h.servicios === 'string') {
               const ids = h.servicios.split(',').map((id) => Number(id));

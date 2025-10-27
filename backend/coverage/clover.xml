@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1760459321042" clover="3.2.0">
-  <project timestamp="1760459321042" name="All files">
-    <metrics statements="862" coveredstatements="711" conditionals="130" coveredconditionals="77" methods="108" coveredmethods="99" elements="1100" coveredelements="887" complexity="0" loc="862" ncloc="862" packages="9" files="41" classes="41"/>
+<coverage generated="1761172118433" clover="3.2.0">
+  <project timestamp="1761172118433" name="All files">
+    <metrics statements="912" coveredstatements="748" conditionals="152" coveredconditionals="88" methods="120" coveredmethods="110" elements="1184" coveredelements="946" complexity="0" loc="912" ncloc="912" packages="9" files="41" classes="41"/>
     <package name="src">
       <metrics statements="20" coveredstatements="19" conditionals="3" coveredconditionals="1" methods="1" coveredmethods="0"/>
       <file name="app.ts" path="D:\A\Proyectos Personales\FullStack\App Hospedajes\backend\src\app.ts">
@@ -29,7 +29,7 @@
       </file>
     </package>
     <package name="src.controllers">
-      <metrics statements="539" coveredstatements="417" conditionals="109" coveredconditionals="72" methods="54" coveredmethods="50"/>
+      <metrics statements="588" coveredstatements="453" conditionals="131" coveredconditionals="83" methods="66" coveredmethods="61"/>
       <file name="admin.ts" path="D:\A\Proyectos Personales\FullStack\App Hospedajes\backend\src\controllers\admin.ts">
         <metrics statements="133" coveredstatements="102" conditionals="15" coveredconditionals="10" methods="14" coveredmethods="14"/>
         <line num="2" count="9" type="stmt"/>
@@ -47,10 +47,10 @@
         <line num="20" count="0" type="stmt"/>
         <line num="21" count="0" type="stmt"/>
         <line num="25" count="9" type="stmt"/>
-        <line num="26" count="9" type="stmt"/>
-        <line num="27" count="9" type="stmt"/>
-        <line num="29" count="9" type="stmt"/>
-        <line num="44" count="9" type="stmt"/>
+        <line num="26" count="10" type="stmt"/>
+        <line num="27" count="10" type="stmt"/>
+        <line num="29" count="10" type="stmt"/>
+        <line num="44" count="10" type="stmt"/>
         <line num="46" count="0" type="stmt"/>
         <line num="47" count="0" type="stmt"/>
         <line num="51" count="9" type="stmt"/>
@@ -305,7 +305,7 @@
         <line num="102" count="0" type="stmt"/>
       </file>
       <file name="habitacion.ts" path="D:\A\Proyectos Personales\FullStack\App Hospedajes\backend\src\controllers\habitacion.ts">
-        <metrics statements="15" coveredstatements="12" conditionals="9" coveredconditionals="7" methods="1" coveredmethods="1"/>
+        <metrics statements="23" coveredstatements="20" conditionals="10" coveredconditionals="8" methods="4" coveredmethods="4"/>
         <line num="2" count="9" type="stmt"/>
         <line num="3" count="9" type="stmt"/>
         <line num="4" count="9" type="stmt"/>
@@ -316,50 +316,87 @@
         <line num="14" count="3" type="cond" truecount="1" falsecount="0"/>
         <line num="16" count="2" type="stmt"/>
         <line num="44" count="2" type="cond" truecount="2" falsecount="0"/>
-        <line num="45" count="1" type="stmt"/>
+        <line num="46" count="1" type="stmt"/>
         <line num="47" count="1" type="stmt"/>
-        <line num="50" count="0" type="stmt"/>
-        <line num="51" count="0" type="stmt"/>
-        <line num="52" count="0" type="stmt"/>
+        <line num="48" count="1" type="stmt"/>
+        <line num="50" count="1" type="cond" truecount="1" falsecount="0"/>
+        <line num="51" count="1" type="stmt"/>
+        <line num="53" count="4" type="stmt"/>
+        <line num="55" count="1" type="stmt"/>
+        <line num="66" count="1" type="stmt"/>
+        <line num="73" count="1" type="stmt"/>
+        <line num="75" count="1" type="stmt"/>
+        <line num="78" count="0" type="stmt"/>
+        <line num="79" count="0" type="stmt"/>
+        <line num="80" count="0" type="stmt"/>
       </file>
       <file name="hospedaje.ts" path="D:\A\Proyectos Personales\FullStack\App Hospedajes\backend\src\controllers\hospedaje.ts">
-        <metrics statements="33" coveredstatements="26" conditionals="17" coveredconditionals="15" methods="6" coveredmethods="4"/>
+        <metrics statements="62" coveredstatements="44" conditionals="36" coveredconditionals="23" methods="14" coveredmethods="11"/>
         <line num="2" count="9" type="stmt"/>
+        <line num="3" count="9" type="stmt"/>
         <line num="4" count="9" type="stmt"/>
-        <line num="5" count="9" type="stmt"/>
-        <line num="7" count="9" type="stmt"/>
+        <line num="6" count="9" type="stmt"/>
+        <line num="7" count="2" type="stmt"/>
         <line num="8" count="2" type="stmt"/>
-        <line num="9" count="2" type="stmt"/>
-        <line num="17" count="2" type="stmt"/>
+        <line num="16" count="2" type="stmt"/>
         <line num="59" count="2" type="cond" truecount="1" falsecount="0"/>
         <line num="60" count="1" type="stmt"/>
         <line num="63" count="1" type="stmt"/>
         <line num="64" count="1" type="stmt"/>
         <line num="65" count="1" type="stmt"/>
         <line num="66" count="1" type="stmt"/>
-        <line num="73" count="1" type="stmt"/>
-        <line num="75" count="0" type="stmt"/>
-        <line num="76" count="0" type="stmt"/>
-        <line num="77" count="0" type="stmt"/>
-        <line num="82" count="9" type="stmt"/>
-        <line num="83" count="2" type="stmt"/>
-        <line num="84" count="2" type="stmt"/>
-        <line num="88" count="2" type="cond" truecount="1" falsecount="0"/>
-        <line num="89" count="1" type="stmt"/>
-        <line num="90" count="1" type="stmt"/>
-        <line num="93" count="1" type="stmt"/>
-        <line num="95" count="0" type="stmt"/>
-        <line num="96" count="0" type="stmt"/>
-        <line num="100" count="9" type="stmt"/>
-        <line num="101" count="2" type="stmt"/>
-        <line num="102" count="2" type="stmt"/>
-        <line num="106" count="2" type="cond" truecount="1" falsecount="0"/>
-        <line num="108" count="1" type="stmt"/>
+        <line num="68" count="1" type="stmt"/>
+        <line num="69" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="70" count="4" type="stmt"/>
+        <line num="71" count="1" type="stmt"/>
+        <line num="76" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="79" count="1" type="stmt"/>
+        <line num="88" count="1" type="stmt"/>
+        <line num="90" count="0" type="stmt"/>
+        <line num="91" count="0" type="stmt"/>
+        <line num="92" count="0" type="stmt"/>
+        <line num="97" count="9" type="stmt"/>
+        <line num="98" count="0" type="stmt"/>
+        <line num="99" count="0" type="stmt"/>
+        <line num="103" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="104" count="0" type="stmt"/>
+        <line num="105" count="0" type="stmt"/>
+        <line num="108" count="0" type="stmt"/>
         <line num="110" count="0" type="stmt"/>
         <line num="111" count="0" type="stmt"/>
+        <line num="115" count="9" type="stmt"/>
+        <line num="116" count="2" type="stmt"/>
+        <line num="117" count="2" type="stmt"/>
+        <line num="122" count="2" type="cond" truecount="1" falsecount="0"/>
+        <line num="123" count="1" type="stmt"/>
+        <line num="124" count="1" type="stmt"/>
+        <line num="128" count="1" type="stmt"/>
+        <line num="134" count="1" type="stmt"/>
+        <line num="136" count="4" type="stmt"/>
+        <line num="138" count="1" type="stmt"/>
+        <line num="149" count="1" type="stmt"/>
+        <line num="155" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="156" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="159" count="1" type="stmt"/>
+        <line num="161" count="1" type="stmt"/>
+        <line num="163" count="0" type="stmt"/>
+        <line num="168" count="1" type="stmt"/>
+        <line num="170" count="0" type="stmt"/>
+        <line num="171" count="0" type="stmt"/>
+        <line num="175" count="9" type="stmt"/>
+        <line num="176" count="2" type="stmt"/>
+        <line num="177" count="2" type="stmt"/>
+        <line num="181" count="2" type="cond" truecount="1" falsecount="0"/>
+        <line num="183" count="1" type="stmt"/>
+        <line num="184" count="1" type="stmt"/>
+        <line num="185" count="1" type="stmt"/>
+        <line num="191" count="1" type="stmt"/>
+        <line num="198" count="1" type="stmt"/>
+        <line num="200" count="0" type="stmt"/>
+        <line num="201" count="0" type="stmt"/>
       </file>
       <file name="resena.ts" path="D:\A\Proyectos Personales\FullStack\App Hospedajes\backend\src\controllers\resena.ts">
-        <metrics statements="62" coveredstatements="44" conditionals="10" coveredconditionals="6" methods="7" coveredmethods="6"/>
+        <metrics statements="74" coveredstatements="54" conditionals="12" coveredconditionals="8" methods="8" coveredmethods="7"/>
         <line num="2" count="9" type="stmt"/>
         <line num="3" count="9" type="stmt"/>
         <line num="4" count="9" type="stmt"/>
@@ -399,29 +436,41 @@
         <line num="96" count="0" type="stmt"/>
         <line num="97" count="0" type="stmt"/>
         <line num="101" count="9" type="stmt"/>
-        <line num="102" count="2" type="stmt"/>
-        <line num="103" count="2" type="cond" truecount="2" falsecount="0"/>
-        <line num="105" count="2" type="stmt"/>
-        <line num="124" count="2" type="cond" truecount="1" falsecount="0"/>
-        <line num="126" count="1" type="stmt"/>
-        <line num="128" count="1" type="stmt"/>
-        <line num="135" count="1" type="stmt"/>
-        <line num="137" count="0" type="stmt"/>
-        <line num="138" count="0" type="stmt"/>
-        <line num="142" count="9" type="stmt"/>
-        <line num="143" count="2" type="stmt"/>
-        <line num="144" count="2" type="stmt"/>
-        <line num="145" count="2" type="stmt"/>
-        <line num="147" count="2" type="stmt"/>
-        <line num="151" count="2" type="cond" truecount="1" falsecount="0"/>
-        <line num="152" count="1" type="stmt"/>
-        <line num="155" count="1" type="cond" truecount="0" falsecount="1"/>
-        <line num="156" count="0" type="stmt"/>
-        <line num="157" count="0" type="stmt"/>
-        <line num="160" count="1" type="stmt"/>
-        <line num="164" count="1" type="stmt"/>
+        <line num="102" count="3" type="stmt"/>
+        <line num="103" count="3" type="stmt"/>
+        <line num="104" count="3" type="stmt"/>
+        <line num="106" count="3" type="stmt"/>
+        <line num="110" count="3" type="cond" truecount="1" falsecount="0"/>
+        <line num="111" count="1" type="stmt"/>
+        <line num="114" count="2" type="stmt"/>
+        <line num="120" count="2" type="cond" truecount="1" falsecount="0"/>
+        <line num="122" count="1" type="stmt"/>
+        <line num="124" count="0" type="stmt"/>
+        <line num="125" count="0" type="stmt"/>
+        <line num="129" count="9" type="stmt"/>
+        <line num="130" count="2" type="stmt"/>
+        <line num="131" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="133" count="2" type="stmt"/>
+        <line num="152" count="2" type="cond" truecount="1" falsecount="0"/>
+        <line num="154" count="1" type="stmt"/>
+        <line num="156" count="1" type="stmt"/>
+        <line num="163" count="1" type="stmt"/>
+        <line num="165" count="0" type="stmt"/>
         <line num="166" count="0" type="stmt"/>
-        <line num="167" count="0" type="stmt"/>
+        <line num="170" count="9" type="stmt"/>
+        <line num="171" count="2" type="stmt"/>
+        <line num="172" count="2" type="stmt"/>
+        <line num="173" count="2" type="stmt"/>
+        <line num="175" count="2" type="stmt"/>
+        <line num="179" count="2" type="cond" truecount="1" falsecount="0"/>
+        <line num="180" count="1" type="stmt"/>
+        <line num="183" count="1" type="cond" truecount="0" falsecount="1"/>
+        <line num="184" count="0" type="stmt"/>
+        <line num="185" count="0" type="stmt"/>
+        <line num="188" count="1" type="stmt"/>
+        <line num="192" count="1" type="stmt"/>
+        <line num="194" count="0" type="stmt"/>
+        <line num="195" count="0" type="stmt"/>
       </file>
       <file name="reserva.ts" path="D:\A\Proyectos Personales\FullStack\App Hospedajes\backend\src\controllers\reserva.ts">
         <metrics statements="112" coveredstatements="84" conditionals="35" coveredconditionals="18" methods="13" coveredmethods="12"/>
@@ -624,14 +673,14 @@
         <line num="2" count="9" type="stmt"/>
         <line num="5" count="9" type="stmt"/>
         <line num="6" count="9" type="stmt"/>
-        <line num="7" count="45" type="stmt"/>
-        <line num="8" count="45" type="stmt"/>
-        <line num="10" count="45" type="cond" truecount="2" falsecount="1"/>
+        <line num="7" count="46" type="stmt"/>
+        <line num="8" count="46" type="stmt"/>
+        <line num="10" count="46" type="cond" truecount="2" falsecount="1"/>
         <line num="11" count="0" type="stmt"/>
-        <line num="14" count="45" type="stmt"/>
-        <line num="16" count="45" type="cond" truecount="0" falsecount="1"/>
+        <line num="14" count="46" type="stmt"/>
+        <line num="16" count="46" type="cond" truecount="0" falsecount="1"/>
         <line num="17" count="0" type="stmt"/>
-        <line num="20" count="45" type="stmt"/>
+        <line num="20" count="46" type="stmt"/>
         <line num="22" count="0" type="stmt"/>
       </file>
       <file name="session.ts" path="D:\A\Proyectos Personales\FullStack\App Hospedajes\backend\src\middleware\session.ts">
@@ -640,23 +689,23 @@
         <line num="3" count="9" type="stmt"/>
         <line num="4" count="9" type="stmt"/>
         <line num="6" count="9" type="stmt"/>
-        <line num="8" count="116" type="stmt"/>
-        <line num="9" count="116" type="stmt"/>
-        <line num="10" count="116" type="cond" truecount="1" falsecount="0"/>
+        <line num="8" count="117" type="stmt"/>
+        <line num="9" count="117" type="stmt"/>
+        <line num="10" count="117" type="cond" truecount="1" falsecount="0"/>
         <line num="11" count="19" type="stmt"/>
-        <line num="14" count="97" type="stmt"/>
-        <line num="15" count="97" type="stmt"/>
-        <line num="17" count="97" type="cond" truecount="0" falsecount="1"/>
+        <line num="14" count="98" type="stmt"/>
+        <line num="15" count="98" type="stmt"/>
+        <line num="17" count="98" type="cond" truecount="0" falsecount="1"/>
         <line num="18" count="0" type="stmt"/>
-        <line num="21" count="97" type="stmt"/>
-        <line num="27" count="97" type="cond" truecount="0" falsecount="1"/>
-        <line num="29" count="97" type="stmt"/>
-        <line num="31" count="97" type="stmt"/>
+        <line num="21" count="98" type="stmt"/>
+        <line num="27" count="98" type="cond" truecount="0" falsecount="1"/>
+        <line num="29" count="98" type="stmt"/>
+        <line num="31" count="98" type="stmt"/>
         <line num="34" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.routes">
-      <metrics statements="146" coveredstatements="125" conditionals="8" coveredconditionals="1" methods="7" coveredmethods="3"/>
+      <metrics statements="147" coveredstatements="126" conditionals="8" coveredconditionals="1" methods="7" coveredmethods="3"/>
       <file name="admin.ts" path="D:\A\Proyectos Personales\FullStack\App Hospedajes\backend\src\routes\admin.ts">
         <metrics statements="22" coveredstatements="22" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="9" type="stmt"/>
@@ -751,18 +800,18 @@
         <line num="4" count="9" type="stmt"/>
         <line num="5" count="9" type="stmt"/>
         <line num="6" count="9" type="stmt"/>
-        <line num="9" count="9" type="stmt"/>
-        <line num="10" count="0" type="stmt"/>
+        <line num="10" count="9" type="stmt"/>
         <line num="11" count="0" type="stmt"/>
-        <line num="13" count="0" type="stmt"/>
-        <line num="20" count="0" type="cond" truecount="0" falsecount="1"/>
-        <line num="23" count="0" type="stmt"/>
-        <line num="27" count="0" type="stmt"/>
-        <line num="29" count="0" type="stmt"/>
-        <line num="51" count="0" type="stmt"/>
-        <line num="56" count="0" type="stmt"/>
+        <line num="12" count="0" type="stmt"/>
+        <line num="14" count="0" type="stmt"/>
+        <line num="21" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="24" count="0" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="52" count="0" type="stmt"/>
         <line num="57" count="0" type="stmt"/>
-        <line num="61" count="9" type="stmt"/>
+        <line num="58" count="0" type="stmt"/>
+        <line num="62" count="9" type="stmt"/>
       </file>
       <file name="mercadopagoWebhook.ts" path="D:\A\Proyectos Personales\FullStack\App Hospedajes\backend\src\routes\mercadopagoWebhook.ts">
         <metrics statements="20" coveredstatements="9" conditionals="6" coveredconditionals="0" methods="2" coveredmethods="0"/>
@@ -788,7 +837,7 @@
         <line num="36" count="9" type="stmt"/>
       </file>
       <file name="resena.ts" path="D:\A\Proyectos Personales\FullStack\App Hospedajes\backend\src\routes\resena.ts">
-        <metrics statements="11" coveredstatements="11" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <metrics statements="12" coveredstatements="12" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="9" type="stmt"/>
         <line num="2" count="9" type="stmt"/>
         <line num="3" count="9" type="stmt"/>
@@ -798,8 +847,9 @@
         <line num="65" count="9" type="stmt"/>
         <line num="109" count="9" type="stmt"/>
         <line num="139" count="9" type="stmt"/>
-        <line num="171" count="9" type="stmt"/>
-        <line num="173" count="9" type="stmt"/>
+        <line num="169" count="9" type="stmt"/>
+        <line num="201" count="9" type="stmt"/>
+        <line num="203" count="9" type="stmt"/>
       </file>
       <file name="reserva.ts" path="D:\A\Proyectos Personales\FullStack\App Hospedajes\backend\src\routes\reserva.ts">
         <metrics statements="14" coveredstatements="14" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
@@ -857,7 +907,7 @@
       <file name="handleError.ts" path="D:\A\Proyectos Personales\FullStack\App Hospedajes\backend\src\utils\handleError.ts">
         <metrics statements="3" coveredstatements="3" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="1"/>
         <line num="3" count="9" type="cond" truecount="0" falsecount="2"/>
-        <line num="4" count="47" type="stmt"/>
+        <line num="4" count="49" type="stmt"/>
         <line num="7" count="9" type="stmt"/>
       </file>
       <file name="handlePassword.ts" path="D:\A\Proyectos Personales\FullStack\App Hospedajes\backend\src\utils\handlePassword.ts">
@@ -885,11 +935,11 @@
         <metrics statements="8" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
         <line num="1" count="9" type="stmt"/>
         <line num="4" count="9" type="stmt"/>
-        <line num="5" count="137" type="stmt"/>
-        <line num="6" count="137" type="stmt"/>
-        <line num="7" count="101" type="stmt"/>
-        <line num="9" count="36" type="stmt"/>
-        <line num="10" count="36" type="stmt"/>
+        <line num="5" count="142" type="stmt"/>
+        <line num="6" count="142" type="stmt"/>
+        <line num="7" count="105" type="stmt"/>
+        <line num="9" count="37" type="stmt"/>
+        <line num="10" count="37" type="stmt"/>
         <line num="14" count="9" type="stmt"/>
       </file>
       <file name="handlerJwt.ts" path="D:\A\Proyectos Personales\FullStack\App Hospedajes\backend\src\utils\handlerJwt.ts">
@@ -900,9 +950,9 @@
         <line num="6" count="0" type="stmt"/>
         <line num="13" count="10" type="stmt"/>
         <line num="15" count="10" type="stmt"/>
-        <line num="32" count="97" type="stmt"/>
-        <line num="33" count="97" type="stmt"/>
-        <line num="34" count="97" type="stmt"/>
+        <line num="32" count="98" type="stmt"/>
+        <line num="33" count="98" type="stmt"/>
+        <line num="34" count="98" type="stmt"/>
         <line num="36" count="0" type="stmt"/>
       </file>
     </package>
@@ -913,7 +963,7 @@
         <line num="1" count="9" type="stmt"/>
         <line num="3" count="9" type="stmt"/>
         <line num="5" count="9" type="stmt"/>
-        <line num="46" count="10" type="stmt"/>
+        <line num="46" count="11" type="stmt"/>
         <line num="49" count="9" type="stmt"/>
         <line num="93" count="3" type="stmt"/>
         <line num="96" count="9" type="stmt"/>
@@ -972,7 +1022,7 @@
         <line num="1" count="9" type="stmt"/>
         <line num="3" count="9" type="stmt"/>
         <line num="5" count="9" type="stmt"/>
-        <line num="9" count="3" type="stmt"/>
+        <line num="9" count="7" type="stmt"/>
         <line num="12" count="9" type="stmt"/>
         <line num="18" count="3" type="stmt"/>
         <line num="21" count="9" type="stmt"/>

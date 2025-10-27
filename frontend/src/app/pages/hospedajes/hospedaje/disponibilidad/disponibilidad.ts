@@ -1,10 +1,11 @@
-import { Component, computed, inject, Input, signal, effect } from '@angular/core';
+import { Component, computed, inject, Input, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HabitacionService } from '../../../../core/services/habitacion';
 import { DatesService } from '../../../../core/services/dates';
 import { HabitacionDetalle } from '../../../../core/interfaces/habitacion.model';
 import { Datepicker } from '../../../../layout/shared/date-picker/date-picker';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-disponibilidad',
@@ -14,10 +15,12 @@ import { Datepicker } from '../../../../layout/shared/date-picker/date-picker';
 })
 export class Disponibilidad {
   @Input() idHospedaje: string | undefined;
+  @Input() imagen:string | undefined;
   
   // Inyecciones
   readonly habitacionesService = inject(HabitacionService);
   readonly datesService = inject(DatesService);
+  router = inject(Router);
 
   // Variables
   desde = signal<string>(this.formatDate(new Date()));
@@ -36,17 +39,24 @@ export class Disponibilidad {
   readonly hayHospedajes = computed(() => this.totalHabitaciones() > 0);
   readonly fechaActual = new Date().toISOString().split('T')[0];
 
-  readonly syncEffect = effect(() => {
+  private cargarFechasGuardadas() {
     const id = this.idHospedaje;
     const saved = this.datesService.currentDates();
-
-    // espera a tener ambos antes de ejecutar
+  
     if (id && saved?.data) {
       this.desde.set(saved.data.fechaInicio.split('T')[0]);
       this.hasta.set(saved.data.fechaSalida.split('T')[0]);
       this.cargarHabitaciones();
     }
-  }); 
+  }
+  
+  ngOnInit() {
+    // Esperamos un poco para asegurarnos de que el @Input() ya llegó
+    setTimeout(() => {
+      this.cargarFechasGuardadas();
+    }, 50);
+  }
+
 
   formatDate(date: Date): string {
     return date.toISOString().split('T')[0];
@@ -57,7 +67,7 @@ export class Disponibilidad {
     const end = new Date(this.hasta());
     const diff = end.getTime() - start.getTime();
     return diff / (1000 * 60 * 60 * 24);
-  });
+  });   
 
   async cargarHabitaciones() {
     try {
@@ -69,7 +79,7 @@ export class Disponibilidad {
           this.personas()
         );
         this.habitacionesCargadas.set(data);
-        this.hayHabitaciones.set(true);
+        this.habitacionesCargadas().length > 0 ? this.hayHabitaciones.set(true) : this.hayHabitaciones.set(false)
       }
     } catch (error) {
       this.hayHabitaciones.set(false);
@@ -83,8 +93,22 @@ export class Disponibilidad {
     this.mostrarDatepicker.set(false);
   }
 
-  reservar(idHabitacion: string, precio: number, numHabitacion: string): void {
-    // TODO: Lógica de reserva
-    console.log('Reservar habitación:', idHabitacion, precio, numHabitacion);
+  reservar(idHabitacion: string, precio: number, total:number, numHabitacion: string): void {
+    const parametros = {
+      idHabitacion: idHabitacion,
+      idHospedaje: this.idHospedaje,
+      precio: precio,
+      precioTotal: total,
+      fechaInicio: this.desde(),
+      fechaFin: this.hasta(),
+      personas: this.personas(),
+      tituloHospedaje: "titulo",
+      habitacion: numHabitacion,
+      imagen: this.imagen,
+      tipoReserva: "hospedaje"
+    };
+    sessionStorage.removeItem('reservaParametros');
+    sessionStorage.setItem('reservaParametros', JSON.stringify(parametros));
+    this.router.navigate(['/reservar']);
   }
 }

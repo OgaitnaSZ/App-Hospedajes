@@ -70,7 +70,7 @@
               <p class="text-sm text-gray-500">Precio por <strong>{{ noches() }}</strong> noches</p>
               <button
                 class="mt-2 bg-blue-600 hover:bg-blue-700 text-white py-1 px-3 rounded"
-                (click)="reservar(habitacion.idHabitacion, habitacion.precio, habitacion.numero)">
+                (click)="reservar(habitacion.idHabitacion, habitacion.precio, habitacion.precio * noches(), habitacion.numero)">
                 Reservar
               </button>
             </div>
