@@ -1,6 +1,6 @@
 @if(hayHospedajes()){
   <div class="flex flex-wrap -mx-2">
-    @for(h of hospedajesCargados(); track $index){
+    @for(h of hospedajesDestacados(); track $index){
       <a
         [routerLink]="['/hospedaje', h.idHospedaje]"
         class="w-full md:w-1/3 px-2 mb-4"

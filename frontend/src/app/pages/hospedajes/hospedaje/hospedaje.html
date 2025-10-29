@@ -83,12 +83,14 @@
   </div>
 
   <!-- Disponibilidad -->
-  <app-disponibilidad 
-    [idHospedaje]="hospedaje()?.idHospedaje"
-    [imagen]="fotos[0].url"
-    id="disponibilidad"
-    class="mt-10"
-  ></app-disponibilidad>
+   @if(idHospedaje && fotos.length > 0){
+     <app-disponibilidad 
+       [idHospedaje]="hospedaje()?.idHospedaje"
+       [imagen]="fotos[0].url"
+       id="disponibilidad"
+       class="mt-10"
+     ></app-disponibilidad>
+   }
 
   <!-- Reseñas -->
   <h2 class="text-2xl font-semibold m-0 mt-10 mb-5" id="resenas">Comentarios de los clientes</h2>

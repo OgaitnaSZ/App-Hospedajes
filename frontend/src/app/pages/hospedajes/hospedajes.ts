@@ -7,7 +7,6 @@ import { UtilsService } from '../../core/services/utils';
 import { DatesService } from '../../core/services/dates';
 import { Datepicker } from '../../layout/shared/date-picker/date-picker';
 import { Title, Meta } from '@angular/platform-browser';
-import { HospedajeListado } from '../../core/interfaces/hospedaje.model';
 
 @Component({
   selector: 'app-hospedajes',
@@ -32,12 +31,14 @@ export class Hospedajes {
   readonly cualquierFecha = signal<boolean>(false);
 
   // Signal de resultados
-  readonly hospedajesCargados = signal<HospedajeListado[]>([]);
+  hospedajes = this.hospedajeService.hospedajes;
+  loading = this.hospedajeService.loading;
+  error = this.hospedajeService.error;
+  success = this.hospedajeService.success;
 
   // Computed
-  readonly hospedajes = computed(() => this.hospedajesCargados());
   readonly totalHospedajes = computed(() => this.hospedajes().length);
-  readonly hayHospedajes = computed(() => this.totalHospedajes() > 0);
+  readonly hayHospedajes = computed(() => this.totalHospedajes() > 0 && !this.error());
   readonly fechaActual = new Date().toISOString().split('T')[0];
 
   mostrarDatepicker = signal<boolean>(false);
@@ -57,24 +58,17 @@ export class Hospedajes {
       if (saved?.data) {
         this.desde.set(saved.data.fechaInicio.split('T')[0]);
         this.hasta.set(saved.data.fechaSalida.split('T')[0]);
-        //this.cargarHabitaciones();
       }
     });
 
     // Reacciona a cambios de filtros y actualiza hospedajes automáticamente
-    effect(async () => {
+    effect(() => {
       const d = this.destino();
       const fi = this.desde();
       const ff = this.hasta();
       const p = this.personas();
 
-      if (this.cualquierFecha()) {
-        this.desde.set('');
-        this.hasta.set('');
-      }
-
-      this.hospedajesCargados.set(await this.hospedajeService.getHospedajes(d, fi, ff, p));
-      console.log(this.hospedajes());
+      this.hospedajeService.getHospedajes(d, fi, ff, p);
     });
 
     // Efecto para metadatos dinámicos
@@ -109,12 +103,5 @@ export class Hospedajes {
     this.desde.set(this.formatDate(dates.start));
     this.hasta.set(this.formatDate(dates.end));
     this.mostrarDatepicker.set(false);
-  }
-
-  onCualquierFechaChange(): void {
-    if (this.cualquierFecha()) {
-      this.desde.set('');
-      this.hasta.set('');
-    }
   }
 }

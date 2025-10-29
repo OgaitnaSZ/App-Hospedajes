@@ -1,4 +1,4 @@
-import { Component, signal, inject } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl, Title, Meta } from '@angular/platform-browser';
 import { HospedajeService } from '../../../core/services/hospedaje';
 import { UtilsService } from '../../../core/services/utils';
@@ -6,7 +6,6 @@ import { Carrucel } from '../../../layout/shared/carrucel/carrucel'
 import { ActivatedRoute } from '@angular/router';
 import { Disponibilidad } from './disponibilidad/disponibilidad';
 import { Resenas } from '../../home/resenas/resenas';
-import { HospedajeDetalles } from '../../../core/interfaces/hospedaje.model';
 
 @Component({
   selector: 'app-hospedaje',
@@ -26,28 +25,30 @@ export class Hospedaje {
 
   // Variables
   idHospedaje: string = '';
-  fotos: any | null;
-  hospedaje = signal<HospedajeDetalles | null>(null);
+  fotos: any[] = [];
+  hospedaje = this.hospedajeService.hospedaje;
+  loading = this.hospedajeService.loading;
+  error = this.hospedajeService.error;
+  success = this.hospedajeService.success;
 
-  async ngOnInit() {
-    this.route.paramMap.subscribe(async params => {
+  constructor() {
+    effect(() => {
+      const h = this.hospedaje();
+      if (h && h.fotos) {
+        this.fotos = h.fotos.map(url => ({
+          url,
+          alt: h.titulo
+        }));
+      }
+    });
+  }
+
+  ngOnInit() {
+    this.route.paramMap.subscribe(params => {
       const id = params.get('id');
-      if (!id) return;
-      
-      this.idHospedaje = id;
-      try {
-        const data = await this.hospedajeService.getHospedaje(id);
-        if (data) {
-          this.hospedaje.set(data);
-          this.fotos = this.hospedaje()?.fotos.map(url => ({
-            url,
-            alt: this.hospedaje()?.titulo
-          }));
-        } else {
-          console.warn('Hospedaje no encontrado');
-        }
-      } catch (error) {
-        console.error('Error al obtener hospedaje', error);
+      if (id) {
+        this.idHospedaje = id;
+        this.hospedajeService.getHospedaje(id);
       }
     });
   }

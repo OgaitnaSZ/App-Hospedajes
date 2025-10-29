@@ -12,15 +12,19 @@ import { HospedajeListado } from '../../../core/interfaces/hospedaje.model';
   styleUrl: './hospedajes-destacados.css'
 })
 export class HospedajesDestacados {
+  // Servicios
   readonly hospedajeService = inject(HospedajeService);
 
-  hospedajesCargados = signal<HospedajeListado[]>([]);
+  // Hospedajes
+  hospedajesDestacados = this.hospedajeService.hospedajesDestacados;
+  loading = this.hospedajeService.loading;
+  error = this.hospedajeService.error;
+  success = this.hospedajeService.success;
 
-  readonly hospedajes = computed(() => this.hospedajesCargados());
-  readonly totalHospedajes = computed(() => this.hospedajes().length);
+  readonly totalHospedajes = computed(() => this.hospedajesDestacados().length);
   readonly hayHospedajes = computed(() => this.totalHospedajes() > 0);
 
-  async ngOnInit() {
-    this.hospedajesCargados.set(await this.hospedajeService.getHospedajesDestacados());
+  ngOnInit() {
+    this.hospedajeService.getHospedajesDestacados();
   }
 }
