@@ -22,9 +22,6 @@ export class Navbar {
         this.currentUrl.set(event.urlAfterRedirects);
       }
     });
-
-    // Debug signal de usuario
-    effect(() => console.log('Usuario actual:', this.auth.currentUser()));
   }
 
   // Computed signals

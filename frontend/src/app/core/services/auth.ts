@@ -1,8 +1,9 @@
-import { Injectable, signal, computed, effect } from '@angular/core';
+import { Injectable, inject, signal, computed, effect } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { TokenService } from './token';
 import { User, UserRegister } from '../interfaces/user.model';
+import { catchError, finalize, of, tap } from 'rxjs';
 
 interface LoginResponse {
   data: {
@@ -10,32 +11,34 @@ interface LoginResponse {
     user: User;
   };
 }
-
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private apiUrl = 'http://localhost:4001/api/auth/';
 
+  // Inject
+  private http = inject(HttpClient);
+  private router = inject(Router);
+  private tokenService = inject(TokenService);
+
   // Signals de estado
-  private _isLoading = signal(false);
-  private _token = signal<string | null>(localStorage.getItem('token'));
-  private _user = signal<User | null>(this.getStoredUser());
+  user = signal<User | null>(this.getStoredUser());
+  token = signal<string | null>(this.getStoredToken());
+  loading = signal(false);
+  error = signal<string | null>(null);
+  success = signal<string | null>(null);
 
-  // Computed (derivados)
-  readonly isLoading = computed(() => this._isLoading());
-  readonly isLoggedIn = computed(() => !!this._token());
-  readonly currentUser = computed(() => this._user());
+  // Computed
+  readonly isLoggedIn = computed(() => !!this.token());
+  readonly currentUser = computed(() => this.user());
 
-  constructor(
-    private http: HttpClient,
-    private router: Router,
-    private tokenService: TokenService
-  ) {
-    //  Efecto para mantener sincronizado localStorage
+  constructor() {
+    // Efecto para mantener sincronizado localStorage
     effect(() => {
-      const token = this._token();
-      const user = this._user();
+      const token = this.token();
+      const user = this.user();
+  
       if (token && user) {
         localStorage.setItem('token', token);
         localStorage.setItem('user', JSON.stringify(user));
@@ -47,79 +50,141 @@ export class AuthService {
   }
 
   // Login
-  async login(email: string, password: string): Promise<boolean> {
-    this._isLoading.set(true);
-    try {
-      const res = await this.http
-        .post<LoginResponse>(`${this.apiUrl}login`, { email, password })
-        .toPromise();
+  login(email: string, password: string): void {
+    this.loading.set(true);
+    this.error.set(null);
 
-      if (res?.data?.token && res.data.user) {
-        this._token.set(res.data.token);
-        this._user.set(res.data.user);
-        return true;
-      }
-      return false;
-    } catch (err) {
-      console.error('Error al iniciar sesión:', err);
-      return false;
-    } finally {
-      this._isLoading.set(false);
-    }
+    this.http.post<LoginResponse>(`${this.apiUrl}login`, { email, password }).pipe(
+      tap((data) => {
+        this.success.set("Login exitoso");
+        this.user.set(data.data.user);
+        this.token.set(data.data.token);
+      }),
+      catchError(err => {
+        this.error.set('Error al iniciar session');
+        console.error(err);
+        return of(null);
+      }),
+      finalize(() => this.loading.set(false))
+    ).subscribe();
   }
 
   // Registro
-  async register(usuario: UserRegister): Promise<any> {
-    this._isLoading.set(true);
-    try {
-      return await this.http.post(`${this.apiUrl}register`, usuario).toPromise();
-    } finally {
-      this._isLoading.set(false);
-    }
+  register(usuario: UserRegister): void {
+    this.loading.set(true);
+    this.error.set(null);
+
+    this.http.post(`${this.apiUrl}register`, usuario).pipe(
+      tap(() => {
+        this.success.set("Login exitoso");
+      }),
+      catchError(err => {
+        this.error.set('Error al registrar usuario');
+        console.error(err);
+        return of(null);
+      }),
+      finalize(() => this.loading.set(false))
+    ).subscribe();
   }
 
   // Logout
   logout() {
-    this._token.set(null);
-    this._user.set(null);
+    this.token.set(null);
+    this.user.set(null);
     this.router.navigate(['/login']);
   }
 
   // Cambiar contraseña
-  async actualizarPassword(password: string, newPassword: string) {
-    const user = this._user();
+  actualizarPassword(password: string, newPassword: string) {
+    this.loading.set(true);
+    this.error.set(null);
+
+    const user = this.user();
     if (!user) throw new Error('Usuario no autenticado');
-    return await this.http
-      .post<any>(
+    
+    this.http.put<any>(
         `${this.apiUrl}update-password`,
         { idUsuario: user.idUsuario, password, newPassword },
         { headers: this.tokenService.createAuthHeaders() }
-      )
-      .toPromise();
+    ).pipe(
+      tap(() => {
+        this.success.set("Password actualizado");
+      }),
+      catchError(err => {
+        this.error.set('Error al actualizar password');
+        console.error(err);
+        return of(null);
+      }),
+      finalize(() => this.loading.set(false))
+    ).subscribe();
   }
 
   // Recuperar contraseña
-  async recuperarPassword(email: string) {
-    return await this.http.post<any>(`${this.apiUrl}recover-password`, { email }).toPromise();
+  recuperarPassword(email: string) {
+    this.loading.set(true);
+    this.error.set(null);
+
+    this.http.post(`${this.apiUrl}recover-password`, { email }).pipe(
+      tap(() => {
+        this.success.set("Email enviado");
+      }),
+      catchError(err => {
+        this.error.set('Error al recuperar password');
+        console.error(err);
+        return of(null);
+      }),
+      finalize(() => this.loading.set(false))
+    ).subscribe();
   }
 
   // Resetear contraseña
-  async resetearPassword(password: string, token: string) {
-    return await this.http.post<any>(`${this.apiUrl}reset-password`, { password, token }).toPromise();
+  resetearPassword(password: string, token: string) {
+    this.loading.set(true);
+    this.error.set(null);
+    
+    this.http.post(`${this.apiUrl}reset-password`, { password, token }).pipe(
+      tap(() => {
+        this.success.set("Password actualizado");
+      }),
+      catchError(err => {
+        this.error.set('Error al actualizar password');
+        console.error(err);
+        return of(null);
+      }),
+      finalize(() => this.loading.set(false))
+    ).subscribe();
   }
 
   // Helpers
   private getStoredUser(): User | null {
     const stored = localStorage.getItem('user');
-    return stored ? JSON.parse(stored) : null;
+    if (!stored || stored === 'undefined' || stored === 'null') {
+      return null;
+    }
+  
+    try {
+      return JSON.parse(stored);
+    } catch (e) {
+      console.error('Error al parsear usuario almacenado:', e);
+      return null;
+    }
+  }
+  
+  private getStoredToken(): string | null {
+    const stored = localStorage.getItem('token');
+    if (!stored || stored === 'undefined' || stored === 'null') {
+      return null;
+    }
+  
+    return stored; // ✅ no uses JSON.parse aquí
   }
 
   // Accesores públicos (solo lectura)
-  get token() {
-    return this._token.asReadonly();
+  get getToken() {
+    return this.token.asReadonly();
   }
 
-  get user() {
-    return this._user.asReadonly();
+  get getUser() {
+    return this.user.asReadonly();
   }
 }
