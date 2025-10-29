@@ -1,46 +1,57 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { catchError, finalize, of, tap } from 'rxjs';
+import { preferenciaMP } from '../interfaces/mercadopago.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class Mercadopago {
-  http = inject(HttpClient);
-
+export class MercadopagoService {
   private preferenceUrl = 'https://vamos.fullbusiness.io/api/reservas/mercado-pago/crear-preferencia.php';
   private webhookUrl = 'https://vamos.fullbusiness.io/api/reservas/mercado-pago/webhook.php';
   mercadopago: any;
+
+  // Inyecciones
+  http = inject(HttpClient);
   
-  private _isLoading = signal(false);
-  private _error = signal<string | null>(null);
+  // Signals
+  preferenciaMP = signal<preferenciaMP | null>(null);
+  estadoPago = signal<any | null>(null);
+  loading = signal(false);
+  error = signal<string | null>(null);
+  success = signal<string | null>(null);
 
-  async createPreference(preferenceData: any): Promise<{ preference_id: string, id_pago: string } | any> {
-    this._isLoading.set(true);
-    this._error.set(null);
+  createPreference(preferenceData: any): void {
+    this.loading.set(true);
+    this.error.set(null);
 
-    try {
-      const data = await this.http.post<{ preference_id: string, id_pago: string }>(this.preferenceUrl, preferenceData).toPromise();
-      if(data) return data;
-    } catch (error: any) {
-      this._error.set(error.message || 'Error al pagar');
-      return null;
-    } finally {
-      this._isLoading.set(false);
-    }
+    this.http.post<preferenciaMP>(this.preferenceUrl, preferenceData).pipe(
+      tap((data) => {
+          this.preferenciaMP.set(data)
+      }),
+      catchError(err => {
+      this.error.set('Error al crear preferencia');
+      console.error(err);
+      return of(null);
+      }),
+      finalize(() => this.loading.set(false))
+    ).subscribe();
   }
 
-  async verificarPago(preferenceId: any): Promise<any> {
-    this._isLoading.set(true);
-    this._error.set(null);
+  verificarPago(preferenceId: any): void {
+    this.loading.set(true);
+    this.error.set(null);
 
-    try{
-      const data = await this.http.post<any>(this.webhookUrl, preferenceId).toPromise();
-      if(data) return data;
-    }catch (error: any) {
-      this._error.set(error.message || 'Error al verificar pago');
-      return null;
-    } finally {
-      this._isLoading.set(false);
-    }
+    this.http.post<any>(this.webhookUrl, preferenceId).pipe(
+      tap((data) => {
+          this.estadoPago.set(data)
+      }),
+      catchError(err => {
+      this.error.set('Error al verificar pago');
+      console.error(err);
+      return of(null);
+      }),
+      finalize(() => this.loading.set(false))
+    ).subscribe();
   }
 }

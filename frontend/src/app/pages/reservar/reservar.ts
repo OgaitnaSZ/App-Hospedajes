@@ -1,12 +1,11 @@
-import { Component, computed, effect, inject, signal } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { firstValueFrom } from 'rxjs';
+import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms'; 
 import { ReservaService } from '../../core/services/reserva';
-import { Mercadopago } from '../../core/services/mercadopago';
+import { MercadopagoService } from '../../core/services/mercadopago';
 import { AuthService } from '../../core/services/auth';
+import { preferenciaMP } from '../../core/interfaces/mercadopago.model';
 
 @Component({
   selector: 'app-reservar',
@@ -15,21 +14,21 @@ import { AuthService } from '../../core/services/auth';
   styleUrl: './reservar.css'
 })
 export class Reservar {
-  router = inject(Router)
-  reservaService = inject(ReservaService)
-  mercadopago = inject(Mercadopago)
-  auth = inject(AuthService);
+  // Inject
+  private router = inject(Router);
+  private reservaService = inject(ReservaService);
+  private mercadopago = inject(MercadopagoService);
+  private auth = inject(AuthService);
 
+  // Variables
   parametros: any;
   fechaActual = new Date();
-
   minDate: string = `${this.fechaActual.getFullYear()}-${('0' + (this.fechaActual.getMonth() + 1)).slice(-2)}-${('0' + this.fechaActual.getDate()).slice(-2)}`;
   personas: number = 1;
   subtotal: number = 0;
-
   preferenciaDePago = { titulo: '', total: 0, }
 
-  preferencia = signal<any>(null);
+  preferencia = this.mercadopago.preferenciaMP;
   reservaExitosa = signal<boolean>(false);
   detallesPago = signal({
     nombre: '',
@@ -40,7 +39,6 @@ export class Reservar {
     telefono: '',
     idPreferencia: '',
   });
-
 
   ngOnInit() {
     const navigation = this.router.getCurrentNavigation();
@@ -77,17 +75,15 @@ export class Reservar {
   
     try {
       // Obtener preferencia de pago sin subscribe
-      const response = await this.mercadopago.createPreference(preferenceData);
-      console.log('Preferencia creada:', response);
-      
-      this.preferencia.set(response);
+      this.mercadopago.createPreference(preferenceData);
+      console.log('Preferencia creada:', this.preferencia);
       
       const mp = new (window as any).MercadoPago('APP_USR-89f48669-7c37-472c-b938-81f0ea476d6b', {
         locale: 'es-AR',
       });
   
       mp.checkout({
-        preference: { id: response.preference_id },
+        preference: { id: this.mercadopago.preferenciaMP()?.preference_id },
         autoOpen: false,  // Desactivar autoOpen
         onSubmit: (event: any) => {
           console.log('Pago enviado', event);
@@ -100,7 +96,7 @@ export class Reservar {
       // Actualizar signal con ID de preferencia
       this.detallesPago.update(p => ({
         ...p,
-        idPreferencia: response.id_pago,
+        idPreferencia: <string>this.mercadopago.preferenciaMP()?.id_pago,
       }));
   
       const idUsuario = this.auth.currentUser()?.idUsuario;
@@ -114,9 +110,9 @@ export class Reservar {
       let reservaResponse: any;
   
       if (this.parametros.tipoReserva === 'hospedaje') {
-        reservaResponse = await firstValueFrom(this.reservaService.reservarHospedaje(datosReserva));
+        reservaResponse = this.reservaService.reservarHospedaje(datosReserva);
       } else if (this.parametros.tipoReserva === 'actividad') {
-        reservaResponse = await firstValueFrom(this.reservaService.reservarActividad(datosReserva));
+        reservaResponse = this.reservaService.reservarActividad(datosReserva);
       }else{
         return console.log('Error al reservar');
       }
@@ -131,9 +127,8 @@ export class Reservar {
     }
   }
 
-
   verificarPagoPeriodicamente(IdPreferencia: string) {
-
+    this.mercadopago.verificarPago(IdPreferencia);
   }
 
   validarDatos(): boolean {
