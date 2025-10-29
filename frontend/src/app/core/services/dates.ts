@@ -1,4 +1,4 @@
-import { Injectable, signal, computed, effect } from '@angular/core';
+import { Injectable, signal, effect, computed } from '@angular/core';
 
 interface Fechas {
   data: {
@@ -12,17 +12,18 @@ interface Fechas {
 })
 export class DatesService {
   // Signals de estado
-  private _isLoading = signal(false);
-  private _dates = signal<Fechas | null>(this.getStoredDates());
+  dates = signal<Fechas | null>(this.getStoredDates());
+  loading = signal(false);
+  error = signal<string | null>(null);
+  success = signal<string | null>(null);
 
-  // Computed (derivados)
-  readonly isLoading = computed(() => this._isLoading());
-  readonly currentDates = computed(() => this._dates());
+  // Computed
+  readonly currentDates = computed(() => this.dates());
 
   constructor() {
     //  Efecto para mantener sincronizado localStorage
     effect(() => {
-      const dates = this._dates();
+      const dates = this.dates();
       if (dates) {
         localStorage.setItem('dates', JSON.stringify(dates));
       } else {
@@ -37,7 +38,7 @@ export class DatesService {
   }
 
   setDates(start: Date, end: Date) {
-    this._dates.set({
+    this.dates.set({
       data: {
         fechaInicio: start.toISOString(),
         fechaSalida: end.toISOString(),

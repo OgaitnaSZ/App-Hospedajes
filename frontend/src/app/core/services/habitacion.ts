@@ -1,6 +1,7 @@
 import { Injectable, signal, computed, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Habitacion, HabitacionDetalle } from '../interfaces/habitacion.model';
+import { catchError, finalize, of, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -8,29 +9,32 @@ import { Habitacion, HabitacionDetalle } from '../interfaces/habitacion.model';
 export class HabitacionService {
   private apiUrl = 'http://localhost:4001/api/habitacion/';
 
-  // Estado base del servicio
-  private _habitaciones = signal<Habitacion[]>([]);
-  private _isLoading = signal(false);
-  private _error = signal<string | null>(null);
-
+  // Inject
   private http = inject(HttpClient);
 
-  // Computed (expuestos como solo lectura)
-  readonly habitacion = computed(() => this._habitaciones());
-  readonly isLoading = computed(() => this._isLoading());
-  readonly error = computed(() => this._error());
+  // Estado base del servicio
+  habitaciones = signal<HabitacionDetalle[]>([]);
+  loading = signal(false);
+  error = signal<string | null>(null);
+  success = signal<string | null>(null);
 
   /* Listar Habitaciones */
-  async getHabitaciones(idHospedaje: string, desde: string, hasta: string, capacidad: number): Promise< HabitacionDetalle | any> {
-    try {
+  getHabitaciones(idHospedaje: string, desde: string, hasta: string, capacidad: number): void {
+      this.loading.set(true);
+      this.error.set(null);
+
       const params = `idHospedaje=${idHospedaje}&desde=${desde}&hasta=${hasta}&capacidad=${capacidad}`;
-      const data = await this.http.get<HabitacionDetalle[]>(`${this.apiUrl}hospedaje?${params}`).toPromise();
-      return data ?? [];
-    } catch (error: any) {
-      this._error.set(error.message || 'Error al obtener hospedajes');
-      return [];
-    } finally {
-      this._isLoading.set(false);
-    }
+
+      this.http.get<HabitacionDetalle[]>(`${this.apiUrl}hospedaje?${params}`).pipe(
+        tap((data) => {
+            this.habitaciones.set(data)
+        }),
+        catchError(err => {
+          this.error.set('Error al obtener hospedajes');
+          console.error(err);
+          return [];
+        }),
+        finalize(() => this.loading.set(false))
+      ).subscribe();
   }
 }

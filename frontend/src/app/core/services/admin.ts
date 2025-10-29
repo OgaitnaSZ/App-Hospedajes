@@ -1,88 +1,289 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Hospedaje } from '../interfaces/hospedaje.model';
 import { Habitacion } from '../interfaces/habitacion.model';
 import { Actividad } from '../interfaces/actividad.model';
 import { TokenService } from './token';
 import { Foto } from '../interfaces/foto.model';
+import { catchError, finalize, of, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AdminService {
-  private apiUrl = 'http://localhost:4001/api/admin/';
+    private apiUrl = 'http://localhost:4001/api/admin/';
 
-  constructor(
-                private http: HttpClient,
-                private tokenService: TokenService
-              ) {}
+    // Inject
+    http = inject(HttpClient);
+    tokenService = inject(TokenService)
+
+    // Signals de estado
+    loading = signal(false);
+    error = signal<string | null>(null);
+    success = signal<string | null>(null);
+
+    hospedajes = signal<Hospedaje[]>([]);
+    habitaciones = signal<Habitacion[]>([]);
+    fotos = signal<Foto[]>([]);
+    actividades = signal<Actividad[]>([]);
+
     /* Hospedajes */
-    getHospedajes() {
-        return this.http.get(`${this.apiUrl}hospedajes/hospedajes`, { headers: this.tokenService.createAuthHeaders() });
+    getHospedajes(): void {
+        this.loading.set(true);
+        this.error.set(null);
+        
+        this.http.get<Hospedaje[]>(`${this.apiUrl}hospedajes/hospedajes`, { headers: this.tokenService.createAuthHeaders() }).pipe(
+            tap((data) => {
+                this.hospedajes.set(data)
+            }),
+            catchError(err => {
+                this.error.set('Error al obtener hospedajes');
+                console.error(err);
+                return [];
+            }),
+            finalize(() => this.loading.set(false))
+        ).subscribe();
     }
 
     /* Agregar Hospedaje */
-    agregarHospedaje(hospedaje: Hospedaje) {
-        return this.http.post(`${this.apiUrl}hospedajes/agregar`, hospedaje, { headers: this.tokenService.createAuthHeaders() });
+    agregarHospedaje(hospedaje: Hospedaje): void {
+        this.loading.set(true);
+        this.error.set(null);
+
+        this.http.post(`${this.apiUrl}hospedajes/agregar`, hospedaje, { headers: this.tokenService.createAuthHeaders() }).pipe(
+            tap(() => {
+                this.success.set("Hospedaje agregado con exito")
+            }),
+            catchError(err => {
+                this.error.set('Error al agregar hospedaje');
+                console.error(err);
+                return [];
+            }),
+            finalize(() => this.loading.set(false))
+        ).subscribe();
     }
     /* Modificar Hospedaje */
-    modificarHospedaje(hospedaje: Hospedaje) {
-        return this.http.put(`${this.apiUrl}hospedajes/modificar`, hospedaje, { headers: this.tokenService.createAuthHeaders() });
+    modificarHospedaje(hospedaje: Hospedaje): void {
+        this.loading.set(true);
+        this.error.set(null);
+
+        this.http.put(`${this.apiUrl}hospedajes/modificar`, hospedaje, { headers: this.tokenService.createAuthHeaders() }).pipe(
+            tap(() => {
+                this.success.set("Hospedaje modificado con exito")
+            }),
+            catchError(err => {
+                this.error.set('Error al modificar hospedaje');
+                console.error(err);
+                return [];
+            }),
+            finalize(() => this.loading.set(false))
+        ).subscribe();
     }
     /* Eliminar Hospedaje */
     eliminarHospedaje(idHospedaje: string) {
-        return this.http.delete(`${this.apiUrl}hospedajes/eliminar/${idHospedaje}`, { headers: this.tokenService.createAuthHeaders() });
+        this.loading.set(true);
+        this.error.set(null);
+
+        this.http.delete(`${this.apiUrl}hospedajes/eliminar/${idHospedaje}`, { headers: this.tokenService.createAuthHeaders() }).pipe(
+            tap(() => {
+                this.success.set("Hospedaje eliminado con exito")
+            }),
+            catchError(err => {
+                this.error.set('Error al eliminar hospedaje');
+                console.error(err);
+                return [];
+            }),
+            finalize(() => this.loading.set(false))
+        ).subscribe();
     }
 
     /* Habitaciones */
     getHabitaciones(idHospedaje: string) {
-        return this.http.get(`${this.apiUrl}habitaciones/hospedaje/${idHospedaje}`, { headers: this.tokenService.createAuthHeaders() });
+        this.loading.set(true);
+        this.error.set(null);
+
+        this.http.get<Habitacion[]>(`${this.apiUrl}habitaciones/hospedaje/${idHospedaje}`, { headers: this.tokenService.createAuthHeaders() }).pipe(
+            tap((data) => {
+                this.habitaciones.set(data)
+            }),
+            catchError(err => {
+                this.error.set('Error al obtener habitaciones');
+                console.error(err);
+                return [];
+            }),
+            finalize(() => this.loading.set(false))
+        ).subscribe();
     }
 
     agregarHabitacion(habitacion: Habitacion) {
-        return this.http.post(`${this.apiUrl}habitaciones/agregar`, habitacion, { headers: this.tokenService.createAuthHeaders() });
+        this.loading.set(true);
+        this.error.set(null);
+
+        this.http.post(`${this.apiUrl}habitaciones/agregar`, habitacion, { headers: this.tokenService.createAuthHeaders() }).pipe(
+            tap(() => {
+                this.success.set("Habitacion agregada con exito")
+            }),
+            catchError(err => {
+                this.error.set('Error al agregar habitacion');
+                console.error(err);
+                return [];
+            }),
+            finalize(() => this.loading.set(false))
+        ).subscribe();
     }
 
     modificarHabitacion(habitacion: Habitacion) {
-        return this.http.put(`${this.apiUrl}habitaciones/modificar`, habitacion, { headers: this.tokenService.createAuthHeaders() });
+        this.loading.set(true);
+        this.error.set(null);
+
+        this.http.put(`${this.apiUrl}habitaciones/modificar`, habitacion, { headers: this.tokenService.createAuthHeaders() }).pipe(
+            tap(() => {
+                this.success.set("Habitacion modificada con exito")
+            }),
+            catchError(err => {
+                this.error.set('Error al modificar habitacion');
+                console.error(err);
+                return [];
+            }),
+            finalize(() => this.loading.set(false))
+        ).subscribe();
     }
 
     eliminarHabtiacion(idHabitacion: string) {
-        return this.http.delete(`${this.apiUrl}habitaciones/eliminar/${idHabitacion}`, { headers: this.tokenService.createAuthHeaders() });
+        this.loading.set(true);
+        this.error.set(null);
+
+        this.http.delete(`${this.apiUrl}habitaciones/eliminar/${idHabitacion}`, { headers: this.tokenService.createAuthHeaders() }).pipe(
+            tap(() => {
+                this.success.set("Habitacion eliminada con exito")
+            }),
+            catchError(err => {
+                this.error.set('Error al eliminar habitacion');
+                console.error(err);
+                return [];
+            }),
+            finalize(() => this.loading.set(false))
+        ).subscribe();
     }
 
     /* Fotos */
     subirFotos(formData: FormData){
-        return this.http.post(`${this.apiUrl}foto/subir`, formData, { headers: this.tokenService.createAuthHeaders() });
+        this.loading.set(true);
+        this.error.set(null);
+
+        this.http.post(`${this.apiUrl}foto/subir`, formData, { headers: this.tokenService.createAuthHeaders() }).pipe(
+            tap(() => {
+                this.success.set("Fotos subidas con exito")
+            }),
+            catchError(err => {
+                this.error.set('Error al subir fotos');
+                console.error(err);
+                return [];
+            }),
+            finalize(() => this.loading.set(false))
+        ).subscribe();
     }
 
-    async getFotos(idHospedaje: string) : Promise<Foto | any> {
-        try {
-            const fotos = await this.http.get(`http://localhost:4001/api/foto/hospedaje/${idHospedaje}`).toPromise();
-            return fotos;
-        } catch (error: any) {
-            return null;
-        }
+    getFotos(idHospedaje: string) : void {
+        this.loading.set(true);
+        this.error.set(null);
+
+        this.http.get<Foto[]>(`http://localhost:4001/api/foto/hospedaje/${idHospedaje}`).pipe(
+            tap((data) => {
+                this.fotos.set(data)
+            }),
+            catchError(err => {
+                this.error.set('Error al obtener fotos');
+                console.error(err);
+                return [];
+            }),
+            finalize(() => this.loading.set(false))
+        ).subscribe();
     }
 
     eliminarFoto(idFoto: string){
-        return this.http.delete(`${this.apiUrl}foto/eliminar/${idFoto}`, { headers: this.tokenService.createAuthHeaders() });
+        this.loading.set(true);
+        this.error.set(null);
+
+        return this.http.delete(`${this.apiUrl}foto/eliminar/${idFoto}`, { headers: this.tokenService.createAuthHeaders() }).pipe(
+            tap(() => {
+                this.success.set("Foto eliminada con exito")
+            }),
+            catchError(err => {
+                this.error.set('Error al eliminar foto');
+                console.error(err);
+                return [];
+            }),
+            finalize(() => this.loading.set(false))
+        ).subscribe();
     }
 
     /* Actividades */
     getActividades(idHospedaje: string) {
-        return this.http.get(`${this.apiUrl}actividades/hospedaje/${idHospedaje}`, { headers: this.tokenService.createAuthHeaders() });
+        this.loading.set(true);
+        this.error.set(null);
+
+        this.http.get<Actividad[]>(`${this.apiUrl}actividades/hospedaje/${idHospedaje}`, { headers: this.tokenService.createAuthHeaders() }).pipe(
+            tap((data) => {
+                this.actividades.set(data)
+            }),
+            catchError(err => {
+                this.error.set('Error al obtener actividades');
+                console.error(err);
+                return [];
+            }),
+            finalize(() => this.loading.set(false))
+        ).subscribe();
     }
 
     agregarActividad(actividad: Actividad) {
-        return this.http.post(`${this.apiUrl}actividades/agregar`, actividad, { headers: this.tokenService.createAuthHeaders() });
+        this.loading.set(true);
+        this.error.set(null);
+
+        this.http.post(`${this.apiUrl}actividades/agregar`, actividad, { headers: this.tokenService.createAuthHeaders() }).pipe(
+            tap(() => {
+                this.success.set("Actividad agregada con exito")
+            }),
+            catchError(err => {
+                this.error.set('Error al agregar actividad');
+                console.error(err);
+                return [];
+            }),
+            finalize(() => this.loading.set(false))
+        ).subscribe();
     }
 
     modificarActividad(actividad: Actividad) {
-        return this.http.put(`${this.apiUrl}actividades/modificar`, actividad, { headers: this.tokenService.createAuthHeaders() });
+        this.loading.set(true);
+        this.error.set(null);
+
+        this.http.put(`${this.apiUrl}actividades/modificar`, actividad, { headers: this.tokenService.createAuthHeaders() }).pipe(
+            tap(() => {
+                this.success.set("Actividad modificada con exito")
+            }),
+            catchError(err => {
+                this.error.set('Error al modificar actividad');
+                console.error(err);
+                return [];
+            }),
+            finalize(() => this.loading.set(false))
+        ).subscribe();
     }
 
     eliminarActividad(idActividad: string) {
-        return this.http.delete(`${this.apiUrl}actividades/eliminar/${idActividad}`, { headers: this.tokenService.createAuthHeaders() });
+        this.loading.set(true);
+        this.error.set(null);
+
+        this.http.delete(`${this.apiUrl}actividades/eliminar/${idActividad}`, { headers: this.tokenService.createAuthHeaders() }).pipe(
+            tap(() => {
+                this.success.set("Actividad eliminada con exito")
+            }),
+            catchError(err => {
+                this.error.set('Error al eliminar actividad');
+                console.error(err);
+                return [];
+            }),
+            finalize(() => this.loading.set(false))
+        ).subscribe();
     }
 }

@@ -1,6 +1,6 @@
-import { Injectable, signal, computed, inject } from '@angular/core';
+import { Injectable, signal, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Hospedaje, HospedajeDetalles } from '../interfaces/hospedaje.model';
+import { HospedajeDetalles } from '../interfaces/hospedaje.model';
 import { HospedajeListado } from '../interfaces/hospedaje.model';
 import { catchError, finalize, of, tap } from 'rxjs';
 

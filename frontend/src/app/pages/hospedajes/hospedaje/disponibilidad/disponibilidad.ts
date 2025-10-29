@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HabitacionService } from '../../../../core/services/habitacion';
 import { DatesService } from '../../../../core/services/dates';
-import { HabitacionDetalle } from '../../../../core/interfaces/habitacion.model';
 import { Datepicker } from '../../../../layout/shared/date-picker/date-picker';
 import { Router } from '@angular/router';
 
@@ -29,12 +28,13 @@ export class Disponibilidad {
   mostrarDatepicker = signal<boolean>(false);
   hayHabitaciones = signal<boolean>(false);
   total = signal<number>(0);
-  
-  // Signal de resultados
-  readonly habitacionesCargadas = signal<HabitacionDetalle[]>([]);
-  
+
+  habitaciones = this.habitacionesService.habitaciones;
+  loading = this.habitacionesService.loading;
+  error = this.habitacionesService.error;
+  success = this.habitacionesService.success;
+
   // Computed
-  readonly habitaciones = computed(() => this.habitacionesCargadas());
   readonly totalHabitaciones = computed(() => this.habitaciones().length);
   readonly hayHospedajes = computed(() => this.totalHabitaciones() > 0);
   readonly fechaActual = new Date().toISOString().split('T')[0];
@@ -72,14 +72,13 @@ export class Disponibilidad {
   async cargarHabitaciones() {
     try {
       if (this.idHospedaje && this.desde() && this.hasta()) {
-        const data = await this.habitacionesService.getHabitaciones(
+        this.habitacionesService.getHabitaciones(
           this.idHospedaje,
           this.desde(),
           this.hasta(),
           this.personas()
         );
-        this.habitacionesCargadas.set(data);
-        this.habitacionesCargadas().length > 0 ? this.hayHabitaciones.set(true) : this.hayHabitaciones.set(false)
+        this.habitaciones().length > 0 ? this.hayHabitaciones.set(true) : this.hayHabitaciones.set(false)
       }
     } catch (error) {
       this.hayHabitaciones.set(false);
