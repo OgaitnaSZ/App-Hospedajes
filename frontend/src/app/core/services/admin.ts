@@ -237,11 +237,28 @@ export class AdminService {
         ).subscribe();
     }
 
-    eliminarFoto(idFoto: string){
+    seleccionarImagenPrincipal(idHospedaje: string, idFoto: string): void {
         this.loading.set(true);
         this.error.set(null);
 
-        return this.http.delete(`${this.apiUrl}foto/eliminar/${idFoto}`, { headers: this.tokenService.createAuthHeaders() }).pipe(
+        this.http.patch(`http://localhost:4001/api/foto/seleccionarPrincipal`, {idHospedaje, idFoto} ,{ headers: this.tokenService.createAuthHeaders() }).pipe(
+            tap(() => {
+                this.success.set("Foto actualizada con exito")
+            }),
+            catchError(err => {
+                this.error.set('Error al actualizar foto');
+                console.error(err);
+                return [];
+            }),
+            finalize(() => this.loading.set(false))
+        ).subscribe();
+    }
+
+    eliminarFoto(idFoto: string): void {
+        this.loading.set(true);
+        this.error.set(null);
+
+        this.http.delete(`${this.apiUrl}foto/eliminar/${idFoto}`, { headers: this.tokenService.createAuthHeaders() }).pipe(
             tap(() => {
                 this.success.set("Foto eliminada con exito")
             }),

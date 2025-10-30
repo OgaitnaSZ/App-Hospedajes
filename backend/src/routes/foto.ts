@@ -74,6 +74,41 @@ router.post("/subir", authMiddleware, uploadMiddleware.array("fotos"), validator
 /**
  * http://localhost:4001/api/foto
  * 
+ * Route seleccionar imagen principal
+ * @swagger
+ * /foto/seleccionarPrincipal":
+ *     patch:
+ *         tags:
+ *             - foto
+ *         summary: "Seleccionar imagen principal"
+ *         description: "Ruta para seleccionar imagen principal"
+ *         requestBody:
+ *              content:
+ *                  multipart/form-data:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              idHospedaje:
+ *                                  type: string
+ *                              idFoto:
+ *                                  type: string
+ *         responses:
+ *             '200':
+ *                 description: Foto principal actualizada
+ *             '401':
+ *                 description: No inicio session o no es administrador
+ *             '403':
+ *                 description: ID del hospedaje o ID de la foto no valida
+ *             '404':
+ *                 description: Hospedaje o Foto no encontrada en la base de datos
+ *             '500':
+ *                 description: Error del servidor 
+ */
+router.patch("/seleccionarPrincipal", validator.validatorSelectFoto, foto.seleccionarPrincipal);
+
+/**
+ * http://localhost:4001/api/foto
+ * 
  * Route eliminar foto
  * @swagger
  * /foto/eliminar/{id}":

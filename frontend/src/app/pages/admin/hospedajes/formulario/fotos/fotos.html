@@ -1,1 +1,39 @@
-<p>fotos works!</p>
+<h3 class="text-gray-800 text-3xl font-bold mb-6">Fotos:</h3>
+
+<!-- Visualización de imágenes existentes -->
+@if(fotos().length > 0) {
+  <div class="grid grid-cols-2 md:grid-cols-2 gap-4">
+    @for(foto of fotos(); track $index) {
+      <div class="bg-white rounded-lg shadow-md overflow-hidden">
+        <img src="{{foto.path}}" class="w-full h-40 object-cover">
+        <div class="p-3 text-center">
+          <!-- Botón para marcar como principal -->
+          <button
+            class="w-full border border-blue-500 text-blue-500 text-sm py-1.5 rounded mb-2 hover:bg-blue-50 transition"
+            [class.bg-blue-500]="hospedaje()?.imagen === foto.path"
+            [class.text-white]="hospedaje()?.imagen === foto.path"
+            (click)="seleccionarImagenPrincipal(foto.idFoto)">
+            Marcar como principal
+          </button>
+
+          <!-- Botón para eliminar -->
+          <button
+            class="w-full border border-red-500 text-red-500 text-sm py-1.5 rounded hover:bg-red-50 transition"
+            (click)="eliminarFoto(foto.idFoto)">
+            Eliminar
+          </button>
+        </div>
+      </div>
+    }
+  </div>
+}
+
+<!-- Subida de nuevas fotos -->
+<div class="mt-4 text-center">
+  <label for="upload-input"
+         class="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-blue-700 transition">
+    Agregar Fotos
+  </label>
+  <input id="upload-input" type="file" accept="image/*" multiple
+         (change)="agregarFotos($event)" class="hidden" />
+</div>

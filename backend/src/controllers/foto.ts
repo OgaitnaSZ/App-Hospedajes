@@ -71,6 +71,39 @@ export async function getFotos(req: Request, res: Response) {
     }
 }
 
+export async function seleccionarPrincipal(req: Request, res: Response) {
+    try{
+        const { idHospedaje, idFoto } = req.body;
+        
+        const hospedajeExistente = await prisma.hospedaje.findUnique({
+            where: { idHospedaje: String(idHospedaje) }
+        });
+        
+        if (!hospedajeExistente) {
+            return handleHttpError(res, "ID de hospedaje no encontrado", 404)
+        }
+        
+        const fotoExistente = await prisma.fotos.findUnique({
+            where: { idFoto: String(idFoto) }
+        });
+        
+        if (!fotoExistente) {
+            return handleHttpError(res, "ID de foto no encontrado", 404)
+        }
+        
+        // Actualizar foto principal
+        await prisma.hospedaje.update({
+          where: { idHospedaje: String(idHospedaje) },
+          data: { 
+            imagen: String(fotoExistente.path)
+          } 
+        });
+        return res.status(200).send({message: "Foto actualizada"});
+    } catch (error) {
+        return handleHttpError(res, "Error al eliminar foto", 500);
+    }
+}
+
 export async function eliminarFoto(req: Request, res: Response) {
     try{
         const params = req.params;
