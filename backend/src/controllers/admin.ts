@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import fs from 'fs';
 import path from 'path';
-import { PrismaClient, habitaciones_tipo } from '../generated/prisma';
+import { PrismaClient, habitaciones_tipo, hospedaje_estado } from '../generated/prisma';
 import { matchedData } from "express-validator";
 import { handleHttpError } from "../utils/handleError";
 const prisma = new PrismaClient()
@@ -9,7 +9,9 @@ const prisma = new PrismaClient()
 // Hospedajes
 export async function getHospedajes(req: Request, res: Response) {
   try {
-    const hospedajes = await prisma.hospedaje.findMany({})
+    const hospedajes = await prisma.hospedaje.findMany({
+      where: { estado : hospedaje_estado.eliminado }
+    });
 
     if(hospedajes.length > 0){
       res.status(200).json(hospedajes);
@@ -83,6 +85,39 @@ export async function modificarHospedaje(req: Request, res: Response) {
   }
 }
 
+export async function toggleEstadoHospedaje(req: Request, res: Response) {
+  try {
+    const data = req.params;
+    const id = <string>data.id;
+
+    const hospedaje = await prisma.hospedaje.findUnique({
+        where: { idHospedaje: String(id)}
+    });
+
+    if (!hospedaje) {
+      handleHttpError(res, "No se encuentra el hospedaje", 404)
+      return;
+    }
+
+    // Cambiar estado
+    const nuevoEstado =
+      hospedaje.estado === hospedaje_estado.activo
+        ? hospedaje_estado.desactivado
+        : hospedaje_estado.activo;
+
+    await prisma.hospedaje.update({
+      where: { idHospedaje: String(id) },
+      data: { estado: nuevoEstado },
+    });
+
+    res.status(200).json({ success: true, message: 'Estado cambiado correctamente' });
+
+  } catch(error){
+    handleHttpError(res, "Error al intentar eliminar el hospedaje", 500);
+    return;
+  }
+}
+
 export async function eliminarHospedaje(req: Request, res: Response) {
   try {
     const data = req.params;
@@ -101,13 +136,11 @@ export async function eliminarHospedaje(req: Request, res: Response) {
     await eliminarImagenesPorHospedaje(String(id), res);
 
     // Eliminar las habitaciones asociadas al IdHospedaje
-    await prisma.habitaciones.deleteMany({
-      where: { idHospedaje: id }
-    });
 
     // Eliminar el hospedaje
-    await prisma.hospedaje.delete({
-      where: { idHospedaje: String(id) }
+    await prisma.hospedaje.update({
+      where: { idHospedaje: String(id) },
+      data: { estado: 'eliminado'}
     });
 
     res.status(200).json({ success: true, message: 'Hospedaje eliminado exitosamente' });

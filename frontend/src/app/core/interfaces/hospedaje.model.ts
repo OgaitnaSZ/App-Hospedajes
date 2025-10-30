@@ -12,6 +12,7 @@ export interface Hospedaje {
     coordenadas: string;
     imagen: string;
     destacado: boolean;
+    estado: EstadoHospedaje;
 }
 export interface HospedajeListado {
     idHospedaje: string;
@@ -47,4 +48,9 @@ export interface HospedajeDetalles {
 interface ServiciosHospedaje {
     nombre: string;
     descripcion: string;
+}
+export enum EstadoHospedaje {
+    Activo = 'activo',
+    Desactivado = 'desactivado',
+    Eliminado = 'eliminado'
 }

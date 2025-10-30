@@ -98,10 +98,44 @@ router.put("/hospedajes/modificar", validator.validatorHospedajeUpdate, admin.mo
 /**
  * http://localhost:4001/api/admin
  * 
+ * Route toggle estado hospedaje
+ * @swagger
+ * /admin/hospedajes/cambiarEstado/{id}:
+ *     patch:
+ *         tags:
+ *             - admin
+ *             - hospedaje
+ *         summary: "Cambiar estado de hospedaje"
+ *         description: "Ruta para cambiar estado del hospedaje"
+ *         parameters:
+ *         - name: id
+ *           in: path
+ *           description: ID del hospedaje
+ *           required: true
+ *           schema:
+ *             type:string
+ * 
+ *         responses:
+ *             '200':
+ *                 description: Estado de hospedaje actualizado
+ *             '401':
+ *                 description: No inicio session o no es administrador
+ *             '403':
+ *                 description: ID del hospedaje no validouh576ytr43e
+ *             '404':
+ *                 description: Hospedaje no encontrado en la base de datos
+ *             '500':
+ *                 description: Error del servidor 
+ */
+router.patch("/hospedajes/cambiarEstado/:id", validator.validatorId, admin.toggleEstadoHospedaje);
+
+/**
+ * http://localhost:4001/api/admin
+ * 
  * Route delete hospedaje
  * @swagger
  * /admin/hospedajes/eliminar/{id}:
- *     post:
+ *     patch:
  *         tags:
  *             - admin
  *             - hospedaje
@@ -127,7 +161,7 @@ router.put("/hospedajes/modificar", validator.validatorHospedajeUpdate, admin.mo
  *             '500':
  *                 description: Error del servidor 
  */
-router.delete("/hospedajes/eliminar/:id", validator.validatorId, admin.eliminarHospedaje);
+router.patch("/hospedajes/eliminar/:id", validator.validatorId, admin.eliminarHospedaje);
 
 /**
  * http://localhost:4001/api/admin

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { PrismaClient } from '../generated/prisma'
+import { hospedaje_estado, PrismaClient } from '../generated/prisma'
 import { handleHttpError } from "../utils/handleError";
 const prisma = new PrismaClient()
 
@@ -15,7 +15,10 @@ export async function getHospedajes(req: Request, res: Response) {
         */
         const hospedajes = await prisma.hospedaje.findMany({
           where: {
-            ...(ciudad && { ciudad: String(ciudad) }),
+            ...(ciudad && { 
+              ciudad: String(ciudad), 
+              estado: hospedaje_estado.activo 
+            }),
             habitaciones: {
               some: {
                 ...(capacidad && { capacidad: { gte: Number(capacidad) } }),
@@ -97,7 +100,10 @@ export async function getHospedajes(req: Request, res: Response) {
 export async function getHospedaje(req: Request, res: Response) {
     try{
       const hospedaje = await prisma.hospedaje.findUnique({
-        where: { idHospedaje: String(req.params.id) }
+        where: { 
+          idHospedaje: String(req.params.id),
+          estado: hospedaje_estado.activo
+         }
       });
   
       if (!hospedaje) {
@@ -115,7 +121,10 @@ export async function getHospedaje(req: Request, res: Response) {
 export async function getHospedajeDetalle(req: Request, res: Response) {
     try{
       const hospedaje = await prisma.hospedaje.findUnique({
-        where: { idHospedaje: String(req.params.id) }
+        where: { 
+          idHospedaje: String(req.params.id),
+          estado: hospedaje_estado.activo
+        }
       });
   
       // Obtener hospedaje
@@ -175,7 +184,10 @@ export async function getHospedajeDetalle(req: Request, res: Response) {
 export async function getHospedajesDestacados(req: Request, res: Response) {
     try{
       const hospedajes = await prisma.hospedaje.findMany({
-        where: { destacado: true }
+        where: { 
+          destacado: true,
+          estado: hospedaje_estado.activo
+        }
       });
 
       if (hospedajes.length === 0) return handleHttpError(res, "No hay hospedajes destacados", 404)
