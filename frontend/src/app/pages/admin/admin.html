@@ -7,7 +7,6 @@
         class="nav-link text-gray-800 hover:text-blue-600"
         routerLink="/administrador/hospedajes"
         routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }"
         >
         Administrar Hospedajes
         </a>
@@ -16,7 +15,6 @@
         class="nav-link text-gray-800 hover:text-blue-600"
         routerLink="/administrador/actividades"
         routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }"
         >
         Administrar Actividades
         </a>
@@ -25,7 +23,6 @@
         class="nav-link text-gray-800 hover:text-blue-600"
         routerLink="/administrador/pagos"
         routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }"
         >
         Pagos
         </a>
@@ -34,7 +31,6 @@
         class="nav-link text-gray-800 hover:text-blue-600"
         routerLink="/administrador/perfil"
         routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }"
         >
         Mi Perfil
         </a>
@@ -43,7 +39,6 @@
         class="nav-link text-gray-800 hover:text-blue-600"
         routerLink="/administrador/cambiar-contrasena"
         routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }"
         >
         Cambiar Contraseña
         </a>
@@ -58,7 +53,7 @@
     </div>
     </aside>
 
-    <router-outlet class="flex-1 p-4"></router-outlet>
+    <router-outlet class="flex flex-col p-4"></router-outlet>
 }@else{
     <p class="text-red-600 font-semibold">No tienes permiso para estar aquí</p>
 }

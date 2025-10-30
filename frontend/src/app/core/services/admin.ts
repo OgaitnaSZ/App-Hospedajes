@@ -22,7 +22,7 @@ export class AdminService {
     error = signal<string | null>(null);
     success = signal<string | null>(null);
     
-    nuevoHospedaje = signal<Hospedaje | null>(null);
+    hospedaje = signal<Hospedaje | null>(null);
     hospedajes = signal<Hospedaje[]>([]);
     habitaciones = signal<Habitacion[]>([]);
     fotos = signal<Foto[]>([]);
@@ -45,15 +45,32 @@ export class AdminService {
             finalize(() => this.loading.set(false))
         ).subscribe();
     }
+    getHospedaje(idHospedaje: string): void {
+        this.loading.set(true);
+        this.error.set(null);
+        
+        this.http.get<Hospedaje>(`${this.apiUrl}hospedajes/hospedaje/${idHospedaje}`, { headers: this.tokenService.createAuthHeaders() }).pipe(
+            tap((data) => {
+                this.hospedaje.set(data)
+            }),
+            catchError(err => {
+                this.error.set('Error al obtener hospedajes');
+                console.error(err);
+                return [];
+            }),
+            finalize(() => this.loading.set(false))
+        ).subscribe();
+    }
 
     /* Agregar Hospedaje */
-    agregarHospedaje(formData: FormData): void {
+    agregarHospedaje(hospedaje: Hospedaje): void {
         this.loading.set(true);
         this.error.set(null);
 
-        this.http.post(`${this.apiUrl}hospedajes/agregar`, formData, { headers: this.tokenService.createAuthHeaders() }).pipe(
-            tap(() => {
-                this.success.set("Hospedaje agregado con exito")
+        this.http.post<Hospedaje>(`${this.apiUrl}hospedajes/agregar`, hospedaje, { headers: this.tokenService.createAuthHeaders() }).pipe(
+            tap((data) => {
+                this.hospedaje.set(data);
+                this.success.set("Hospedaje creado con exito");
             }),
             catchError(err => {
                 this.error.set('Error al agregar hospedaje');
@@ -80,12 +97,30 @@ export class AdminService {
             finalize(() => this.loading.set(false))
         ).subscribe();
     }
+    /* Cambiar estado de hospedaje */
+    cambiarEstadoHospedaje(idHospedaje: string) {
+        this.loading.set(true);
+        this.error.set(null);
+
+        this.http.patch(`${this.apiUrl}hospedajes/cambiarEstado/${idHospedaje}`, {}, { headers: this.tokenService.createAuthHeaders() }).pipe(
+            tap(() => {
+                this.success.set("Estado actualizado con exito")
+            }),
+            catchError(err => {
+                this.error.set('Error al eliminar hospedaje');
+                console.error(err);
+                return [];
+            }),
+            finalize(() => this.loading.set(false))
+        ).subscribe();
+    }
+
     /* Eliminar Hospedaje */
     eliminarHospedaje(idHospedaje: string) {
         this.loading.set(true);
         this.error.set(null);
 
-        this.http.delete(`${this.apiUrl}hospedajes/eliminar/${idHospedaje}`, { headers: this.tokenService.createAuthHeaders() }).pipe(
+        this.http.patch(`${this.apiUrl}hospedajes/eliminar/${idHospedaje}`, {}, { headers: this.tokenService.createAuthHeaders() }).pipe(
             tap(() => {
                 this.success.set("Hospedaje eliminado con exito")
             }),

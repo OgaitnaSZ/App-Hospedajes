@@ -10,7 +10,7 @@ const prisma = new PrismaClient()
 export async function getHospedajes(req: Request, res: Response) {
   try {
     const hospedajes = await prisma.hospedaje.findMany({
-      where: { estado : hospedaje_estado.eliminado }
+      where: { estado : { not: hospedaje_estado.eliminado } }
     });
 
     if(hospedajes.length > 0){
@@ -19,7 +19,30 @@ export async function getHospedajes(req: Request, res: Response) {
       return res.status(404).send("No se encontraron hospedajes.")
     }
   } catch(error){
-    handleHttpError(res, "Error al obtener habitaciones", 500);
+    handleHttpError(res, "Error al obtener hospedajes", 500);
+    return;
+  }
+}
+
+export async function getHospedaje(req: Request, res: Response) {
+  try {
+    const data = req.params;
+    const idHospedaje = <string>data.id;
+
+    const hospedaje = await prisma.hospedaje.findUnique({
+      where: { 
+        estado : { not: hospedaje_estado.eliminado },
+        idHospedaje
+      }
+    });
+
+    if(hospedaje){
+      res.status(200).json(hospedaje);
+    }else{
+      return res.status(404).send("No se encontraron hospedajes.")
+    }
+  } catch(error){
+    handleHttpError(res, "Error al obtener hospedaje", 500);
     return;
   }
 }

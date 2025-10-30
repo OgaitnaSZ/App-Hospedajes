@@ -28,9 +28,17 @@ export class HospedajesAdmin {
   }
 
   //Eliminar Hospedaje
-  eliminar(idHospedaje: string){
+  eliminar(idHospedaje: string | undefined) {
+    if (!idHospedaje) return;
     if (confirm('¿Estás seguro de que deseas eliminar este hospedaje?')) {
       this.admin.eliminarHospedaje(idHospedaje);
+      this.admin.hospedajes.update(lista =>
+        lista.filter(h => h.idHospedaje !== idHospedaje)
+      );
     }
+  }
+
+  actualizarEstado(idHospedaje: string){
+    this.admin.cambiarEstadoHospedaje(idHospedaje);
   }
 }

@@ -13,7 +13,7 @@ export class ServicioService {
   private http = inject(HttpClient);
 
   // Signals de estado
-  servicios = signal<Servicio | null>(null);
+  servicios = signal<Servicio[]>([]);
   loading = signal(false);
   error = signal<string | null>(null);
   success = signal<string | null>(null);
@@ -23,7 +23,7 @@ export class ServicioService {
     this.error.set(null);
     const parametros = `tipo=${tipo}`;
     
-    this.http.get<Servicio>(`${this.apiUrl}?${parametros}`).pipe(
+    this.http.get<Servicio[]>(`${this.apiUrl}?${parametros}`).pipe(
       tap((data) => {
           this.servicios.set(data)
       }),

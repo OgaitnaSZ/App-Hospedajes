@@ -47,13 +47,13 @@ export class Login implements OnInit {
     }
   });
 
-  async onLogin() {
+  onLogin() {
     if (this.formLogin.invalid) return this.error.set('Faltan datos.');
     const { email, password } = this.formLogin.getRawValue(); 
     this.auth.login(email, password);
   }
 
-  async recuperarPassword() {
+  recuperarPassword() {
     if (this.formRec.invalid) return this.error.set('Faltan datos.');
     
     const { emailRec } = this.formRec.getRawValue(); 

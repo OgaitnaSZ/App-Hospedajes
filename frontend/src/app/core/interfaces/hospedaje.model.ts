@@ -1,18 +1,18 @@
 import { Habitacion } from "./habitacion.model";
 
 export interface Hospedaje {
-    idHospedaje: string;
+    idHospedaje?: string;
     titulo: string;
     descripcion: string;
-    servicios: number[];
+    servicios: number[] | null;
     estrellas: number;
     telefono: string;
     ciudad: string;
     direccion: string;
     coordenadas: string;
-    imagen: string;
-    destacado: boolean;
-    estado: EstadoHospedaje;
+    imagen?: string;
+    destacado?: boolean;
+    estado?: EstadoHospedaje;
 }
 export interface HospedajeListado {
     idHospedaje: string;

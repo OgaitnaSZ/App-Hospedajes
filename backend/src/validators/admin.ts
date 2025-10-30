@@ -39,10 +39,6 @@ export const validatorHospedajeNew = [
     .exists().withMessage("El campo es obligatorio")
     .notEmpty().withMessage("El campo no puede estar vacío"),
 
-    check("imagen")
-    .exists().withMessage("El campo es obligatorio")
-    .notEmpty().withMessage("El campo no puede estar vacío"),
-
   (req: Request, res: Response, next: NextFunction) => validateResults(req, res, next)
 ];
 

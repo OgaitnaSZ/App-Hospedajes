@@ -36,6 +36,30 @@ router.get("/hospedajes/hospedajes", admin.getHospedajes);
 /**
  * http://localhost:4001/api/admin
  * 
+ * Route get habitaciones hospedaje
+ * @swagger
+ * /admin/hospedajes/hospedaje:
+ *     get:
+ *         tags:
+ *             - admin
+ *             - habitacion
+ *         summary: "Obtener un hospedaje"
+ *         description: "Ruta para obtener un hospedaje"
+ *         responses:
+ *             '200':
+ *                 description: Datos de hospedaje
+ *             '401':
+ *                 description: No inicio session o no es administrador
+ *             '404':
+ *                 description: No existe hospedaje
+ *             '500':
+ *                 description: Error del servidor 
+ */
+router.get("/hospedajes/hospedaje/:id", admin.getHospedaje);
+
+/**
+ * http://localhost:4001/api/admin
+ * 
  * Route create hospedaje
  * @swagger
  * /admin/hospedajes/agregar:
@@ -121,7 +145,7 @@ router.put("/hospedajes/modificar", validator.validatorHospedajeUpdate, admin.mo
  *             '401':
  *                 description: No inicio session o no es administrador
  *             '403':
- *                 description: ID del hospedaje no validouh576ytr43e
+ *                 description: ID del hospedaje no valido
  *             '404':
  *                 description: Hospedaje no encontrado en la base de datos
  *             '500':

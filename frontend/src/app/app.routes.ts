@@ -14,6 +14,7 @@ import { Hospedaje } from './pages/hospedajes/hospedaje/hospedaje';
 import { Reservar } from './pages/reservar/reservar';
 import { HospedajesAdmin } from './pages/admin/hospedajes/hospedajes';
 import { AgregarHospedaje } from './pages/admin/hospedajes/agregar/agregar';
+import { EditarHospedaje } from './pages/admin/hospedajes/editar/editar';
 
 export const routes: Routes = [
     { path: '', component: Home },
@@ -32,7 +33,8 @@ export const routes: Routes = [
     { path: 'administrador', component: Admin, canActivate: [adminGuard],
       children: [
         { path: 'hospedajes', component: HospedajesAdmin},
-        { path: 'agregar-hospedaje', component: AgregarHospedaje},
+        { path: 'hospedajes/agregar', component: AgregarHospedaje},
+        { path: 'hospedajes/editar/:id', component: EditarHospedaje},
       ]
      },
     { path: '**', component:Error },

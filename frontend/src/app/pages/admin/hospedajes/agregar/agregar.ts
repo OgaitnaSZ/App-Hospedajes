@@ -1,10 +1,10 @@
-import { Component, inject } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { ServicioService } from '../../../../core/services/servicio';
 import { AdminService } from '../../../../core/services/admin';
-import { Servicio } from '../../../../core/interfaces/servicio.model';
+import { Hospedaje } from '../../../../core/interfaces/hospedaje.model';
 
 @Component({
   selector: 'app-agregar',
@@ -22,28 +22,25 @@ export class AgregarHospedaje {
 
   // Signals
   servicios = this.servicio.servicios;
-  hospedaje = this.admin.nuevoHospedaje;
+  hospedaje = this.admin.hospedaje;
   loading = this.admin.loading;
   error = this.admin.error;
   success = this.admin.success;
-
+  
   // Campos del formulario
   form = this.fb.nonNullable.group({
     titulo: ['', Validators.required],
     descripcion: ['', Validators.required],
-    servicios: ['', Validators.required],
-    estrellas: 0,
+    servicios: this.fb.control<number[]>([], Validators.required),
+    estrellas: [3, [Validators.min(1), Validators.max(5)]],
     telefono: ['', Validators.required],
     ciudad: ['', Validators.required],
     direccion: ['', Validators.required],
-    imagen: ['', Validators.required],
-    calificacionPromedio : ['', Validators.required],
-    coordenadas: ['', Validators.required]
+    coordenadas: ['', Validators.required],
   });
 
-  imagenes: File[] = [];
   serviciosSeleccionados: number[] = []
-
+  mostrarServicios = false;
 
   ngOnInit(){
     // Obtener servicios para el select
@@ -52,44 +49,29 @@ export class AgregarHospedaje {
 
   // Helpers
   almacenarServicios(event: any) {
+    const control = this.form.get('servicios');
+    const valor = Number(event.target.value);
+    const actual = control?.value || [];
+  
     if (event.target.checked) {
-      this.serviciosSeleccionados.push(Number(event.target.value));
+      control?.setValue([...actual, valor]);
     } else {
-      const index = this.serviciosSeleccionados.indexOf(Number(event.target.value));
-      if (index > -1) {
-        this.serviciosSeleccionados.splice(index, 1);
-      }
-    }
-  }
-
-  // Captura de fotos seleccionadas
-  onFileChange(event: any): void {
-    if (event.target.files) {
-      this.imagenes = Array.from(event.target.files);
+      control?.setValue(actual.filter((id: number) => id !== valor));
     }
   }
 
   agregarHospedaje(): void {
-    if (!this.imagenes || this.imagenes.length === 0) {
-      return this.error.set('Debes seleccionar al menos una imagen antes de continuar.');
-    }
-  
-    const formData = new FormData();
-  
-    Object.entries(this.form.value).forEach(([key, value]) => {
-      formData.append(key, value as string);
-    });
-  
-    this.serviciosSeleccionados.forEach((servicioId) => {
-      formData.append('servicios[]', servicioId.toString());
-    });
-  
-    if (this.imagenes && this.imagenes.length > 0) {
-      this.imagenes.forEach((file) => {
-        formData.append('imagenes[]', file, file.name);
-      });
-    }
-  
-    this.admin.agregarHospedaje(formData);
+    if (this.form.invalid) return this.error.set('Faltan datos.');
+    const hospedaje: Hospedaje = this.form.getRawValue();
+    this.admin.agregarHospedaje(hospedaje);
   }
+
+  successEffect = effect(() => {
+    const success = this.success();
+    if (success) {
+      this.router.navigate(
+        [`/administrador/hospedajes/editar/${this.admin.hospedaje()?.idHospedaje}`],
+      );
+    }
+  });
 }

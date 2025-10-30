@@ -69,7 +69,7 @@ router.get("/hospedaje/:id", validator.validatorId, foto.getFotos);
  *             '500':
  *                 description: Error del servidor 
  */
-router.post("/subir",authMiddleware, uploadMiddleware.array("fotos"), validator.validatorUploadFoto, foto.subirFotos);
+router.post("/subir", authMiddleware, uploadMiddleware.array("fotos"), validator.validatorUploadFoto, foto.subirFotos);
 
 /**
  * http://localhost:4001/api/foto
