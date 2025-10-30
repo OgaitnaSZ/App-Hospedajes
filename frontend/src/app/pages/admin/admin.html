@@ -53,7 +53,9 @@
     </div>
     </aside>
 
-    <router-outlet class="flex flex-col p-4"></router-outlet>
+    <div class="w-full md:w-3/4 p-4">
+        <router-outlet></router-outlet>
+    </div>
 }@else{
     <p class="text-red-600 font-semibold">No tienes permiso para estar aquí</p>
 }

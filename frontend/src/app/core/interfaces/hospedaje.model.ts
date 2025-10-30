@@ -4,7 +4,7 @@ export interface Hospedaje {
     idHospedaje?: string;
     titulo: string;
     descripcion: string;
-    servicios: number[] | null;
+    servicios: string;
     estrellas: number;
     telefono: string;
     ciudad: string;

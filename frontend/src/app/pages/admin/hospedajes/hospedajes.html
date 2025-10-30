@@ -45,7 +45,7 @@
         <td class="px-4 py-3 text-gray-700">{{ hospedaje.direccion }}</td>
         <td class="px-4 py-3 text-center">
           <a 
-            [routerLink]="['/administrador/editar', hospedaje.idHospedaje]" 
+            [routerLink]="[`/administrador/hospedajes/editar/${hospedaje.idHospedaje}`]" 
             class="text-blue-600 hover:text-blue-800"
           >
             <span class="material-symbols-outlined align-middle">edit</span>
