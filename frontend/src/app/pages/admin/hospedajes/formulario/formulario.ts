@@ -4,7 +4,7 @@ import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { ServicioService } from '../../../../core/services/servicio';
 import { AdminService } from '../../../../core/services/admin';
-import { Hospedaje } from '../../../../core/interfaces/hospedaje.model';
+import { EstadoHospedaje, Hospedaje } from '../../../../core/interfaces/hospedaje.model';
 import { HabitacionesAdmin } from './habitaciones/habitaciones';
 import { Fotos } from './fotos/fotos';
 
@@ -101,6 +101,23 @@ export class FormularioHospedaje {
     } else {
       control?.setValue(actualArray.filter((x: string) => x !== id));
     }
+  }
+
+  toggleEstado() {
+    const hospedajeActual = this.hospedaje();
+    if (!hospedajeActual) return;
+  
+    const nuevoEstado: EstadoHospedaje =
+      hospedajeActual.estado === EstadoHospedaje.Activo ? EstadoHospedaje.Desactivado : EstadoHospedaje.Activo;
+  
+    // Llamada HTTP (no suscribe, solo dispara)
+    this.admin.cambiarEstadoHospedaje(this.idHospedaje);
+  
+    // Actualiza el signal y fuerza re-render
+    this.admin.hospedaje.update(h => ({
+      ...h!,
+      estado: nuevoEstado
+    }));
   }
   
   // Verifica si el servicio está seleccionado

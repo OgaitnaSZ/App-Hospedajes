@@ -37,8 +37,4 @@ export class HospedajesAdmin {
       );
     }
   }
-
-  actualizarEstado(idHospedaje: string){
-    this.admin.cambiarEstadoHospedaje(idHospedaje);
-  }
 }

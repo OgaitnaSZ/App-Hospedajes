@@ -102,10 +102,32 @@
         <p class="text-red-500 text-sm mt-2">{{ error() }}</p>
       }
     
+      <!-- Botón Toggle Estado Hospedaje -->
+       <div>
+        <label for="estado" class="block text-sm font-medium text-gray-700">Estado</label>
+        <button
+          (click)="toggleEstado()"
+          name="estado"
+          class="flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-200"
+          [ngClass]="
+            hospedaje()?.estado === 'activo'
+              ? 'bg-green-100 text-green-700 hover:bg-green-200'
+              : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
+          "
+        >
+          <span class="material-symbols-outlined text-lg">
+            {{ hospedaje()?.estado === 'activo' ? 'toggle_on' : 'toggle_off' }}
+          </span>
+          <span class="text-sm font-medium">
+            {{ hospedaje()?.estado === 'activo' ? 'Activo' : 'Desactivado' }}
+          </span>
+        </button>
+      </div>
+
       <!-- Botón -->
       <button type="submit"
         class="w-full bg-blue-600 text-white font-medium py-2.5 rounded-lg hover:bg-blue-700 transition">
-        Agregar Hospedaje
+        {{ titulo }}
       </button>
     </form>
   </div>
