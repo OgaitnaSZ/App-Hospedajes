@@ -21,7 +21,8 @@ export class AdminService {
     loading = signal(false);
     error = signal<string | null>(null);
     success = signal<string | null>(null);
-
+    
+    nuevoHospedaje = signal<Hospedaje | null>(null);
     hospedajes = signal<Hospedaje[]>([]);
     habitaciones = signal<Habitacion[]>([]);
     fotos = signal<Foto[]>([]);
@@ -46,11 +47,11 @@ export class AdminService {
     }
 
     /* Agregar Hospedaje */
-    agregarHospedaje(hospedaje: Hospedaje): void {
+    agregarHospedaje(formData: FormData): void {
         this.loading.set(true);
         this.error.set(null);
 
-        this.http.post(`${this.apiUrl}hospedajes/agregar`, hospedaje, { headers: this.tokenService.createAuthHeaders() }).pipe(
+        this.http.post(`${this.apiUrl}hospedajes/agregar`, formData, { headers: this.tokenService.createAuthHeaders() }).pipe(
             tap(() => {
                 this.success.set("Hospedaje agregado con exito")
             }),

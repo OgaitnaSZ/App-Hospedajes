@@ -7,10 +7,7 @@
 
 html, body { height: 100% }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif }
-
 main{ padding-top: 10vh !important }
-
-/* Tipografias */
 h1{
   font-family: "Montserrat", sans-serif;
   font-weight: 500;
@@ -18,8 +15,12 @@ h1{
 }
 h2, h3, h4, h5, h6, .form-label{ font-family: "Poppins", sans-serif }
 p, a{ font-family: "Open Sans", sans-serif }
-
 a, button { cursor: pointer; }
+
+.active {
+  @apply text-blue-600 font-semibold border-l-4 border-blue-600 pl-2;
+}
+
 
 /* Iconos Google */
 .material-symbols-outlined {

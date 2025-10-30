@@ -1,0 +1,67 @@
+<a 
+  routerLink="/administrador/agregar-hospedaje" 
+  class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md w-auto inline-block"
+>
+  Agregar Hospedaje
+</a>
+
+@if(error()){
+  <p class="text-red-600 mt-2">{{ error() }}</p>
+}
+@if(success()){
+  <p class="text-green-600 mt-2">{{ success() }}</p>
+}
+
+<section class="container mx-auto overflow-x-auto mt-6">
+  <table class="min-w-full border border-gray-300 bg-white shadow-sm rounded-lg">
+    <thead class="bg-gray-800 text-white">
+      <tr>
+        <th scope="col" class="w-32 px-4 py-3 text-left font-semibold">Foto</th>
+        <th scope="col" class="px-4 py-3 text-left font-semibold">Título</th>
+        <th scope="col" class="px-4 py-3 text-left font-semibold">Descripción</th>
+        <th scope="col" class="px-4 py-3 text-left font-semibold">Teléfono</th>
+        <th scope="col" class="px-4 py-3 text-left font-semibold">Ciudad</th>
+        <th scope="col" class="px-4 py-3 text-left font-semibold">Dirección</th>
+        <th scope="col" class="px-4 py-3 text-center font-semibold">Editar</th>
+        <th scope="col" class="px-4 py-3 text-center font-semibold">Eliminar</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for(hospedaje of hospedajes(); track $index) {
+      <tr class="border-t hover:bg-gray-50">
+        <td class="px-4 py-3">
+          <figure class="w-24 h-24 overflow-hidden rounded-md">
+            <img 
+              src="{{ hospedaje.imagen }}" 
+              alt="{{ hospedaje.titulo }}" 
+              class="w-full h-full object-cover"
+            >
+          </figure>
+        </td>
+        <td class="px-4 py-3 text-gray-800">{{ hospedaje.titulo }}</td>
+        <td class="px-4 py-3 text-gray-600">{{ getTextoCorto(hospedaje.descripcion) }}</td>
+        <td class="px-4 py-3 text-gray-700">{{ hospedaje.telefono }}</td>
+        <td class="px-4 py-3 text-gray-700">{{ hospedaje.ciudad }}</td>
+        <td class="px-4 py-3 text-gray-700">{{ hospedaje.direccion }}</td>
+        <td class="px-4 py-3 text-center">
+          <a 
+            [routerLink]="['/administrador/editar', hospedaje.idHospedaje]" 
+            class="text-blue-600 hover:text-blue-800"
+          >
+            <span class="material-symbols-outlined align-middle">edit</span>
+          </a>
+        </td>
+        <td class="px-4 py-3 text-center">
+          <span 
+            class="material-symbols-outlined text-red-600 hover:text-red-800 cursor-pointer align-middle" 
+            (click)="eliminar(hospedaje.idHospedaje)"
+          >
+            delete
+          </span>
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</section>
+

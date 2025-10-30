@@ -1,4 +1,4 @@
-import { Component, inject, signal, computed } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
@@ -35,7 +35,6 @@ export class Register {
   async onRegister() {
     if (this.form.invalid) return this.error.set('Faltan datos.');
   
-    
     const usuario: UserRegister = this.form.getRawValue(); 
 
     this.auth.register(usuario);

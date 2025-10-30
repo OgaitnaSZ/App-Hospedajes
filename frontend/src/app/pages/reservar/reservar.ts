@@ -1,15 +1,14 @@
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { FormsModule } from '@angular/forms'; 
+import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ReservaService } from '../../core/services/reserva';
 import { MercadopagoService } from '../../core/services/mercadopago';
 import { AuthService } from '../../core/services/auth';
-import { preferenciaMP } from '../../core/interfaces/mercadopago.model';
 
 @Component({
   selector: 'app-reservar',
-  imports: [FormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './reservar.html',
   styleUrl: './reservar.css'
 })
@@ -19,6 +18,22 @@ export class Reservar {
   private reservaService = inject(ReservaService);
   private mercadopago = inject(MercadopagoService);
   private auth = inject(AuthService);
+  private fb = inject(FormBuilder);
+
+  // Form
+  form = this.fb.nonNullable.group({
+    nombre: ['', Validators.required],
+    apellido: ['', Validators.required],
+    dni: ['', Validators.required],
+    direccion: ['', Validators.required],
+    email: ['', [Validators.required, Validators.email]],
+    telefono: ['', Validators.required],
+  });
+
+  formActividad = this.fb.nonNullable.group({
+    fecha: ['', Validators.required],
+    personas: ['', Validators.required]
+  })
 
   // Variables
   parametros: any;
@@ -31,12 +46,7 @@ export class Reservar {
   preferencia = this.mercadopago.preferenciaMP;
   reservaExitosa = signal<boolean>(false);
   detallesPago = signal({
-    nombre: '',
-    apellido: '',
-    dni: '',
-    direccion: '',
-    email: '',
-    telefono: '',
+    ...this.form.getRawValue(),
     idPreferencia: '',
   });
 
@@ -53,7 +63,7 @@ export class Reservar {
     }
   }
 
-  async pagar() {
+  pagar() {
     if (!this.validarDatos()) console.log('Datos incorrectos');
   
     console.log('Datos válidos. Iniciando pago...');
