@@ -16,18 +16,21 @@ export class TokenService {
     return localStorage.getItem('token');
   }
 
-  createAuthHeaders(contentType: string = 'application/json'): HttpHeaders {
+  createAuthHeaders(options?: { excludeContentType?: boolean }): HttpHeaders {
     const token = this.getToken();
     
-    // Si el token existe, incluye 'Bearer', si no, es una cadena vacía.
-    const headersConfig: { [name: string]: string | string[] } = {
-      'Content-Type': contentType
-    };
-
+    const headersConfig: { [name: string]: string | string[] } = {};
+  
+    // Por defecto incluir Content-Type: application/json
+    // a menos que se especifique excludeContentType: true
+    if (!options?.excludeContentType) {
+      headersConfig['Content-Type'] = 'application/json';
+    }
+  
     if (token) {
       headersConfig['Authorization'] = `Bearer ${token}`;
     }
-
+  
     return new HttpHeaders(headersConfig);
   }
 }

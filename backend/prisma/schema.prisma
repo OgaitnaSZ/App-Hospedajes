@@ -12,7 +12,6 @@ model actividades {
   idActividad          String                 @id @default(dbgenerated("(uuid())")) @db.Char(36)
   nombre               String                 @db.Text
   descripcion          String                 @db.Text
-  imagen               String                 @db.Text
   ciudad               String                 @db.Text
   precio               Float                  @db.Float
   created_at           DateTime               @default(now()) @db.Timestamp(0)
@@ -23,7 +22,8 @@ model actividades {
 model fotos {
   idFoto      String    @id @default(dbgenerated("(uuid())")) @db.Char(36)
   idHospedaje String    @db.Char(36)
-  path        String    @db.VarChar(255)
+  url         String    @db.VarChar(255)
+  sort        Int
   created_at  DateTime  @default(now()) @db.Timestamp(0)
   updated_at  DateTime  @default(now()) @db.Timestamp(0)
   hospedaje   hospedaje @relation(fields: [idHospedaje], references: [idHospedaje], onUpdate: Restrict, map: "fotos_ibfk_1")
@@ -57,7 +57,6 @@ model hospedaje {
   ciudad              String                @db.VarChar(100)
   direccion           String                @db.VarChar(255)
   coordenadas         String                @db.Text
-  imagen              String?               @db.Text
   destacado           Boolean
   created_at          DateTime              @default(now()) @db.Timestamp(0)
   updated_at          DateTime              @default(now()) @db.Timestamp(0)

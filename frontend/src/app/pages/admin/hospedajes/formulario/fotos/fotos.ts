@@ -1,10 +1,11 @@
-import { Component, Input, effect, inject } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AdminService } from '../../../../../core/services/admin';
+import { CdkDragDrop, moveItemInArray, DragDropModule } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-fotos',
-  imports: [CommonModule],
+  imports: [CommonModule, DragDropModule],
   templateUrl: './fotos.html',
   styleUrl: './fotos.css'
 })
@@ -27,32 +28,44 @@ export class Fotos {
     this.admin.getHospedaje(this.idHospedaje)
   }
 
-  seleccionarImagenPrincipal(idFoto: string): void {
-    if (this.idHospedaje == undefined) return console.error('El ID de hospedaje no es válido');
-    this.admin.seleccionarImagenPrincipal(this.idHospedaje, idFoto);
+  drop(event: any) {
+    const e = event as CdkDragDrop<Fotos[]>;
+    const copia = [...this.fotos()];
+    moveItemInArray(copia, e.previousIndex, e.currentIndex);
+    copia.forEach((f, i) => (f.sort = i + 1));
+    this.fotos.set(copia);
   }
 
+  actualizarOrden(){
+    this.admin.actualizarOrdenFotos(this.fotos());
+  }
+  
   eliminarFoto(id: string) {
     if (confirm('¿Estás seguro de que deseas eliminar esta foto?')) {
       this.admin.eliminarFoto(id);
-      console.log(`Foto con ID ${id} eliminada.`);
+      this.admin.fotos.update(lista =>
+        lista.filter(f => f.idFoto !== id)
+      );
     }
   }
 
-  agregarFotos(event: any) {
-    const input = event.target as HTMLInputElement;
+  verSubir: boolean = false;
+  fotosSeleccionadas: File[] = [];
 
-    if (input.files && input.files.length > 0 && this.idHospedaje != null) {
-        const formData = new FormData();
-        formData.append('idHospedaje', this.idHospedaje.toString()); // Agrega el ID del hospedaje
-    
-        Array.from(input.files).forEach((file) => {
-          formData.append('imagenes[]', file, file.name);
-        });
-    
-        this.admin.subirFotos(formData);
-    } else {
-        console.warn('No se seleccionaron imágenes.');
+  onFileSelected(event: any) {
+    this.fotosSeleccionadas = Array.from(event.target.files);
+  }
+
+  agregarFotos(event: Event) {
+    event.preventDefault();
+
+    if (this.idHospedaje !== undefined && this.idHospedaje != ''){
+      const formData = new FormData();
+      this.fotosSeleccionadas.forEach(file => formData.append('fotos', file));
+      formData.append('idHospedaje', this.idHospedaje.toString());
+  
+      this.admin.subirFotos(formData);
     }
+
   }
 }

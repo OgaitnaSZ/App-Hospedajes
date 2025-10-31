@@ -207,7 +207,7 @@ export class AdminService {
         this.loading.set(true);
         this.error.set(null);
 
-        this.http.post(`${this.apiUrl}foto/subir`, formData, { headers: this.tokenService.createAuthHeaders() }).pipe(
+        this.http.post(`${this.apiUrl}foto/subir`, formData, { headers: this.tokenService.createAuthHeaders({ excludeContentType: true }) }).pipe(
             tap(() => {
                 this.success.set("Fotos subidas con exito")
             }),
@@ -237,13 +237,13 @@ export class AdminService {
         ).subscribe();
     }
 
-    seleccionarImagenPrincipal(idHospedaje: string, idFoto: string): void {
+    actualizarOrdenFotos(fotos: Foto[]): void {
         this.loading.set(true);
         this.error.set(null);
 
-        this.http.patch(`${this.apiUrl}foto/seleccionarPrincipal`, {idHospedaje, idFoto} ,{ headers: this.tokenService.createAuthHeaders() }).pipe(
+        this.http.patch(`${this.apiUrl}foto/actualizarOrden`, {fotos} ,{ headers: this.tokenService.createAuthHeaders() }).pipe(
             tap(() => {
-                this.success.set("Foto actualizada con exito")
+                this.success.set("Fotos actualizadas con exito")
             }),
             catchError(err => {
                 this.error.set('Error al actualizar foto');

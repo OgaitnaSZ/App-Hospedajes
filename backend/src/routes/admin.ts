@@ -464,42 +464,37 @@ router.delete("/actividades/eliminar/:id", validator.validatorId, admin.eliminar
  *             '500':
  *                 description: Error del servidor 
  */
-router.post("/foto/subir", authMiddleware, uploadMiddleware.array("fotos"), validator.validatorUploadFoto, admin.subirFotos);
+router.post("/foto/subir", uploadMiddleware.array("fotos"), validator.validatorUploadFoto, admin.subirFotos);
 
 /**
  * http://localhost:4001/api/admin
  * 
- * Route seleccionar imagen principal
+ * Route Actualizar orden de fotos
  * @swagger
  * /admin/foto/seleccionarPrincipal":
  *     patch:
  *         tags:
  *             - foto
- *         summary: "Seleccionar imagen principal"
- *         description: "Ruta para seleccionar imagen principal"
+ *         summary: "Actualizar orden de fotos"
+ *         description: "Ruta para Actualizar orden de fotos"
  *         requestBody:
- *              content:
- *                  multipart/form-data:
- *                      schema:
- *                          type: object
- *                          properties:
- *                              idHospedaje:
- *                                  type: string
- *                              idFoto:
- *                                  type: string
+ *             content:
+ *                 application/json:
+ *                     schema:
+ *                         fotos
  *         responses:
  *             '200':
- *                 description: Foto principal actualizada
+ *                 description: Orden actualizada
  *             '401':
  *                 description: No inicio session o no es administrador
  *             '403':
- *                 description: ID del hospedaje o ID de la foto no valida
+ *                 description: Fotos no validas
  *             '404':
  *                 description: Hospedaje o Foto no encontrada en la base de datos
  *             '500':
  *                 description: Error del servidor 
  */
-router.patch("/foto/seleccionarPrincipal", validator.validatorSelectFoto, admin.seleccionarPrincipal);
+router.patch("/foto/actualizarOrden", validator.validatorUpdateOrder, admin.actualizarOrden);
 
 /**
  * http://localhost:4001/api/admin
@@ -531,6 +526,6 @@ router.patch("/foto/seleccionarPrincipal", validator.validatorSelectFoto, admin.
  *             '500':
  *                 description: Error del servidor 
  */
-router.delete("/foto/eliminar/:id",authMiddleware, validator.validatorId, admin.eliminarFoto);
+router.delete("/foto/eliminar/:id", validator.validatorId, admin.eliminarFoto);
 
 export { router };

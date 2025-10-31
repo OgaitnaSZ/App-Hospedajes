@@ -164,9 +164,14 @@ export async function obtenerReservasUsuario(req: Request, res: Response) {
                 select: {
                   titulo: true,
                   descripcion: true,
-                  ciudad: true,
-                  imagen: true,
+                  ciudad: true
                 },
+                include:{
+                  fotos: {
+                    orderBy: { sort: 'asc' },
+                    take: 1,
+                  },
+                }
               },
               habitaciones: {
                 select: {
@@ -175,7 +180,7 @@ export async function obtenerReservasUsuario(req: Request, res: Response) {
                   capacidad: true,
                   precio: true,
                 },
-              },
+              }
             },
           });
         }else{

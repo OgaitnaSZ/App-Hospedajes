@@ -21,4 +21,12 @@ a, button { cursor: pointer; }
   @apply text-blue-600 font-semibold border-l-4 border-blue-600 pl-2;
 }
 
+.cdk-drag-preview {
+  @apply border-2 border-blue-500 rounded-lg bg-white;
+}
+.cdk-drag-placeholder {
+  opacity: 0;
+}
 
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

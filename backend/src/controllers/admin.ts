@@ -6,6 +6,7 @@ import { matchedData } from "express-validator";
 import { handleHttpError } from "../utils/handleError";
 const prisma = new PrismaClient()
 const MEDIA_PATH = `${__dirname}/../uploads`;
+const PUBLIC_URL = process.env.PUBLIC_URL;
 
 // Hospedajes
 export async function getHospedajes(req: Request, res: Response) {
@@ -62,7 +63,6 @@ export async function agregarHospedaje(req: Request, res: Response) {
         ciudad: String(dataHospedaje.ciudad),
         direccion: String(dataHospedaje.direccion),
         coordenadas: String(dataHospedaje.coordenadas),
-        imagen: String(dataHospedaje.imagen),
         destacado: false
       } 
     });
@@ -97,7 +97,6 @@ export async function modificarHospedaje(req: Request, res: Response) {
         ciudad: String(dataHospedaje.ciudad),
         direccion: String(dataHospedaje.direccion),
         coordenadas: String(dataHospedaje.coordenadas),
-        imagen: String(dataHospedaje.imagen),
         destacado: false
       } 
     });
@@ -386,11 +385,21 @@ export async function subirFotos(req: Request, res: Response) {
         if (!hospedajeExistente) {
             return handleHttpError(res, "ID de hospedaje no encontrado", 404)
         }
+
+        // Obtener el valor máximo actual de "sort" para este hospedaje
+        const ultimaFoto = await prisma.fotos.findFirst({
+            where: { idHospedaje: body.idHospedaje },
+            orderBy: { sort: "desc" },
+            select: { sort: true },
+        });
+
+        const sortInicial = ultimaFoto ? ultimaFoto.sort + 1 : 1;
         
         // Mapear todos los archivos subidos
-        const archivosData = (files as Express.Multer.File[]).map(file => ({
+        const archivosData = (files as Express.Multer.File[]).map((file, index) => ({
             idHospedaje: body.idHospedaje,
-            path: `${MEDIA_PATH}/uploads/${file.filename}`
+            url: `${PUBLIC_URL}/uploads/${file.filename}`,
+            sort: sortInicial + index,
         }));
         
         // Guardar en la db
@@ -419,38 +428,28 @@ export async function subirFotos(req: Request, res: Response) {
     }
 }
 
-export async function seleccionarPrincipal(req: Request, res: Response) {
-    try{
-        const { idHospedaje, idFoto } = req.body;
-        
-        const hospedajeExistente = await prisma.hospedaje.findUnique({
-            where: { idHospedaje: String(idHospedaje) }
-        });
-        
-        if (!hospedajeExistente) {
-            return handleHttpError(res, "ID de hospedaje no encontrado", 404)
-        }
-        
-        const fotoExistente = await prisma.fotos.findUnique({
-            where: { idFoto: String(idFoto) }
-        });
-        
-        if (!fotoExistente) {
-            return handleHttpError(res, "ID de foto no encontrado", 404)
-        }
-        
-        // Actualizar foto principal
-        await prisma.hospedaje.update({
-          where: { idHospedaje: String(idHospedaje) },
-          data: { 
-            imagen: String(fotoExistente.path)
-          } 
-        });
-        return res.status(200).send({message: "Foto actualizada"});
-    } catch (error) {
-        return handleHttpError(res, "Error al eliminar foto", 500);
-    }
+export async function actualizarOrden(req: Request, res: Response) {
+  try {
+    const { fotos } = req.body;
+
+    if (!fotos || fotos.length === 0)
+      return handleHttpError(res, "No se recibieron fotos", 400);
+
+    await prisma.$transaction(
+      fotos.map((f:any) =>
+        prisma.fotos.update({
+          where: { idFoto: f.idFoto },
+          data: { sort: f.sort},
+        })
+      )
+    );
+
+    return res.status(200).send({ message: "Fotos actualizadas" });
+  } catch (error) {
+    return handleHttpError(res, "Error al actualizar foto", 500);
+  }
 }
+
 
 export async function eliminarFoto(req: Request, res: Response) {
     try{
@@ -463,7 +462,7 @@ export async function eliminarFoto(req: Request, res: Response) {
         
         if (!foto) return handleHttpError(res, "Archivo no encontrado en la base de datos", 404);
         
-        const filePath  = foto.path;
+        const filePath  = foto.url;
         const fileName = filePath.split('/').pop();
 
         // Verificar si el archivo existe
@@ -487,16 +486,16 @@ export async function eliminarFoto(req: Request, res: Response) {
 /*--- Funciones Extras ---*/
 const eliminarImagenesPorHospedaje = async (id: string, res: Response) => {
   try {
-    // Obtener los path de las imágenes asociadas al IdHospedaje
+    // Obtener los url de las imágenes asociadas al IdHospedaje
     const imagenes = await prisma.fotos.findMany({
         where: { idHospedaje: String(id) },
         select:{
-          path: true
+          url: true
         }
     });
 
     for (const imagen of imagenes) {
-      const nombreArchivoFisico = `${imagen.path}`;
+      const nombreArchivoFisico = `${imagen.url}`;
       const ruta = path.join(__dirname, '../uploads', nombreArchivoFisico);
 
       try {

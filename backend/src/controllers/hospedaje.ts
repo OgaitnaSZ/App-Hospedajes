@@ -56,6 +56,10 @@ export async function getHospedajes(req: Request, res: Response) {
                 precio: true,
               },
             },
+            fotos: {
+              orderBy: { sort: 'asc' },
+              take: 1,
+            },
           }
         });
     
@@ -83,6 +87,7 @@ export async function getHospedajes(req: Request, res: Response) {
               ...h,
               capacidad: Math.max(...capacidades),
               precioMinimo: Math.min(...precios),
+              imagen: h.fotos[0] ?? null,
               servicios: serviciosData,
             };
           })
@@ -136,7 +141,7 @@ export async function getHospedajeDetalle(req: Request, res: Response) {
       // Obtener fotos
       const fotos = await prisma.fotos.findMany({
         where: { idHospedaje: String(req.params.id) },
-        select: { path: true }
+        select: { url: true }
       });
   
       // Obtener servicios
@@ -165,11 +170,9 @@ export async function getHospedajeDetalle(req: Request, res: Response) {
       ? resenas.reduce((acc, r) => acc + (r.calificacion ?? 0), 0) / resenas.length
       : 0;
 
-      const { imagen, ...hospedajeSinFoto } = hospedaje;
-
       const data = {
-        ...hospedajeSinFoto,
-        fotos: fotos.map(f => f.path),
+        ...hospedaje,
+        fotos: fotos.map(f => f.url),
         servicios,
         calificacionPromedio
       };

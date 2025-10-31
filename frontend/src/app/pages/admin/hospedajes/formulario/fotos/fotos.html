@@ -1,39 +1,67 @@
-<h3 class="text-gray-800 text-3xl font-bold mb-6">Fotos:</h3>
-
-<!-- Visualización de imágenes existentes -->
-@if(fotos().length > 0) {
-  <div class="grid grid-cols-2 md:grid-cols-2 gap-4">
-    @for(foto of fotos(); track $index) {
-      <div class="bg-white rounded-lg shadow-md overflow-hidden">
-        <img src="{{foto.path}}" class="w-full h-40 object-cover">
-        <div class="p-3 text-center">
-          <!-- Botón para marcar como principal -->
-          <button
-            class="w-full border border-blue-500 text-blue-500 text-sm py-1.5 rounded mb-2 hover:bg-blue-50 transition"
-            [class.bg-blue-500]="hospedaje()?.imagen === foto.path"
-            [class.text-white]="hospedaje()?.imagen === foto.path"
-            (click)="seleccionarImagenPrincipal(foto.idFoto)">
-            Marcar como principal
-          </button>
-
-          <!-- Botón para eliminar -->
-          <button
-            class="w-full border border-red-500 text-red-500 text-sm py-1.5 rounded hover:bg-red-50 transition"
-            (click)="eliminarFoto(foto.idFoto)">
-            Eliminar
-          </button>
-        </div>
-      </div>
-    }
-  </div>
-}
+<h3 class="text-gray-800 text-3xl font-bold mb-6">Fotos</h3>
+<p>{{success()}}</p>
 
 <!-- Subida de nuevas fotos -->
-<div class="mt-4 text-center">
-  <label for="upload-input"
-         class="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-blue-700 transition">
+<div class="p-4 mb-4 bg-white rounded-lg shadow border border-gray-200 max-w-md">
+  @if (!verSubir) {
+  <button type="submit" (click)="verSubir = true" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700 transition-colors">
     Agregar Fotos
-  </label>
-  <input id="upload-input" type="file" accept="image/*" multiple
-         (change)="agregarFotos($event)" class="hidden" />
+  </button>
+  }
+  @if (verSubir) {
+    <form (submit)="agregarFotos($event)" enctype="multipart/form-data" class="space-y-4">
+      <div class="flex justify-between items-center">
+        <label class="block text-sm font-medium text-gray-700">Seleccionar archivos (Max. 10)</label>
+        <a (click)="verSubir = false" class="text-red-400 material-symbols-outlined">close</a>
+      </div>
+      <input
+        type="file" multiple
+        (change)="onFileSelected($event)"
+        class="block w-full text-sm text-gray-700 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"/>
+        <div class="flex justify-end">
+          <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700 transition-colors">
+            Subir
+          </button>
+        </div>
+      </form>
+    }
+
+    <!-- Visualización de imágenes existentes -->
+    @if (fotos().length > 0) {
+      <div
+        cdkDropList
+        [cdkDropListData]="fotos()"
+        (cdkDropListDropped)="drop($event)"
+        class="grid grid-cols-2 md:grid-cols-2 gap-4 mt-4"
+      >
+        @for (foto of fotos(); track foto.idFoto) {
+          <div
+            cdkDrag
+            class="bg-white rounded-lg shadow-md overflow-hidden select-none"
+          >
+            <div class="flex justify-between items-center p-2 bg-gray-100 text-xs">
+              <span class="text-gray-500">#{{ foto.sort }}</span>
+              <button
+                type="button"
+                class="text-red-400 material-symbols-outlined"
+                (click)="eliminarFoto(foto.idFoto)"
+              >
+                close
+              </button>
+            </div>
+            <img [src]="foto.url" class="w-full h-40 object-cover pointer-events-none" />
+          </div>
+        }
+      </div>
+    }
+
+  </div>
+
+
+<!-- Actualizar orden de fotos -->
+<div class="mt-4 text-center">
+  <button (click)="actualizarOrden()"
+    class="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-blue-700 transition">
+    Actualizar orden
+  </button>
 </div>
