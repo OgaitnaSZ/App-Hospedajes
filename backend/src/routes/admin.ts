@@ -5,6 +5,7 @@ import * as validator from "../validators/admin";
 import { authMiddleware } from "../middleware/session";
 import { checkRol } from "../middleware/rol";
 import { usuario_rol } from "../generated/prisma";
+import { uploadMiddleware } from "../utils/handleStorage";
 
 router.use(authMiddleware); // Middleware para todas las rutas
 router.use(checkRol([usuario_rol.administrador]));
@@ -428,5 +429,108 @@ router.put("/actividades/modificar", validator.validatorActividadUpdate, admin.m
  *                 description: Error del servidor 
  */
 router.delete("/actividades/eliminar/:id", validator.validatorId, admin.eliminarActividad);
+
+/**
+ * http://localhost:4001/api/admin
+ * 
+ * Route subir fotos
+ * @swagger
+ * /admin/foto/subir":
+ *     post:
+ *         tags:
+ *             - foto
+ *         summary: "Subir fotos de hospedaje"
+ *         description: "Ruta para subir fotos de hospedaje"
+ *         requestBody:
+ *              content:
+ *                  multipart/form-data:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              fotos:
+ *                                  type: string
+ *                                  format: binary
+ *                              idHospedaje:
+ *                                  type: string
+ *         responses:
+ *             '201':
+ *                 description: Fotos subidas correctamente
+ *             '400':
+ *                 description: No se recibieron archivos
+ *             '401':
+ *                 description: No inicio session o no es administrador
+ *             '404':
+ *                 description: Hospedaje no existe
+ *             '500':
+ *                 description: Error del servidor 
+ */
+router.post("/foto/subir", authMiddleware, uploadMiddleware.array("fotos"), validator.validatorUploadFoto, admin.subirFotos);
+
+/**
+ * http://localhost:4001/api/admin
+ * 
+ * Route seleccionar imagen principal
+ * @swagger
+ * /admin/foto/seleccionarPrincipal":
+ *     patch:
+ *         tags:
+ *             - foto
+ *         summary: "Seleccionar imagen principal"
+ *         description: "Ruta para seleccionar imagen principal"
+ *         requestBody:
+ *              content:
+ *                  multipart/form-data:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              idHospedaje:
+ *                                  type: string
+ *                              idFoto:
+ *                                  type: string
+ *         responses:
+ *             '200':
+ *                 description: Foto principal actualizada
+ *             '401':
+ *                 description: No inicio session o no es administrador
+ *             '403':
+ *                 description: ID del hospedaje o ID de la foto no valida
+ *             '404':
+ *                 description: Hospedaje o Foto no encontrada en la base de datos
+ *             '500':
+ *                 description: Error del servidor 
+ */
+router.patch("/foto/seleccionarPrincipal", validator.validatorSelectFoto, admin.seleccionarPrincipal);
+
+/**
+ * http://localhost:4001/api/admin
+ * 
+ * Route eliminar foto
+ * @swagger
+ * /admin/foto/eliminar/{id}":
+ *     delete:
+ *         tags:
+ *             - foto
+ *         summary: "Eliminar foto"
+ *         description: "Ruta para eliminar foto"
+ *         parameters:
+ *         - name: id
+ *           in: path
+ *           description: ID de la foto
+ *           required: true
+ *           schema:
+ *             type:string
+ *         responses:
+ *             '200':
+ *                 description: Archivo eliminado
+ *             '401':
+ *                 description: No inicio session o no es administrador
+ *             '403':
+ *                 description: ID de foto no valido
+ *             '404':
+ *                 description: Foto no encontrada en la base de datos
+ *             '500':
+ *                 description: Error del servidor 
+ */
+router.delete("/foto/eliminar/:id",authMiddleware, validator.validatorId, admin.eliminarFoto);
 
 export { router };
