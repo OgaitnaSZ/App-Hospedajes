@@ -1,4 +1,4 @@
-import { Component, Input, inject } from '@angular/core';
+import { Component, Input, effect, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AdminService } from '../../../../../core/services/admin';
 import { CdkDragDrop, moveItemInArray, DragDropModule } from '@angular/cdk/drag-drop';
@@ -21,6 +21,26 @@ export class Fotos {
   loading = this.admin.loading;
   error = this.admin.error;
   success = this.admin.success;
+
+  constructor() {
+    // Effect para actualizar fotos cuando hay cambios
+    effect(() => {
+      const mensajeSuccess = this.success();
+      
+      if (mensajeSuccess && this.idHospedaje) {
+        // Si el mensaje de éxito indica que se subieron o eliminaron fotos
+        if (mensajeSuccess.includes('foto') || mensajeSuccess.includes('Foto')) {
+          this.admin.getFotos(this.idHospedaje);
+          
+          // Limpiar fotos seleccionadas y cerrar modal si se subieron
+          if (mensajeSuccess.toLowerCase().includes('subid')) {
+            this.fotosSeleccionadas = [];
+            this.verSubir = false;
+          }
+        }
+      }
+    });
+  }
 
   ngOnInit(): void {
     if (this.idHospedaje == undefined) return console.error('El ID de hospedaje no es válido');
@@ -51,10 +71,35 @@ export class Fotos {
 
   verSubir: boolean = false;
   fotosSeleccionadas: File[] = [];
+  maxFotos = 10;
 
-  onFileSelected(event: any) {
-    this.fotosSeleccionadas = Array.from(event.target.files);
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (!input.files) return;
+  
+    const nuevas = Array.from(input.files);
+  
+    const imagenes = nuevas.filter(file => file.type.startsWith('image/'));
+  
+    const totalActual = this.fotos().length + this.fotosSeleccionadas.length;
+  
+    const disponibles = this.maxFotos - totalActual;
+  
+    if (disponibles <= 0) {
+      this.error.set(`Ya alcanzaste el máximo de ${this.maxFotos} fotos.`);
+      input.value = '';
+      return;
+    }
+  
+    const permitidas = imagenes.slice(0, disponibles);
+  
+    if (permitidas.length < imagenes.length) {
+      this.error.set(`Solo puedes agregar ${disponibles} foto(s) más.`);
+    }
+  
+    this.fotosSeleccionadas.push(...permitidas);
   }
+
 
   agregarFotos(event: Event) {
     event.preventDefault();
@@ -66,6 +111,5 @@ export class Fotos {
   
       this.admin.subirFotos(formData);
     }
-
   }
 }

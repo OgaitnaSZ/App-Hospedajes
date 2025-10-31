@@ -464,7 +464,7 @@ router.delete("/actividades/eliminar/:id", validator.validatorId, admin.eliminar
  *             '500':
  *                 description: Error del servidor 
  */
-router.post("/foto/subir", uploadMiddleware.array("fotos"), validator.validatorUploadFoto, admin.subirFotos);
+router.post("/foto/subir", uploadMiddleware, validator.validatorUploadFoto, admin.subirFotos);
 
 /**
  * http://localhost:4001/api/admin

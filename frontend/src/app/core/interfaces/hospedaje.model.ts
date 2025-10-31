@@ -10,7 +10,7 @@ export interface Hospedaje {
     ciudad: string;
     direccion: string;
     coordenadas: string;
-    imagen?: string;
+    fotos?: string;
     destacado?: boolean;
     estado?: EstadoHospedaje;
 }
@@ -24,7 +24,7 @@ export interface HospedajeListado {
     ciudad: string;
     direccion: string;
     coordenadas: string;
-    imagen: string;
+    fotos: string;
     destacado: boolean;
     precioMinimo: number;
     habitaciones: Habitacion[];

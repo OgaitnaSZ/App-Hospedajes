@@ -12,11 +12,21 @@ const PUBLIC_URL = process.env.PUBLIC_URL;
 export async function getHospedajes(req: Request, res: Response) {
   try {
     const hospedajes = await prisma.hospedaje.findMany({
-      where: { estado : { not: hospedaje_estado.eliminado } }
+      where: { estado : { not: hospedaje_estado.eliminado } },
+      include: {
+        fotos: {
+          orderBy: { sort: 'asc' },
+          take: 1,
+        },
+      }
     });
-
+    
     if(hospedajes.length > 0){
-      res.status(200).json(hospedajes);
+      const data = hospedajes.map(h => ({
+        ...h,
+        fotos: h.fotos?.[0]?.url ?? null
+      }));
+      res.status(200).json(data);
     }else{
       return res.status(404).send("No se encontraron hospedajes.")
     }
@@ -379,12 +389,19 @@ export async function subirFotos(req: Request, res: Response) {
         if (!files || files.length === 0) return handleHttpError(res, "No se recibieron archivos", 400);
 
         const hospedajeExistente = await prisma.hospedaje.findUnique({
-            where: { idHospedaje: String(body.idHospedaje) }
+            where: { idHospedaje: String(body.idHospedaje) },
+            include: { fotos: true },
         });
         
         if (!hospedajeExistente) {
             return handleHttpError(res, "ID de hospedaje no encontrado", 404)
         }
+
+        const MAX_FOTOS = 10;
+        const fotosActuales = hospedajeExistente.fotos.length;
+        const nuevas = (files as Express.Multer.File[]).length;
+
+        if (fotosActuales + nuevas > MAX_FOTOS) return handleHttpError(res,`El hospedaje ya tiene ${fotosActuales} fotos. Solo puedes agregar ${MAX_FOTOS - fotosActuales} más.`,400);
 
         // Obtener el valor máximo actual de "sort" para este hospedaje
         const ultimaFoto = await prisma.fotos.findFirst({
@@ -403,24 +420,10 @@ export async function subirFotos(req: Request, res: Response) {
         }));
         
         // Guardar en la db
-        const data = await prisma.fotos.createMany({
-            data: archivosData
-        });
-
-        // Obtener las fotos recién creadas
-        const fotos = await prisma.fotos.findMany({
-            where: {
-                idHospedaje: body.idHospedaje
-            },
-            orderBy: {
-                idFoto: 'desc' // o como sea que se ordenen
-            },
-            take: archivosData.length
-        });
+        const data = await prisma.fotos.createMany({data: archivosData});
         
         return res.status(201).send({ 
           mensaje: `${data.count} fotos fueron agregadas`, 
-          data: fotos
         });
     } catch (error) {
         console.log(error);

@@ -21,4 +21,14 @@ const storage = multer.diskStorage({
     }
 });
 
-export const uploadMiddleware = multer({storage});
+export const uploadMiddleware = multer({
+  storage,
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5 MB
+  fileFilter: (req, file, cb) => {
+    // Solo permitir imágenes
+    if (!file.mimetype.startsWith('image/')) {
+      return cb(new Error('Solo se permiten archivos de tipo imagen'));
+    }
+    cb(null, true);
+  },
+}).array('fotos', 10); // máximo 10 archivos

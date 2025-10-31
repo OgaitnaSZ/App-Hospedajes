@@ -71,7 +71,7 @@ export async function getHospedajes(req: Request, res: Response) {
           hospedajes.map(async (h) => {
             const capacidades = h.habitaciones.map((hab) => hab.capacidad);
             const precios = h.habitaciones.map((hab) => hab.precio);
-
+        
             let serviciosData = [];
             if (typeof h.servicios === 'string') {
               const ids = h.servicios.split(',').map((id) => Number(id));
@@ -82,17 +82,20 @@ export async function getHospedajes(req: Request, res: Response) {
             } else {
               serviciosData = h.servicios || [];
             }
-    
+        
             return {
               ...h,
               capacidad: Math.max(...capacidades),
               precioMinimo: Math.min(...precios),
-              imagen: h.fotos[0] ?? null,
+        
+              // 👇 Aquí convertimos fotos a string (por ejemplo, solo la primera URL)
+              fotos: h.fotos?.[0]?.url ?? null,
+        
               servicios: serviciosData,
             };
           })
         );
-    
+
         return res.status(200).json(result);
     }catch(error){
         console.log(error);
@@ -190,6 +193,12 @@ export async function getHospedajesDestacados(req: Request, res: Response) {
         where: { 
           destacado: true,
           estado: hospedaje_estado.activo
+        },
+        include: {
+          fotos: {
+            orderBy: { sort: 'asc' },
+            take: 1,
+          },
         }
       });
 
@@ -205,6 +214,7 @@ export async function getHospedajesDestacados(req: Request, res: Response) {
       
           return {
             ...hospedaje,
+            fotos: hospedaje.fotos?.[0]?.url ?? null,
             precioMinimo: habitacionMasBarata?.precio ?? null,
           };
         })

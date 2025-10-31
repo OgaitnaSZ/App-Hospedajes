@@ -83,7 +83,7 @@ export class Hospedajes {
       if (h.length > 0) {
         this.metaService.updateTag({
           property: 'og:image',
-          content: `http://localhost:4001/assets/uploads/hospedajes/${h[0].imagen}`
+          content: `http://localhost:4001/assets/uploads/hospedajes/${h[0].fotos}`
         });
       }
     });
