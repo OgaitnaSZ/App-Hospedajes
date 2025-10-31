@@ -241,7 +241,7 @@ export class AdminService {
         this.loading.set(true);
         this.error.set(null);
 
-        this.http.patch(`http://localhost:4001/api/foto/seleccionarPrincipal`, {idHospedaje, idFoto} ,{ headers: this.tokenService.createAuthHeaders() }).pipe(
+        this.http.patch(`${this.apiUrl}foto/seleccionarPrincipal`, {idHospedaje, idFoto} ,{ headers: this.tokenService.createAuthHeaders() }).pipe(
             tap(() => {
                 this.success.set("Foto actualizada con exito")
             }),
