@@ -1,6 +1,6 @@
 import { Injectable, signal, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Hospedaje } from '../interfaces/hospedaje.model';
+import { Hospedaje, hospedajeDetalleAdmin } from '../interfaces/hospedaje.model';
 import { Habitacion } from '../interfaces/habitacion.model';
 import { Actividad } from '../interfaces/actividad.model';
 import { TokenService } from './token';
@@ -22,7 +22,8 @@ export class AdminService {
     error = signal<string | null>(null);
     success = signal<string | null>(null);
     
-    hospedaje = signal<Hospedaje | null>(null);
+    hospedajeNew = signal<Hospedaje | null>(null);
+    hospedaje = signal<hospedajeDetalleAdmin | null>(null);
     hospedajes = signal<Hospedaje[]>([]);
     habitaciones = signal<Habitacion[]>([]);
     fotos = signal<Foto[]>([]);
@@ -49,7 +50,7 @@ export class AdminService {
         this.loading.set(true);
         this.error.set(null);
         
-        this.http.get<Hospedaje>(`${this.apiUrl}hospedajes/hospedaje/${idHospedaje}`, { headers: this.tokenService.createAuthHeaders() }).pipe(
+        this.http.get<hospedajeDetalleAdmin>(`${this.apiUrl}hospedajes/hospedaje/${idHospedaje}`, { headers: this.tokenService.createAuthHeaders() }).pipe(
             tap((data) => {
                 this.hospedaje.set(data)
             }),
@@ -69,7 +70,7 @@ export class AdminService {
 
         this.http.post<Hospedaje>(`${this.apiUrl}hospedajes/agregar`, hospedaje, { headers: this.tokenService.createAuthHeaders() }).pipe(
             tap((data) => {
-                this.hospedaje.set(data);
+                this.hospedajeNew.set(data);
                 this.success.set("Hospedaje creado con exito");
             }),
             catchError(err => {

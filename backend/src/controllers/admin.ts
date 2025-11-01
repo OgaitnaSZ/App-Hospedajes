@@ -48,8 +48,18 @@ export async function getHospedaje(req: Request, res: Response) {
       }
     });
 
+    // Obtener habitaciones
+    const habitaciones = await prisma.habitaciones.findMany({
+      where: { idHospedaje }
+    })
+
+    // Obtener fotos
+    const fotos = await prisma.fotos.findMany({
+      where: { idHospedaje }
+    })
+
     if(hospedaje){
-      res.status(200).json(hospedaje);
+      res.status(200).json({... hospedaje, habitaciones, fotos});
     }else{
       return res.status(404).send("No se encontraron hospedajes.")
     }

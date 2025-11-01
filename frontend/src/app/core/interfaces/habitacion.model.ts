@@ -5,7 +5,7 @@ export interface Habitacion {
     tipo: string;
     precio: number;
     capacidad: number;
-    servicios: string[];
+    servicios: string;
 }
 
 export interface HabitacionDetalle {

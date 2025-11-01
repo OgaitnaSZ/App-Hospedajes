@@ -29,7 +29,6 @@ export class Resenas {
 
   async ngOnInit() {
     if(this.resenasHospedaje != undefined){
-      console.log(this.resenasHospedaje)
       this.resenas.set(this.resenasHospedaje);
     }else{
       this.resenaService.getMejoresResenas(4);

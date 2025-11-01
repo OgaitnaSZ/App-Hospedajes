@@ -40,7 +40,6 @@ export class Hospedaje {
           alt: h.titulo
         }));
       }
-      console.log(this.hospedaje());
     });
   }
 

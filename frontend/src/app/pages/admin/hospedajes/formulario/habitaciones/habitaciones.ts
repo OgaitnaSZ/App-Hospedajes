@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { Habitacion } from '../../../../../core/interfaces/habitacion.model';
 
 @Component({
   selector: 'app-habitaciones',
@@ -7,5 +8,11 @@ import { Component, Input } from '@angular/core';
   styleUrl: './habitaciones.css'
 })
 export class HabitacionesAdmin {
-  @Input() idHospedaje: string | undefined;
+  @Input() habitaciones: Habitacion[] | undefined;
+
+  ngOnInit(){
+    console.log(this.habitaciones)
+  }
+
+
 }

@@ -2,6 +2,7 @@ import { Component, Input, effect, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AdminService } from '../../../../../core/services/admin';
 import { CdkDragDrop, moveItemInArray, DragDropModule } from '@angular/cdk/drag-drop';
+import { Foto } from '../../../../../core/interfaces/foto.model';
 
 @Component({
   selector: 'app-fotos',
@@ -10,6 +11,7 @@ import { CdkDragDrop, moveItemInArray, DragDropModule } from '@angular/cdk/drag-
   styleUrl: './fotos.css'
 })
 export class Fotos {
+  @Input() fotosHospedaje: Foto[] | undefined;
   @Input() idHospedaje: string | undefined;
 
   // Servicios
@@ -43,9 +45,11 @@ export class Fotos {
   }
 
   ngOnInit(): void {
-    if (this.idHospedaje == undefined) return console.error('El ID de hospedaje no es válido');
-    this.admin.getFotos(this.idHospedaje)
-    this.admin.getHospedaje(this.idHospedaje)
+    console.log(this.fotosHospedaje);
+    console.log(this.idHospedaje);
+    if (this.fotosHospedaje !== undefined &&this.fotosHospedaje?.length > 0){
+      this.fotos.set(this.fotosHospedaje);
+    }
   }
 
   drop(event: any) {
@@ -104,12 +108,12 @@ export class Fotos {
   agregarFotos(event: Event) {
     event.preventDefault();
 
-    if (this.idHospedaje !== undefined && this.idHospedaje != ''){
-      const formData = new FormData();
-      this.fotosSeleccionadas.forEach(file => formData.append('fotos', file));
-      formData.append('idHospedaje', this.idHospedaje.toString());
-  
-      this.admin.subirFotos(formData);
-    }
+    if (this.idHospedaje == undefined) return this.error.set("Falta el ID hospedaje")
+
+    const formData = new FormData();
+    this.fotosSeleccionadas.forEach(file => formData.append('fotos', file));
+    formData.append('idHospedaje', this.idHospedaje);
+
+    this.admin.subirFotos(formData);
   }
 }

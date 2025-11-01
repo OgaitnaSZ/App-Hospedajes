@@ -13,6 +13,7 @@ import { Fotos } from './fotos/fotos';
   imports: [ReactiveFormsModule, RouterModule, CommonModule, RouterModule, HabitacionesAdmin, Fotos],
   templateUrl: './formulario.html'
 })
+
 export class FormularioHospedaje {
   // Servicios
   admin = inject(AdminService);
@@ -65,6 +66,7 @@ export class FormularioHospedaje {
   // Effect para cargar datos cuando el hospedaje se obtiene
   cargarDatosEffect = effect(() => {
     const hospedaje = this.hospedaje();
+    console.log(this.hospedaje());
     
     if (hospedaje && this.idHospedaje) {
       // Cargar los valores en el formulario

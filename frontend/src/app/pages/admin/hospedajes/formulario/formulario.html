@@ -133,11 +133,14 @@
   </div>
 
   <div class="w-full lg:w-1/2">
-    @if(idHospedaje !== ''){
-      <app-fotos [idHospedaje]="idHospedaje"></app-fotos>
+    @if(idHospedaje && hospedaje()?.fotos){
+      <app-fotos
+        [fotosHospedaje]="hospedaje()?.fotos"
+        [idHospedaje]="hospedaje()?.idHospedaje"
+      ></app-fotos>
     }
   </div>
 </div>
-  @if(idHospedaje !== ''){
-    <app-habitaciones [idHospedaje]="idHospedaje" class="p-4"></app-habitaciones>
+  @if(hospedaje()?.habitaciones && hospedaje()?.habitaciones?.length){
+    <app-habitaciones [habitaciones]="hospedaje()?.habitaciones" class="p-4"></app-habitaciones>
   }

@@ -1,3 +1,4 @@
+import { Foto } from "./foto.model";
 import { Habitacion } from "./habitacion.model";
 import { ResenaHome } from "./resena.model";
 
@@ -14,6 +15,21 @@ export interface Hospedaje {
     fotos?: string;
     destacado?: boolean;
     estado?: EstadoHospedaje;
+}
+export interface hospedajeDetalleAdmin {
+    idHospedaje?: string;
+    titulo: string;
+    descripcion: string;
+    servicios: string;
+    estrellas: number;
+    telefono: string;
+    ciudad: string;
+    direccion: string;
+    coordenadas: string;
+    fotos: Foto[];
+    destacado?: boolean;
+    estado: EstadoHospedaje;
+    habitaciones: Habitacion[]
 }
 export interface HospedajeListado {
     idHospedaje: string;
