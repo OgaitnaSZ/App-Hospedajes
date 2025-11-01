@@ -95,7 +95,6 @@
   <!-- Reseñas -->
   <h2 class="text-2xl font-semibold m-0 mt-10 mb-5" id="resenas">Comentarios de los clientes</h2>
   <app-resenas 
-    [page]="'hospedaje'"
-    [idHospedaje]="idHospedaje"
+    [resenasHospedaje]="hospedaje()?.resenas"
   ></app-resenas>
 </main>

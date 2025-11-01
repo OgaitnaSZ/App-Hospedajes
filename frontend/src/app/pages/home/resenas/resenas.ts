@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ResenaService } from '../../../core/services/resena';
 import { UtilsService } from '../../../core/services/utils';
+import { ResenaHome } from '../../../core/interfaces/resena.model';
 
 @Component({
   selector: 'app-resenas',
@@ -11,8 +12,7 @@ import { UtilsService } from '../../../core/services/utils';
   styleUrl: './resenas.css'
 })
 export class Resenas {
-  @Input() page: string | undefined; // pagina del componente padre
-  @Input() idHospedaje: string | undefined; // pagina del componente padre
+  @Input() resenasHospedaje: ResenaHome[] | undefined; // pagina del componente padre
 
   // Inyecciones
   readonly resenaService = inject(ResenaService);
@@ -28,9 +28,10 @@ export class Resenas {
   readonly hayResenas = computed(() => this.totalResenas() > 0)
 
   async ngOnInit() {
-    if(this.page == 'home'){
-      this.resenaService.getMejoresResenas(4);
-    }else if(this.page == 'hospedaje' && this.idHospedaje != null && this.idHospedaje != undefined){
+    if(this.resenasHospedaje != undefined){
+      console.log(this.resenasHospedaje)
+      this.resenas.set(this.resenasHospedaje);
+    }else{
       this.resenaService.getMejoresResenas(4);
     }
   }

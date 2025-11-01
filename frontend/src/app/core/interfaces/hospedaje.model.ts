@@ -1,4 +1,5 @@
 import { Habitacion } from "./habitacion.model";
+import { ResenaHome } from "./resena.model";
 
 export interface Hospedaje {
     idHospedaje?: string;
@@ -44,6 +45,7 @@ export interface HospedajeDetalles {
     precioMinimo: number;
     habitaciones: Habitacion[];
     calificacionPromedio: number;
+    resenas: ResenaHome[]
 }
 interface ServiciosHospedaje {
     nombre: string;

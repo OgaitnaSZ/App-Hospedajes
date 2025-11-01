@@ -177,7 +177,8 @@ export async function getHospedajeDetalle(req: Request, res: Response) {
         ...hospedaje,
         fotos: fotos.map(f => f.url),
         servicios,
-        calificacionPromedio
+        calificacionPromedio,
+        resenas
       };
     
       res.status(200).json(data);

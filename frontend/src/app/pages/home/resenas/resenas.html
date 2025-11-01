@@ -14,7 +14,7 @@
             </p>
             <footer class="text-sm text-gray-500">— {{ resena.usuario }}</footer>
           </div>
-          @if (!idHospedaje) {
+          @if (resena.idHospedaje) {
             <a [routerLink]="['/hospedaje', resena.idHospedaje]" class="block text-center text-blue-500 py-2 hover:underline">
               Ver Hospedaje
             </a>

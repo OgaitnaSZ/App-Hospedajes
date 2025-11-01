@@ -1,3 +1,0 @@
-Agregar reseñas en HospedajeDetalle
-
-Arreglar administracion de fotos en rutas admin en backend
