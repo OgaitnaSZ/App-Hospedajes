@@ -1,11 +1,38 @@
 <main class="container mx-auto flex flex-col md:flex-row min-h-8/12">
+@if(isLoggedIn()){
     <aside class="w-full md:w-1/4 p-4">
-        <div class="flex flex-col space-y-4" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-            <a class="nav-link text-gray-800 hover:text-blue-600" routerLink="/cuenta/perfil" routerLinkActive="active">Mi Perfil</a>
-            <a class="nav-link text-gray-800 hover:text-blue-600" routerLink="/cuenta/historial" routerLinkActive="active">Historial de Reservas</a>
-            <a class="nav-link text-gray-800 hover:text-blue-600" routerLink="/cuenta/cambiar-contrasena">Cambiar Contraseña</a>
-            <a class="nav-link text-gray-800 hover:text-blue-600" (click)="cerrarSesion()" routerLinkActive="active">Cerrar Sesión</a>
-        </div>
+    <div class="flex flex-col" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+
+        <a
+        class="nav-link text-gray-800 hover:text-blue-600 py-2"
+        routerLink="/cuenta/historial"
+        routerLinkActive="active"
+        >
+        Historial
+        </a>
+
+        <a
+        class="nav-link text-gray-800 hover:text-blue-600 py-2"
+        routerLink="/cuenta/perfil"
+        routerLinkActive="active"
+        >
+        Mi Perfil
+        </a>
+
+        <a
+        class="nav-link text-gray-800 hover:text-blue-600 py-2"
+        (click)="cerrarSesion()"
+        >
+        Cerrar Sesión
+        </a>
+
+    </div>
     </aside>
-    <router-outlet class="flex-1 p-4"></router-outlet>
+
+    <div class="w-full md:w-3/4 p-4">
+        <router-outlet></router-outlet>
+    </div>
+}@else{
+    <p class="text-red-600 font-semibold">No tienes permiso para estar aquí</p>
+}
 </main>

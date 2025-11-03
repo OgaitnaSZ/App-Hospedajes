@@ -102,21 +102,20 @@ export class AuthService {
     const user = this.user();
     if (!user) throw new Error('Usuario no autenticado');
     
-    this.http.put<any>(
-        `${this.apiUrl}update-password`,
+    this.http.put(`${this.apiUrl}update-password`,
         { idUsuario: user.idUsuario, password, newPassword },
-        { headers: this.tokenService.createAuthHeaders() }
-    ).pipe(
-      tap(() => {
-        this.success.set("Password actualizado");
-      }),
-      catchError(err => {
-        this.error.set('Error al actualizar password');
-        console.error(err);
-        return of(null);
-      }),
-      finalize(() => this.loading.set(false))
-    ).subscribe();
+        { headers: this.tokenService.createAuthHeaders() })
+        .pipe(
+          tap(() => {
+            this.success.set("Password actualizado");
+          }),
+          catchError(err => {
+            this.error.set('Error al actualizar password');
+            console.error(err);
+            return of(null);
+          }),
+          finalize(() => this.loading.set(false))
+        ).subscribe();
   }
 
   // Recuperar contraseña

@@ -1,10 +1,10 @@
 <main class="container mx-auto flex flex-col md:flex-row min-h-8/12">
 @if(isAdmin()){
     <aside class="w-full md:w-1/4 p-4">
-    <div class="flex flex-col space-y-4" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+    <div class="flex flex-col" id="v-pills-tab" role="tablist" aria-orientation="vertical">
 
         <a
-        class="nav-link text-gray-800 hover:text-blue-600"
+        class="nav-link text-gray-800 hover:text-blue-600 py-2"
         routerLink="/administrador/hospedajes"
         routerLinkActive="active"
         >
@@ -12,7 +12,7 @@
         </a>
 
         <a
-        class="nav-link text-gray-800 hover:text-blue-600"
+        class="nav-link text-gray-800 hover:text-blue-600 py-2"
         routerLink="/administrador/actividades"
         routerLinkActive="active"
         >
@@ -20,7 +20,7 @@
         </a>
 
         <a
-        class="nav-link text-gray-800 hover:text-blue-600"
+        class="nav-link text-gray-800 hover:text-blue-600 py-2"
         routerLink="/administrador/pagos"
         routerLinkActive="active"
         >
@@ -28,7 +28,7 @@
         </a>
 
         <a
-        class="nav-link text-gray-800 hover:text-blue-600"
+        class="nav-link text-gray-800 hover:text-blue-600 py-2"
         routerLink="/administrador/perfil"
         routerLinkActive="active"
         >
@@ -36,15 +36,7 @@
         </a>
 
         <a
-        class="nav-link text-gray-800 hover:text-blue-600"
-        routerLink="/administrador/cambiar-contrasena"
-        routerLinkActive="active"
-        >
-        Cambiar Contraseña
-        </a>
-
-        <a
-        class="nav-link text-gray-800 hover:text-blue-600"
+        class="nav-link text-gray-800 hover:text-blue-600 py-2"
         (click)="cerrarSesion()"
         >
         Cerrar Sesión

@@ -12,6 +12,11 @@ import { AuthService } from '../../core/services/auth';
 export class Cuenta {
   auth = inject(AuthService);
 
+  // Computed property para reactividad
+  isLoggedIn = computed(() => {
+    return this.auth.isLoggedIn()
+  });
+
   cerrarSesion() {
     this.auth.logout();
   }

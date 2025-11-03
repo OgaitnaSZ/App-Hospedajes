@@ -54,6 +54,7 @@ export async function updateData(req: Request, res: Response) {
         telefono: dataUser.telefono
       },
       select: {
+        idUsuario: true,
         nombre: true,
         apellido: true,
         email: true,

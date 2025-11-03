@@ -5,6 +5,7 @@ export interface User {
     email: string;
     telefono: string;
     rol: Rol;
+    password?: string
 }
 
 export enum Rol {

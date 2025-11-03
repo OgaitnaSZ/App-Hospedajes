@@ -1,17 +1,17 @@
-<button class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700 transition-colors" (click)="editarAgregar()">
-  Agregar Habitación
+<button class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md w-auto inline-block" (click)="editarAgregar()">
+  Agregar Actividad
 </button>
 
-<div class="overflow-x-auto">
-  <table class="min-w-full border border-gray-300 mt-4">
+<div class="overflow-x-auto mt-6">
+  <table class="min-w-full border border-gray-300 bg-white shadow-sm rounded-lg">
     <thead class="bg-gray-800 text-white">
       <tr>
-        <th class="py-2 px-4 text-center">Imagen</th>
-        <th class="py-2 px-4 text-center">Nombre</th>
-        <th class="py-2 px-4 text-center">Descripcion</th>
-        <th class="py-2 px-4 text-center">Ciudad</th>
-        <th class="py-2 px-4 text-center">Precio</th>
-        <th class="py-2 px-4 text-center">Acciones</th>
+        <th scope="col" class="px-4 py-3 text-center font-semibold">Imagen</th>
+        <th scope="col" class="px-4 py-3 text-center font-semibold">Nombre</th>
+        <th scope="col" class="px-4 py-3 text-center font-semibold">Descripcion</th>
+        <th scope="col" class="px-4 py-3 text-center font-semibold">Ciudad</th>
+        <th scope="col" class="px-4 py-3 text-center font-semibold">Precio</th>
+        <th scope="col" class="px-4 py-3 text-center font-semibold">Acciones</th>
       </tr>
     </thead>
 
@@ -28,11 +28,11 @@
                     >
                 </figure>
             </td>
-            <td class="py-2 px-4 text-center">{{ actividad.nombre }}</td>
-            <td class="py-2 px-4 text-center">{{ actividad.descripcion }}</td>
-            <td class="py-2 px-4 text-center">{{ actividad.ciudad }}</td>
-            <td class="py-2 px-4 text-center">{{ actividad.precio }}</td>
-            <td class="py-2 px-4 text-center">
+            <td class="px-4 py-3 text-gray-800">{{ actividad.nombre }}</td>
+            <td class="px-4 py-3 text-gray-800">{{ actividad.descripcion }}</td>
+            <td class="px-4 py-3 text-gray-800">{{ actividad.ciudad }}</td>
+            <td class="px-4 py-3 text-gray-800">{{ actividad.precio }}</td>
+            <td class="px-4 py-3 text-gray-800">
               <button
                 class="material-symbols-outlined text-blue-600 hover:text-blue-800 align-middle mr-2"
                 (click)="editarAgregar(actividad)">

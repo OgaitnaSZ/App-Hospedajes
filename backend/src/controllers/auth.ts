@@ -92,6 +92,8 @@ export async function updatePassword(req: Request, res: Response): Promise<void>
   try{
     const dataPassword = matchedData(req);
 
+    console.log("Actualizando password...", dataPassword);
+
     if (req.user.idUsuario !== dataPassword.idUsuario) {
       handleHttpError(res, "No tienes permiso para actualizar este usuario", 401);
       return
@@ -122,7 +124,7 @@ export async function updatePassword(req: Request, res: Response): Promise<void>
 
     const { password, ...userWithoutPassword } = updatedUser; // Eliminar password para la respuesta
 
-    res.status(200).send({updatedUser: userWithoutPassword});
+    res.status(200).send({userWithoutPassword});
   }catch(error){
     handleHttpError(res, "Error al actualizar password", 500)
     return;

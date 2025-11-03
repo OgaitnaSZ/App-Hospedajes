@@ -14,8 +14,8 @@
 
     <div class="flex flex-col items-center justify-center w-full">
         <div class="flex flex-col md:flex-row w-11/12 md:w-10/12 justify-between px-3 md:px-0">
-            <figure class="w-full md:w-6/12 bg-blue-500 pt-4 pb-4 -translate-x-5">
-                <img src="https://vamos.fullbusiness.io/assets/actividades-en-{{ciudad}}.jpg" class="w-full h-auto">
+            <figure class="w-full md:w-6/12 bg-blue-500 -translate-x-5">
+                <img src="https://vamos.fullbusiness.io/assets/actividades-en-{{ciudad}}.jpg" class="w-full h-full ms-4 mt-4">
             </figure>
             <div class="w-full md:w-5/12 mt-6 md:mt-0">
                 <h1 class="font-bold text-4xl md:text-6xl">Experiencias imperdibles en {{ ciudad }}</h1>
@@ -25,7 +25,7 @@
     </div>
 
     @if(hayActividades()){
-        <section class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-20">
             @for(actividad of actividades() ; track $index){
                 <div class="w-full mb-4 cursor-pointer" (click)="reservar(actividad)">
                     <div class="bg-white rounded-lg shadow-md overflow-hidden h-full">

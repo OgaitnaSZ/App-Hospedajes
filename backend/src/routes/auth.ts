@@ -70,7 +70,7 @@ router.post("/register", validator.validatorRegister, auth.register);
  * Route update password
  * @swagger
  * /auth/update-password:
- *     post:
+ *     put:
  *         tags:
  *             - auth
  *         summary: "Actualizar password"
@@ -95,7 +95,7 @@ router.post("/register", validator.validatorRegister, auth.register);
  *             '500':
  *                 description: Error del servidor 
  */
-router.post("/update-password", authMiddleware, validator.validatorUpdatePassword, auth.updatePassword);
+router.put("/update-password", authMiddleware, validator.validatorUpdatePassword, auth.updatePassword);
 
 /**
  * http://localhost:4001/api/auth

@@ -13,6 +13,7 @@ import { Actividades } from './pages/actividades/actividades';
 import { Datepicker } from './layout/shared/date-picker/date-picker';
 import { Hospedaje } from './pages/hospedajes/hospedaje/hospedaje';
 import { Reservar } from './pages/reservar/reservar';
+import { Perfil } from './pages/cuenta/perfil/perfil';
 import { HospedajesAdmin } from './pages/admin/hospedajes/hospedajes';
 import { HospedajeAdmin } from './pages/admin/hospedajes/hospedaje/hospedaje';
 import { ActividadesAdmin } from './pages/admin/actividades/actividades';
@@ -28,7 +29,7 @@ export const routes: Routes = [
     { path: 'soporte', component: Soporte},
     { path: 'cuenta', component: Cuenta, canActivate: [authGuard],  
       children: [
-        // Proximamente
+        { path: 'perfil', component: Perfil},
       ]
     },
     { path: 'reservar', component: Reservar, canActivate: [authGuard]},
@@ -37,7 +38,8 @@ export const routes: Routes = [
         { path: 'hospedajes', component: HospedajesAdmin},
         { path: 'hospedajes/agregar', component: HospedajeAdmin},
         { path: 'hospedajes/editar/:id', component: HospedajeAdmin},
-        { path: 'actividades', component: ActividadesAdmin}
+        { path: 'actividades', component: ActividadesAdmin},
+        { path: 'perfil', component: Perfil},
       ]
      },
     { path: '**', component:Error },

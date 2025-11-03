@@ -44,10 +44,11 @@ export class UserService {
     this.loading.set(true);
     this.error.set(null);
     
-    this.http.put(`${this.apiUrl}update-data`, usuario, 
+    this.http.put<any>(`${this.apiUrl}update-data`, usuario, 
       { headers: this.tokenService.createAuthHeaders() }).pipe(
         tap((data) => {
-          this.userData.set(usuario)
+          this.success.set("Usuario actualizado");
+          this.userData.set(data)
         }),
               catchError(err => {
         this.error.set('Error al actualizar datos de usuario');
