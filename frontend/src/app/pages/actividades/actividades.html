@@ -1,0 +1,48 @@
+<main class="lg:max-w-3/4 mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col md:flex-row justify-between items-start px-3 md:px-0 mb-6">
+        <p class="text-sm text-gray-600 mb-6">América del Sur > Argentina > Norte de Argentina > {{ ciudad }}</p>
+        <div class="flex flex-row justify-center items-center mt-3 md:mt-0">
+            <label for="ciudad" class="text-gray-500 mr-2">Ciudad</label>
+            <select class="rounded-md border border-gray-300 bg-white py-1 px-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500" (change)="admin.getActividades()">
+                <option value="Termas" selected>Termas</option>
+                <option value="Tucuman">Tucuman</option>
+                <option value="Salta">Salta</option>
+                <option value="Jujuy">Jujuy</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="flex flex-col items-center justify-center w-full">
+        <div class="flex flex-col md:flex-row w-11/12 md:w-10/12 justify-between px-3 md:px-0">
+            <figure class="w-full md:w-6/12 bg-blue-500 pt-4 pb-4 -translate-x-5">
+                <img src="https://vamos.fullbusiness.io/assets/actividades-en-{{ciudad}}.jpg" class="w-full h-auto">
+            </figure>
+            <div class="w-full md:w-5/12 mt-6 md:mt-0">
+                <h1 class="font-bold text-4xl md:text-6xl">Experiencias imperdibles en {{ ciudad }}</h1>
+                <p class="text-xl md:text-2xl mt-2">Échale un vistaso a las mejores actividades y atracciones.</p>
+            </div>
+        </div>
+    </div>
+
+    @if(hayActividades()){
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
+            @for(actividad of actividades() ; track $index){
+                <div class="w-full mb-4 cursor-pointer" (click)="reservar(actividad)">
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden h-full">
+                        <img src="{{ actividad.imagen }}" class="w-full h-48 object-cover">
+                        <div class="p-4">
+                            <h5 class="font-bold text-lg mb-2">{{ actividad.nombre }}</h5>
+                            <p class="text-gray-600 text-sm">{{ actividad.descripcion }}</p>
+                            <div class="flex justify-end items-baseline mt-3">
+                                <p class="font-bold text-2xl">${{ actividad.precio | number:'1.0-0' }}</p>
+                                <p class="text-gray-500 text-xs ml-2">/Persona</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </section>
+    } @else {
+        <h2 class="text-center text-gray-500 mt-8">No hay actividades disponibles en esta ciudad.</h2>
+    }
+</main>

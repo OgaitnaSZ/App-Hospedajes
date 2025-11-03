@@ -10,7 +10,7 @@ import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
   templateUrl: './actividades.html',
   styleUrl: './actividades.css'
 })
-export class Actividades {
+export class ActividadesAdmin {
   // Servicios
   admin = inject(AdminService);
   fb = inject(FormBuilder);
