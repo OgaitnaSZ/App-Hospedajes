@@ -1,0 +1,104 @@
+<button class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700 transition-colors" (click)="editarAgregar()">
+  Agregar Habitación
+</button>
+
+<div class="overflow-x-auto">
+  <table class="min-w-full border border-gray-300 mt-4">
+    <thead class="bg-gray-800 text-white">
+      <tr>
+        <th class="py-2 px-4 text-left">Número</th>
+        <th class="py-2 px-4 text-left">Tipo</th>
+        <th class="py-2 px-4 text-left">Precio</th>
+        <th class="py-2 px-4 text-left">Capacidad</th>
+        <th class="py-2 px-4 text-center">Acciones</th>
+      </tr>
+    </thead>
+
+    @if (this.habitaciones().length > 0) {
+      <tbody>
+        @for (habitacion of habitaciones(); track $index) {
+          <tr class="odd:bg-white even:bg-gray-50 border-b border-gray-300">
+            <td class="py-2 px-4 text-center">{{ habitacion.numero }}</td>
+            <td class="py-2 px-4 text-center">{{ habitacion.tipo }}</td>
+            <td class="py-2 px-4 text-center">{{ habitacion.precio }}</td>
+            <td class="py-2 px-4 text-center">{{ habitacion.capacidad }}</td>
+            <td class="py-2 px-4 text-center">
+              <button
+                class="material-symbols-outlined text-blue-600 hover:text-blue-800 align-middle mr-2"
+                (click)="editarAgregar(habitacion)">
+                edit
+              </button>
+              <button
+                class="material-symbols-outlined text-red-600 hover:text-red-800 align-middle"
+                (click)="eliminarHabitacion(habitacion.idHabitacion)">
+                delete
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    }
+  </table>
+</div>
+
+@if (mostrarForm()) {
+<div class="fixed inset-0 bg-black/40 backdrop-blur-md flex items-center justify-center p-4 z-50">
+  <div class="bg-white rounded-lg shadow-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6">
+    <div class="flex justify-between">
+      <h4 class="text-xl font-semibold mb-4">{{ esNueva() ? 'Nueva Habitación' : 'Editar Habitación #' + form.value.numero }}</h4>
+      <a (click)="mostrarForm.set(false)" class="text-red-400 material-symbols-outlined">close</a>
+    </div>
+
+    <form [formGroup]="form" class="mx-auto bg-white space-y-4">
+      <div class="mb-3">
+        <label for="numero" class="block text-sm font-medium text-gray-700 mb-1">Número</label>
+        <input formControlName="numero" type="number" id="Numero" class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none" name="numero" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="tipo" class="block text-sm font-medium text-gray-700 mb-1">Tipo</label>
+        <select formControlName="tipo" class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+          <option value="individual">Individual</option>
+          <option value="doble">Doble</option>
+          <option value="suite">Suite</option>
+          <option value="deluxe">Deluxe</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label for="precio" class="block text-sm font-medium text-gray-700 mb-1">Precio</label>
+        <input formControlName="precio" type="text" id="precio" class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none" name="precio" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="capacidad" class="block text-sm font-medium text-gray-700 mb-1">Capacidad</label>
+        <input formControlName="capacidad" type="text" id="capacidad" class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none" name="capacidad" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="servicios" class="block text-sm font-medium text-gray-700 mb-1">Servicios {{ serviciosSeleccionados }} / {{servicios().length}}</label>
+        <div class="max-h-[34vh] overflow-y-auto">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+            @for(servicio of servicios(); track $index){
+              <label class="flex items-center space-x-2 p-2 border rounded-lg cursor-pointer hover:bg-gray-50">
+                <input
+                  type="checkbox"
+                  class="h-4 w-4 text-blue-600 border-gray-300 rounded"
+                  [value]="servicio.idServicio"
+                  (change)="almacenarServicios($event)"
+                  [checked]="isServicioSeleccionado(servicio.idServicio)"
+                  name="servicios">
+                <span class="text-gray-700 text-sm">{{ servicio.nombre }}</span>
+              </label>
+            }
+          </div>
+        </div>
+      </div>
+
+      <button class="w-full mt-4 bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded" (click)="guardarHabitacion()">
+        Guardar
+      </button>
+    </form>
+  </div>
+</div>
+}

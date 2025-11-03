@@ -13,7 +13,7 @@ import { Datepicker } from './layout/shared/date-picker/date-picker';
 import { Hospedaje } from './pages/hospedajes/hospedaje/hospedaje';
 import { Reservar } from './pages/reservar/reservar';
 import { HospedajesAdmin } from './pages/admin/hospedajes/hospedajes';
-import { FormularioHospedaje } from './pages/admin/hospedajes/formulario/formulario';
+import { HospedajeAdmin } from './pages/admin/hospedajes/hospedaje/hospedaje';
 
 export const routes: Routes = [
     { path: '', component: Home },
@@ -32,8 +32,8 @@ export const routes: Routes = [
     { path: 'administrador', component: Admin, canActivate: [adminGuard],
       children: [
         { path: 'hospedajes', component: HospedajesAdmin},
-        { path: 'hospedajes/agregar', component: FormularioHospedaje},
-        { path: 'hospedajes/editar/:id', component: FormularioHospedaje},
+        { path: 'hospedajes/agregar', component: HospedajeAdmin},
+        { path: 'hospedajes/editar/:id', component: HospedajeAdmin},
       ]
      },
     { path: '**', component:Error },

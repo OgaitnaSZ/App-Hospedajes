@@ -1,15 +1,22 @@
-<h3 class="text-gray-800 text-3xl font-bold mb-6">Fotos ({{fotos().length}}/{{maxFotos}})</h3>
-<p>{{success()}}</p>
-
-<!-- Subida de nuevas fotos -->
-<div class="flex flex-col p-4 mb-4 bg-white rounded-lg shadow border border-gray-200 max-w-md">
-  @if (!verSubir && fotos().length < maxFotos) {
-  <button type="submit" (click)="verSubir = true" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700 transition-colors">
-    Agregar Fotos
-  </button>
-  } @else {
-    <p>Por favor elimine imagenes para agregar más/</p>
-  }
+<!-- Controles -->
+<div class="flex flex-col p-4 mb-4 bg-white rounded-lg shadow border border-gray-200">
+  <div class="flex gap-2">
+    @if (!verSubir && fotos().length < maxFotos) {
+      <button type="submit" (click)="verSubir = true" class="w-1/2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700 transition-colors">
+        Agregar Fotos
+      </button>
+    }
+    @if (!verSubir){
+      <button 
+        (click)="actualizarOrden()"
+        [disabled]="!hayCambios()" 
+        class="w-1/2 px-4 py-2 bg-blue-500 text-white rounded-lg transition-colors
+              disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-50
+              enabled:hover:bg-blue-700">
+        Guardar orden de fotos
+      </button>
+    }
+  </div>
   @if (verSubir) {
     <form (submit)="agregarFotos($event)" enctype="multipart/form-data" class="space-y-4">
       <div class="flex justify-between items-center">
@@ -36,9 +43,9 @@
         cdkDropList
         [cdkDropListData]="fotos()"
         (cdkDropListDropped)="drop($event)"
-        class="grid grid-cols-2 md:grid-cols-2 gap-4 mt-4"
+        class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4"
       >
-        @for (foto of fotos(); track foto.idFoto) {
+        @for (foto of fotos(); track foto.sort) {
           <div
             cdkDrag
             class="bg-white rounded-lg shadow-md overflow-hidden select-none"
@@ -62,10 +69,3 @@
   </div>
 
 
-<!-- Actualizar orden de fotos -->
-<div class="mt-4 text-center">
-  <button (click)="actualizarOrden()"
-    class="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-blue-700 transition">
-    Actualizar orden
-  </button>
-</div>

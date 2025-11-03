@@ -1,20 +1,20 @@
-import { Component, effect, inject } from '@angular/core';
+import { Component, effect, inject, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
-import { ServicioService } from '../../../../core/services/servicio';
-import { AdminService } from '../../../../core/services/admin';
-import { EstadoHospedaje, Hospedaje } from '../../../../core/interfaces/hospedaje.model';
-import { HabitacionesAdmin } from './habitaciones/habitaciones';
-import { Fotos } from './fotos/fotos';
+import { ServicioService } from '../../../../../core/services/servicio';
+import { AdminService } from '../../../../../core/services/admin';
+import { Hospedaje, hospedajeDetalleAdmin } from '../../../../../core/interfaces/hospedaje.model';
 
 @Component({
   selector: 'app-formulario',
-  imports: [ReactiveFormsModule, RouterModule, CommonModule, RouterModule, HabitacionesAdmin, Fotos],
-  templateUrl: './formulario.html'
+  imports: [ReactiveFormsModule, RouterModule, CommonModule, RouterModule],
+  templateUrl: './formulario.html',
+  styleUrl: './formulario.css'
 })
+export class Formulario {
+  @Input() hospedajeDetalles: hospedajeDetalleAdmin | null | undefined;
 
-export class FormularioHospedaje {
   // Servicios
   admin = inject(AdminService);
   servicio = inject(ServicioService)
@@ -25,9 +25,9 @@ export class FormularioHospedaje {
   // Signals
   servicios = this.servicio.servicios;
   hospedaje = this.admin.hospedaje;
-  loading = this.admin.loading;
-  error = this.admin.error;
-  success = this.admin.success;
+  loading = this.admin.loadingHospedajes;
+  error = this.admin.errorHospedajes;
+  success = this.admin.successHospedajes;
   
   // Campos del formulario
   form = this.fb.nonNullable.group({
@@ -44,31 +44,25 @@ export class FormularioHospedaje {
 
   serviciosSeleccionados: string[] = [];
   mostrarServicios = false;
-  idHospedaje: string = '';
   titulo: string = 'Agregar Hospedaje';
+  activeTab: 'form' | 'habitaciones' | 'fotos' = 'form';
+
 
   ngOnInit(){
     // Obtener servicios para el select
     this.servicio.getServicios("hospedaje");
 
-    // Verificar si se recibe un ID de hospedaje
-    this.route.paramMap.subscribe(params => {
-      const id = params.get('id');
-      if (id) {
-        this.idHospedaje = id;
-        this.admin.getHospedaje(id);
-        this.titulo = 'Modificar'
-      }
-    });
-    
+    if(this.hospedajeDetalles){
+      this.hospedaje.set(this.hospedajeDetalles);
+      this.titulo = `Modificar`
+    }
   }
 
   // Effect para cargar datos cuando el hospedaje se obtiene
   cargarDatosEffect = effect(() => {
     const hospedaje = this.hospedaje();
-    console.log(this.hospedaje());
     
-    if (hospedaje && this.idHospedaje) {
+    if (hospedaje) {
       // Cargar los valores en el formulario
       this.form.patchValue({
         idHospedaje: hospedaje.idHospedaje,
@@ -104,23 +98,6 @@ export class FormularioHospedaje {
       control?.setValue(actualArray.filter((x: string) => x !== id));
     }
   }
-
-  toggleEstado() {
-    const hospedajeActual = this.hospedaje();
-    if (!hospedajeActual) return;
-  
-    const nuevoEstado: EstadoHospedaje =
-      hospedajeActual.estado === EstadoHospedaje.Activo ? EstadoHospedaje.Desactivado : EstadoHospedaje.Activo;
-  
-    // Llamada HTTP (no suscribe, solo dispara)
-    this.admin.cambiarEstadoHospedaje(this.idHospedaje);
-  
-    // Actualiza el signal y fuerza re-render
-    this.admin.hospedaje.update(h => ({
-      ...h!,
-      estado: nuevoEstado
-    }));
-  }
   
   // Verifica si el servicio está seleccionado
   isServicioSeleccionado(idServicio: string): boolean {
@@ -141,7 +118,7 @@ export class FormularioHospedaje {
       servicios: String(serviciosString)
     };
   
-    if (this.idHospedaje) {
+    if (this.hospedaje()?.idHospedaje !== '') {
       this.admin.modificarHospedaje(hospedaje);
     } else {
       this.admin.agregarHospedaje(hospedaje);
@@ -152,7 +129,7 @@ export class FormularioHospedaje {
     const success = this.success();
     if (success) {
       this.router.navigate(
-        [`/administrador/hospedajes/editar/${this.admin.hospedaje()?.idHospedaje}`],
+        [`/administrador/hospedajes/editar/${this.success()}`],
       );
     }
   });

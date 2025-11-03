@@ -55,7 +55,10 @@ export async function getHospedaje(req: Request, res: Response) {
 
     // Obtener fotos
     const fotos = await prisma.fotos.findMany({
-      where: { idHospedaje }
+      where: { idHospedaje },
+      orderBy: {
+        sort: 'asc' 
+      }
     })
 
     if(hospedaje){
@@ -294,7 +297,7 @@ export async function eliminarHabitacion(req: Request, res: Response) {
     });
     
     if (!habitacionExistente) {
-      return handleHttpError(res, "ID de habitacion no encontrado", 404)
+      return handleHttpError(res, "ID de habitacion no encontrada", 404)
     }
 
     // Eliminar habitacion
@@ -304,8 +307,8 @@ export async function eliminarHabitacion(req: Request, res: Response) {
 
     res.status(200).json({ success: true, message: 'Habitacion eliminada exitosamente' });
   } catch(error){
-    handleHttpError(res, "Error al intentar eliminar la habitacion", 500);
-    return;
+    console.log(error);
+    return handleHttpError(res, "Error al intentar eliminar la habitacion", 500);
   }
 }
 

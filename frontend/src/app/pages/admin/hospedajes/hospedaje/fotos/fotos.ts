@@ -1,4 +1,4 @@
-import { Component, Input, effect, inject } from '@angular/core';
+import { Component, Input, computed, effect, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AdminService } from '../../../../../core/services/admin';
 import { CdkDragDrop, moveItemInArray, DragDropModule } from '@angular/cdk/drag-drop';
@@ -13,6 +13,7 @@ import { Foto } from '../../../../../core/interfaces/foto.model';
 export class Fotos {
   @Input() fotosHospedaje: Foto[] | undefined;
   @Input() idHospedaje: string | undefined;
+  ordenOriginal = signal<number[]>([]);
 
   // Servicios
   admin = inject(AdminService);
@@ -20,9 +21,19 @@ export class Fotos {
   // Signals
   hospedaje = this.admin.hospedaje;
   fotos = this.admin.fotos;
-  loading = this.admin.loading;
-  error = this.admin.error;
-  success = this.admin.success;
+  loading = this.admin.loadingFotos;
+  error = this.admin.errorFotos;
+  success = this.admin.successFotos;
+
+  // Computed
+  hayCambios = computed(() => {
+    const ordenActual = this.fotos().map(f => f.sort);
+    const original = this.ordenOriginal();
+    
+    if (ordenActual.length !== original.length) return true;
+    
+    return ordenActual.some((sort, index) => sort !== original[index]);
+  });
 
   constructor() {
     // Effect para actualizar fotos cuando hay cambios
@@ -35,7 +46,7 @@ export class Fotos {
           this.admin.getFotos(this.idHospedaje);
           
           // Limpiar fotos seleccionadas y cerrar modal si se subieron
-          if (mensajeSuccess.toLowerCase().includes('subid')) {
+          if (mensajeSuccess) {
             this.fotosSeleccionadas = [];
             this.verSubir = false;
           }
@@ -45,10 +56,10 @@ export class Fotos {
   }
 
   ngOnInit(): void {
-    console.log(this.fotosHospedaje);
-    console.log(this.idHospedaje);
+    this.fotos.set([]);
     if (this.fotosHospedaje !== undefined &&this.fotosHospedaje?.length > 0){
       this.fotos.set(this.fotosHospedaje);
+      this.ordenOriginal.set(this.fotosHospedaje.map(f => f.sort));
     }
   }
 
@@ -62,6 +73,7 @@ export class Fotos {
 
   actualizarOrden(){
     this.admin.actualizarOrdenFotos(this.fotos());
+    this.ordenOriginal.set(this.fotos().map(f => f.sort));
   }
   
   eliminarFoto(id: string) {

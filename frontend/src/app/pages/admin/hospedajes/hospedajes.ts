@@ -15,9 +15,6 @@ export class HospedajesAdmin {
 
   // Signals
   hospedajes = this.admin.hospedajes;
-  loading = this.admin.loading;
-  error = this.admin.error;
-  success = this.admin.success;
 
   ngOnInit(): void {
     this.admin.getHospedajes();
