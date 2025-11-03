@@ -283,11 +283,11 @@ export class AdminService {
     }
 
     /* Actividades */
-    getActividades(idHospedaje: string) {
+    getActividades() {
         this.loadingActividades.set(true);
         this.errorActividades.set(null);
 
-        this.http.get<Actividad[]>(`${this.apiUrl}actividades/hospedaje/${idHospedaje}`, { headers: this.tokenService.createAuthHeaders() }).pipe(
+        this.http.get<Actividad[]>(`${this.apiUrl}actividades`, { headers: this.tokenService.createAuthHeaders() }).pipe(
             tap((data) => {
                 this.actividades.set(data)
             }),

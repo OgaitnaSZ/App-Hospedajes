@@ -14,6 +14,7 @@ import { Hospedaje } from './pages/hospedajes/hospedaje/hospedaje';
 import { Reservar } from './pages/reservar/reservar';
 import { HospedajesAdmin } from './pages/admin/hospedajes/hospedajes';
 import { HospedajeAdmin } from './pages/admin/hospedajes/hospedaje/hospedaje';
+import { Actividades } from './pages/admin/actividades/actividades';
 
 export const routes: Routes = [
     { path: '', component: Home },
@@ -34,6 +35,9 @@ export const routes: Routes = [
         { path: 'hospedajes', component: HospedajesAdmin},
         { path: 'hospedajes/agregar', component: HospedajeAdmin},
         { path: 'hospedajes/editar/:id', component: HospedajeAdmin},
+        { path: 'actividades', component: Actividades},
+        { path: 'actividades/agregar', component: Actividades},
+        { path: 'actividades/editar/:id', component: Actividades},
       ]
      },
     { path: '**', component:Error },
