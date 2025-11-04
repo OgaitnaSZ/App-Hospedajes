@@ -18,6 +18,7 @@ import { HospedajesAdmin } from './pages/admin/hospedajes/hospedajes';
 import { HospedajeAdmin } from './pages/admin/hospedajes/hospedaje/hospedaje';
 import { ActividadesAdmin } from './pages/admin/actividades/actividades';
 import { Historial } from './pages/cuenta/historial/historial';
+import { PagosAdmin } from './pages/admin/pagos/pagos';
 
 export const routes: Routes = [
     { path: '', component: Home },
@@ -41,6 +42,7 @@ export const routes: Routes = [
         { path: 'hospedajes/agregar', component: HospedajeAdmin},
         { path: 'hospedajes/editar/:id', component: HospedajeAdmin},
         { path: 'actividades', component: ActividadesAdmin},
+        { path: 'pagos', component: PagosAdmin},
         { path: 'perfil', component: Perfil},
         { path: 'historial', component: Historial},
       ]

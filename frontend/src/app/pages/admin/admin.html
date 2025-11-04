@@ -24,7 +24,7 @@
         routerLink="/administrador/pagos"
         routerLinkActive="active"
         >
-        Pagos
+        Administrar Pagos
         </a>
 
         <a
@@ -37,10 +37,20 @@
 
         <a
         class="nav-link text-gray-800 hover:text-blue-600 py-2"
+        routerLink="/administrador/historial"
+        routerLinkActive="active"
+        >
+        Historial
+        </a>
+
+        <a
+        class="nav-link text-gray-800 hover:text-blue-600 py-2"
         (click)="cerrarSesion()"
         >
         Cerrar Sesión
         </a>
+
+        
 
     </div>
     </aside>
