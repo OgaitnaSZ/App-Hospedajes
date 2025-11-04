@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import e, { Request, Response } from "express";
 import { pagos_actividades_estado, pagos_hospedajes_estado, PrismaClient, reservas_actividades_estado, reservas_hospedajes_estado } from '../generated/prisma';
 import { matchedData } from "express-validator";
 import { handleHttpError } from "../utils/handleError";
@@ -157,20 +157,18 @@ export async function obtenerReservasUsuario(req: Request, res: Response) {
         if (data.tipo == 'hospedaje'){
           reservasUsuario = await prisma.reservas_hospedajes.findMany({
             where: {
-              idUsuario: data.id, 
+              idUsuario: "7ddf98bc-a317-11f0-85e5-9c6b0080d542"
             },
             include: {
               hospedaje: {
                 select: {
                   titulo: true,
                   descripcion: true,
-                  ciudad: true
-                },
-                include:{
+                  ciudad: true,
                   fotos: {
-                    orderBy: { sort: 'asc' },
-                    take: 1,
-                  },
+                    orderBy: { sort: "asc" },
+                    take: 1
+                  }
                 }
               },
               habitaciones: {
@@ -178,10 +176,10 @@ export async function obtenerReservasUsuario(req: Request, res: Response) {
                   numero: true,
                   tipo: true,
                   capacidad: true,
-                  precio: true,
-                },
+                  precio: true
+                }
               }
-            },
+            }
           });
         }else{
           reservasUsuario = await prisma.reservas_actividades.findMany({
@@ -204,6 +202,7 @@ export async function obtenerReservasUsuario(req: Request, res: Response) {
 
         res.status(200).json(reservasUsuario);
     } catch(error){
+      console.log(error);
         return handleHttpError(res, "Error al obtener reservas", 500);
     }
 }

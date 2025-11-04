@@ -17,6 +17,7 @@ import { Perfil } from './pages/cuenta/perfil/perfil';
 import { HospedajesAdmin } from './pages/admin/hospedajes/hospedajes';
 import { HospedajeAdmin } from './pages/admin/hospedajes/hospedaje/hospedaje';
 import { ActividadesAdmin } from './pages/admin/actividades/actividades';
+import { Historial } from './pages/cuenta/historial/historial';
 
 export const routes: Routes = [
     { path: '', component: Home },
@@ -30,6 +31,7 @@ export const routes: Routes = [
     { path: 'cuenta', component: Cuenta, canActivate: [authGuard],  
       children: [
         { path: 'perfil', component: Perfil},
+        { path: 'historial', component: Historial},
       ]
     },
     { path: 'reservar', component: Reservar, canActivate: [authGuard]},
@@ -40,6 +42,7 @@ export const routes: Routes = [
         { path: 'hospedajes/editar/:id', component: HospedajeAdmin},
         { path: 'actividades', component: ActividadesAdmin},
         { path: 'perfil', component: Perfil},
+        { path: 'historial', component: Historial},
       ]
      },
     { path: '**', component:Error },

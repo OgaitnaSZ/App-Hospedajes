@@ -17,7 +17,7 @@ export class ReservaService {
 
   // Signals de estado
   reserva = signal<any | null>(null);
-  reservasUsuario = signal<any | null>(null);
+  reservasUsuario = signal<any[]>([]);
   fechasOcupadas = signal<any | null>(null);
   estadoPago = signal<string>('');
   loading = signal(false);
@@ -65,7 +65,7 @@ export class ReservaService {
     this.loading.set(true);
     this.error.set(null);
 
-    return this.http.post(`${this.apiUrl}/reserva`, { id, tipo }, { headers: this.tokenService.createAuthHeaders() })
+    return this.http.post(`${this.apiUrl}reserva`, { id, tipo }, { headers: this.tokenService.createAuthHeaders() })
     .pipe(
       tap((data) => {
         this.reserva.set(data);
@@ -84,9 +84,10 @@ export class ReservaService {
     this.loading.set(true);
     this.error.set(null);
 
-    return this.http.post(`${this.apiUrl}/reservas-usuario`, { id, tipo }, { headers: this.tokenService.createAuthHeaders() })
+    return this.http.post<any>(`${this.apiUrl}reservas-usuario`, { id, tipo }, { headers: this.tokenService.createAuthHeaders() })
     .pipe(
       tap((data) => {
+        console.log(data)
         this.reservasUsuario.set(data);
       }),
       catchError(err => {
@@ -103,7 +104,7 @@ export class ReservaService {
     this.loading.set(true);
     this.error.set(null);
 
-    return this.http.post(`${this.apiUrl}/cancelar`, { id, tipo }, { headers: this.tokenService.createAuthHeaders() })
+    return this.http.post(`${this.apiUrl}cancelar`, { id, tipo }, { headers: this.tokenService.createAuthHeaders() })
     .pipe(
       tap(() => {
         this.success.set("Reserva pendiente de cancelacion");
@@ -122,7 +123,7 @@ export class ReservaService {
     this.loading.set(true);
     this.error.set(null);
 
-    return this.http.post(`${this.apiUrl}/fechas-ocupadas`, { id, tipo }, { headers: this.tokenService.createAuthHeaders() })
+    return this.http.post(`${this.apiUrl}fechas-ocupadas`, { id, tipo }, { headers: this.tokenService.createAuthHeaders() })
     .pipe(
       tap((data) => {
         this.fechasOcupadas.set(data)
@@ -140,7 +141,7 @@ export class ReservaService {
     this.loading.set(true);
     this.error.set(null);
 
-    return this.http.post<string>(`${this.apiUrl}/verificar-pago-hospedaje`, { idPreferencia }, { headers: this.tokenService.createAuthHeaders() })
+    return this.http.post<string>(`${this.apiUrl}verificar-pago-hospedaje`, { idPreferencia }, { headers: this.tokenService.createAuthHeaders() })
     .pipe(
       tap((data) => {
         this.estadoPago.set(data);
@@ -158,7 +159,7 @@ export class ReservaService {
     this.loading.set(true);
     this.error.set(null);
 
-    return this.http.post<string>(`${this.apiUrl}/verificar-pago-actividad`, { idPreferencia }, { headers: this.tokenService.createAuthHeaders() })
+    return this.http.post<string>(`${this.apiUrl}verificar-pago-actividad`, { idPreferencia }, { headers: this.tokenService.createAuthHeaders() })
     .pipe(
       tap((data) => {
         this.estadoPago.set(data);

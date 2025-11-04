@@ -1,0 +1,39 @@
+@if(hayReservas()){
+    <section class="container mx-auto">
+        @for(reserva of reservas() ; track $index){
+            <article class="flex flex-col mb-6">
+                <div class="flex flex-col md:flex-row">
+                    <figure class="w-full md:w-4/12">
+                        <img src="{{reserva.actividades.imagen}}" class="w-full h-auto">
+                    </figure>
+                    <div class="w-full md:ps-2 pb-2">
+                        <p class="w-full md:w-2/20 bg-blue-500 text-white rounded px-2 py-1 text-xs font-semibold">{{ reserva.actividades.ciudad }}</p>
+                        <h2 class="text-xl font-bold mt-2">{{ reserva.actividades.nombre }}</h2>
+                        <p class="text-gray-600 mt-2">{{ reserva.actividades.descripcion }}</p>
+                        <p class="font-semibold">Personas: {{ reserva.personas | number:'1.0-0' }}</p>
+                        <p class="font-semibold">Precio: $ {{ reserva.actividades.precio | number:'1.0-0' }}</p>
+                        <p class="text-sm text-gray-500">Fecha: {{ reserva.fecha | date }}</p>
+                        <div class="flex flex-row justify-end mt-4">
+                            @if(indiceDetalle == null || indiceDetalle != reserva.idReserva){
+                                <button (click)="indiceDetalle = reserva.idReserva" class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md transition duration-200">
+                                    Ver Detalles
+                                </button>
+                            }@else {
+                                <button (click)="indiceDetalle = null" class="bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded-md transition duration-200">
+                                    Cerrar
+                                </button>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <!-- Aquí se carga el componente de detalle dinámicamente -->
+                 @if(indiceDetalle === reserva.idReserva){
+                     <app-detalles-reserva [idReserva]="reserva.idReserva"></app-detalles-reserva>
+                 }
+                <hr class="mt-4 border-gray-300">
+            </article>
+        }
+    </section>
+} @else {
+    <p class="text-center text-gray-500 py-8">No tienes reservas</p>
+}
