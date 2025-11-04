@@ -1,0 +1,9 @@
+.star-rating {
+  display: flex;
+  cursor: pointer;
+}
+
+.material-icons {
+  font-size: 32px;
+  transition: color 0.2s ease-in-out;
+}

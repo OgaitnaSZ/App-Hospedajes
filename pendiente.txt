@@ -1,0 +1,2 @@
+Terminar componente de detalles de reserva.
+Crear componente para ver pagos de los usuarios

@@ -15,6 +15,7 @@ export class ResenaService {
     private tokenService = inject(TokenService);
 
     // Signals de estado
+    resena = signal<Resena | null>(null);
     resenasUsuario = signal<Resena[]>([]);
     resenasDestacadas = signal<ResenaHome[]>([]);
     resenasHospedaje = signal<ResenaHome[]>([]);
@@ -43,10 +44,11 @@ export class ResenaService {
         this.loading.set(true);
         this.error.set(null);
 
-        this.http.get<Resena[]>(`${this.apiUrl}/usuario/${idUsuario}/hospedaje/${idHospedaje}/habitacion/${idHabitacion}`, 
+        this.http.get<Resena>(`${this.apiUrl}usuario/${idUsuario}/hospedaje/${idHospedaje}/habitacion/${idHabitacion}`, 
         { headers: this.tokenService.createAuthHeaders() }).pipe(
             tap((data) => {
-                this.resenasUsuario.set(data)
+                this.resena.set(data)
+                this.success.set("Reseña encontrada");
             }),
             catchError(err => {
             this.error.set('Error al obtener reseñas');
@@ -61,7 +63,7 @@ export class ResenaService {
         this.loading.set(true);
         this.error.set(null);
 
-        this.http.get<ResenaHome[]>(`${this.apiUrl}/hospedaje/${idHospedaje}`).pipe(
+        this.http.get<ResenaHome[]>(`${this.apiUrl}hospedaje/${idHospedaje}`).pipe(
             tap((data) => {
                 this.resenasHospedaje.set(data)
             }),

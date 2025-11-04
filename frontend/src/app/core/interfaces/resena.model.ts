@@ -1,5 +1,5 @@
 export interface Resena {
-    idResena: string;
+    idResena?: string;
     idUsuario: string;
     idHospedaje: string;
     idHabitacion: string;

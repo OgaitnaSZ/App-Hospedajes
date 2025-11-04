@@ -16,7 +16,8 @@ export class ReservaService {
   private tokenService = inject(TokenService);
 
   // Signals de estado
-  reserva = signal<any | null>(null);
+  reservaHospedaje = signal<ReservaHospedajeDetalle | null>(null);
+  reservaActividad = signal<ReservaActividadDetalle | null>(null);
   reservasHospedaje = signal<ReservaHospedajeDetalle[]>([]);
   reservasActividades = signal<ReservaActividadDetalle[]>([]);
   fechasOcupadas = signal<any | null>(null);
@@ -66,10 +67,14 @@ export class ReservaService {
     this.loading.set(true);
     this.error.set(null);
 
-    return this.http.post(`${this.apiUrl}reserva`, { id, tipo }, { headers: this.tokenService.createAuthHeaders() })
+    return this.http.post<ReservaHospedajeDetalle | ReservaActividadDetalle>(`${this.apiUrl}reserva`, { id, tipo }, { headers: this.tokenService.createAuthHeaders() })
     .pipe(
       tap((data) => {
-        this.reserva.set(data);
+        if(tipo === 'hospedaje'){
+          this.reservaHospedaje.set(data as ReservaHospedajeDetalle);
+        }else{
+          this.reservaActividad.set(data as ReservaActividadDetalle);
+        }
       }),
       catchError(err => {
         this.error.set('Error al obtener reserva');

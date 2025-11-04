@@ -135,9 +135,6 @@ export class HabitacionesAdmin {
       servicios: String(serviciosString),
     };
 
-    console.log(this.esNueva());
-    console.log(habitacion);
-
     if (this.esNueva()) {
       this.admin.agregarHabitacion(habitacion);
     } else {

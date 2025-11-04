@@ -47,7 +47,6 @@ export class Perfil {
   guardarDatos(): void {
     if (this.formData.invalid) return this.error.set('Faltan datos.');
     const formValue = this.formData.getRawValue();
-    console.log('Datos a actualizar:', formValue);
 
     this.user.updateUserData(formValue);
   }

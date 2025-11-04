@@ -28,7 +28,7 @@
                 </div>
                 <!-- Aquí se carga el componente de detalle dinámicamente -->
                  @if(indiceDetalle === reserva.idReserva){
-                     <app-detalles-reserva [idReserva]="reserva.idReserva"></app-detalles-reserva>
+                     <app-detalles-reserva [reservaActividad]="reserva"></app-detalles-reserva>
                  }
                 <hr class="mt-4 border-gray-300">
             </article>

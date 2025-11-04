@@ -1,1 +1,59 @@
-<p>detalles-reserva works!</p>
+<div class="flex flex-col md:flex-row justify-between">
+  <div class="pb-2 md:w-1/2">
+    <h2 class="text-xl font-semibold">Detalles de la reserva</h2>
+    <div class="mt-3 space-y-2">
+      <p>Estado: 
+        <span class="bg-yellow-500 w-1/2 md:w-1/4 text-center rounded text-white font-bold py-1 px-2 inline-block">
+          {{ reservaH()?.estado }}
+        </span>
+      </p>
+      <p>Fecha de entrada: <span class="font-bold">{{ reservaH()?.fechaInicio | date:'dd/MM/yyyy' }}</span></p>
+      <p>Fecha de salida: <span class="font-bold">{{ reservaH()?.fechaFin | date:'dd/MM/yyyy' }}</span></p>
+      <p>Precio total: <span class="font-bold">$ {{ reservaH()?.precioTotal | number:'1.0-0' }}</span></p>
+      @if(esCancelable(reservaH()?.fechaInicio ?? '') && reservaH()?.estado == 'pendiente'){
+        <button (click)="cancelarReserva('hospedaje')" class="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-md transition duration-200 mt-3">
+          Cancelar Reserva
+        </button>
+      }
+    </div>
+  </div>
+  
+  @if (reservaH()?.estado === 'concretado'){
+    <div class="mb-2 md:w-1/2 md:pl-4 mt-4 md:mt-0">
+      <h3 class="text-lg font-semibold mb-3">Dejanos tu reseña</h3>
+      <form [formGroup]="formData" (ngSubmit)="guardarDatos()" class="space-y-4">
+        <div class="flex flex-col">
+          <label class="mb-2 font-medium">Calificación</label>
+          <div class="star-rating flex space-x-1">
+            @for(star of stars ; track $index){
+              <span
+                class="material-icons cursor-pointer transition-colors"
+                [class.text-yellow-400]="$index < (resena()?.calificacion ?? 5)"
+                [class.text-gray-300]="$index >= (resena()?.calificacion ?? 5)"
+                (click)="setRating($index + 1)"
+                (mouseover)="hoverRating($index + 1)"
+              >
+                star
+              </span>
+            }
+          </div>
+        </div>
+        
+        <div class="flex flex-col">
+          <label for="comentario" class="mb-2 font-medium">Comentario</label>
+          <textarea 
+            id="comentario" 
+            formControlName="comentario"
+            class="rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500" 
+            name="comentario" 
+            required>
+          </textarea>
+        </div>
+        
+        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition duration-200">
+          Guardar
+        </button>
+      </form>
+    </div>
+  }
+</div>
