@@ -16,7 +16,7 @@ export class ReservasActividad {
   reservaService = inject(ReservaService);
 
   // Signals
-  reservas = this.reservaService.reservasUsuario;
+  reservas = this.reservaService.reservasActividades;
   loading = this.reservaService.loading;
   error = this.reservaService.error;
   success = this.reservaService.success;

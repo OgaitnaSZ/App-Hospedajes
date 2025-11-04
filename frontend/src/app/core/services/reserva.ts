@@ -1,7 +1,7 @@
 import { Injectable, signal, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ReservaHospedaje } from '../interfaces/reservaHospedaje.model';
-import { ReservaActividad } from '../interfaces/reservaActividad.model';
+import { ReservaHospedaje, ReservaHospedajeDetalle } from '../interfaces/reservaHospedaje.model';
+import { ReservaActividad, ReservaActividadDetalle } from '../interfaces/reservaActividad.model';
 import { catchError, finalize, of, tap } from 'rxjs';
 import { TokenService } from './token';
 
@@ -17,7 +17,8 @@ export class ReservaService {
 
   // Signals de estado
   reserva = signal<any | null>(null);
-  reservasUsuario = signal<any[]>([]);
+  reservasHospedaje = signal<ReservaHospedajeDetalle[]>([]);
+  reservasActividades = signal<ReservaActividadDetalle[]>([]);
   fechasOcupadas = signal<any | null>(null);
   estadoPago = signal<string>('');
   loading = signal(false);
@@ -84,11 +85,14 @@ export class ReservaService {
     this.loading.set(true);
     this.error.set(null);
 
-    return this.http.post<any>(`${this.apiUrl}reservas-usuario`, { id, tipo }, { headers: this.tokenService.createAuthHeaders() })
+    return this.http.post<ReservaHospedajeDetalle[] | ReservaActividadDetalle[]>(`${this.apiUrl}reservas-usuario`, { id, tipo }, { headers: this.tokenService.createAuthHeaders() })
     .pipe(
       tap((data) => {
-        console.log(data)
-        this.reservasUsuario.set(data);
+        if(tipo === 'hospedaje'){
+          this.reservasHospedaje.set(data as ReservaHospedajeDetalle[]);
+        }else{
+          this.reservasActividades.set(data as ReservaActividadDetalle[]);
+        }
       }),
       catchError(err => {
         this.error.set('Error al obtener reservas');
