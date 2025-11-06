@@ -9,7 +9,17 @@ import swaggerUI from 'swagger-ui-express';
 import openApiConfiguration from './docs/swagger';
 
 const app = express();
-app.use(cors());
+
+const corsOptions = {
+  origin: [
+    'https://app-hospedajes.vercel.app/',
+    'http://localhost:4200',
+  ],
+  credentials: true,
+  optionsSuccessStatus: 200
+};
+app.use(cors(corsOptions));
+
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
