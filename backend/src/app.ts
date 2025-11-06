@@ -3,7 +3,7 @@ import cors from "cors";
 import dotenv from 'dotenv';
 dotenv.config();
 const path = require('path');
-import routes from "./routes";
+import routes from "./routes/index";
 import './global-types';
 import swaggerUI from 'swagger-ui-express';
 import openApiConfiguration from './docs/swagger';
