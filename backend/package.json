@@ -3,12 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon src/app.ts",
     "build": "tsc",
-    "start": "node dist/app.js",
-    "vercel-build": "npm run build",
-    "test": "cross-env NODE_ENV=test jest --coverage --runInBand",
-    "test:watch": "cross-env NODE_ENV=test jest --coverage --watch --silent --runInBand"
+    "start": "node dist/app.js"
   },
   "keywords": [],
   "author": "",
