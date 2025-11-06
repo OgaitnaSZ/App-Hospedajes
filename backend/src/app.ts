@@ -12,12 +12,14 @@ const app = express();
 
 const corsOptions = {
   origin: [
-    'https://app-hospedajes.vercel.app/',
+    'https://app-hospedajes.vercel.app',
     'http://localhost:4200',
   ],
   credentials: true,
-  optionsSuccessStatus: 200
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
 };
+
 app.use(cors(corsOptions));
 
 app.use(express.json());
