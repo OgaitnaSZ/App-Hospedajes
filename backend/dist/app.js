@@ -8,7 +8,7 @@ const cors_1 = __importDefault(require("cors"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const path = require('path');
-const routes_1 = __importDefault(require("./routes"));
+const index_1 = __importDefault(require("./routes/index"));
 require("./global-types");
 const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const swagger_1 = __importDefault(require("./docs/swagger"));
@@ -44,7 +44,7 @@ app.use('/uploads', express_1.default.static(path.join(__dirname, 'uploads')));
  */
 app.use('/documentation', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_1.default));
 // Importacion dinamica de rutas
-app.use("/api", routes_1.default);
+app.use("/api", index_1.default);
 const port = process.env.PORT || 4001;
 const NODE_ENV = process.env.NODE_ENV;
 if (NODE_ENV !== 'test')
