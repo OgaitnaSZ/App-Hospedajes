@@ -12,6 +12,7 @@ model actividades {
   idActividad          String                 @id @default(dbgenerated("(uuid())")) @db.Char(36)
   nombre               String                 @db.Text
   descripcion          String                 @db.Text
+  imagen               String                 @db.Text
   ciudad               String                 @db.Text
   precio               Float                  @db.Float
   created_at           DateTime               @default(now()) @db.Timestamp(0)
