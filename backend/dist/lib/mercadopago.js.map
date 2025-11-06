@@ -1,0 +1,1 @@
+{"version":3,"file":"mercadopago.js","sourceRoot":"","sources":["../../src/lib/mercadopago.ts"],"names":[],"mappings":";;;AAAA,yBAAyB;AACzB,6CAA4D;AAE5D,MAAM,MAAM,GAAG,IAAI,+BAAiB,CAAC;IACnC,WAAW,EAAE,OAAO,CAAC,GAAG,CAAC,eAAgB;CAC1C,CAAC,CAAC;AAEU,QAAA,YAAY,GAAG,IAAI,wBAAU,CAAC,MAAM,CAAC,CAAC"}

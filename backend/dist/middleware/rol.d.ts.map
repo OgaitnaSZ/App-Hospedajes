@@ -1,0 +1,1 @@
+{"version":3,"file":"rol.d.ts","sourceRoot":"","sources":["../../src/middleware/rol.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,OAAO,EAAE,QAAQ,EAAE,YAAY,EAAE,MAAM,SAAS,CAAC;AAE1D,OAAO,EAAE,WAAW,EAAE,MAAM,qBAAqB,CAAC;AAElD,eAAO,MAAM,QAAQ,GAAI,cAAc,WAAW,EAAE,MAC1C,KAAK,OAAO,EAAE,KAAK,QAAQ,EAAE,MAAM,YAAY,mDAmBxD,CAAC"}

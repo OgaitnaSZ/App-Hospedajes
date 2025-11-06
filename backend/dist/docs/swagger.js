@@ -1,0 +1,476 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const swagger_jsdoc_1 = __importDefault(require("swagger-jsdoc"));
+/**
+ * API Config Info
+ */
+const swaggerDefinition = {
+    openapi: "3.0.0",
+    info: {
+        title: "Documentacion de API de App de Hospedajes",
+        version: "1.0.1"
+    },
+    servers: [
+        {
+            url: "http://localhost:4001/api"
+        }
+    ],
+    components: {
+        securitySchemes: {
+            bearerAuth: {
+                type: "http",
+                scheme: "bearer",
+                bearerFormat: "JWT"
+            }
+        },
+        schemas: {
+            userLogin: {
+                type: "object",
+                required: ["email", "password"],
+                properties: {
+                    email: {
+                        type: "string"
+                    },
+                    password: {
+                        type: "string"
+                    }
+                }
+            },
+            userRegister: {
+                type: "object",
+                required: ["nombre", "apellido", "email", "telefono", "password"],
+                properties: {
+                    nombre: {
+                        type: "string"
+                    },
+                    apellido: {
+                        type: "string"
+                    },
+                    email: {
+                        type: "string"
+                    },
+                    telefono: {
+                        type: "string"
+                    },
+                    password: {
+                        type: "string"
+                    },
+                }
+            },
+            userUpdatePassword: {
+                type: "object",
+                required: ["idUsuario", "password", "newPassword"],
+                properties: {
+                    idUsuario: {
+                        type: "string"
+                    },
+                    password: {
+                        type: "string"
+                    },
+                    newPassword: {
+                        type: "string"
+                    }
+                }
+            },
+            recoverPassword: {
+                type: "object",
+                required: ["email"],
+                properties: {
+                    email: {
+                        type: "string"
+                    }
+                }
+            },
+            resetPassword: {
+                type: "object",
+                required: ["password", "token"],
+                properties: {
+                    password: {
+                        type: "string"
+                    },
+                    token: {
+                        type: "string"
+                    }
+                }
+            },
+            getDataUser: {
+                type: "object",
+                required: ["idUsuario"],
+                properties: {
+                    idUsuario: {
+                        type: "string"
+                    }
+                }
+            },
+            userUpdateData: {
+                type: "object",
+                required: ["idUsuario", "nombre", "apellido", "email", "telefono", "password"],
+                properties: {
+                    idUsuario: {
+                        type: "string"
+                    },
+                    nombre: {
+                        type: "string"
+                    },
+                    apellido: {
+                        type: "string"
+                    },
+                    email: {
+                        type: "string"
+                    },
+                    telefono: {
+                        type: "string"
+                    },
+                    password: {
+                        type: "string"
+                    }
+                }
+            },
+            userSuscribe: {
+                type: "object",
+                required: ["email"],
+                properties: {
+                    email: {
+                        type: "string"
+                    }
+                }
+            },
+            resenaNew: {
+                type: "object",
+                required: ["idUsuario", "idHospedaje", "idHabitacion", "calificacion", "comentario"],
+                properties: {
+                    idUsuario: {
+                        type: "string"
+                    },
+                    idHospedaje: {
+                        type: "string"
+                    },
+                    idHabitacion: {
+                        type: "string"
+                    },
+                    calificacion: {
+                        type: "number"
+                    },
+                    comentario: {
+                        type: "string"
+                    }
+                }
+            },
+            resenaUpdate: {
+                type: "object",
+                required: ["idResena", "idUsuario", "idHospedaje", "idHabitacion", "calificacion", "comentario"],
+                properties: {
+                    idResena: {
+                        type: "string"
+                    },
+                    idUsuario: {
+                        type: "string"
+                    },
+                    idHospedaje: {
+                        type: "string"
+                    },
+                    idHabitacion: {
+                        type: "string"
+                    },
+                    calificacion: {
+                        type: "number"
+                    },
+                    comentario: {
+                        type: "string"
+                    }
+                }
+            },
+            reservaHospedaje: {
+                type: "object",
+                required: ["idUsuario", "idHospedaje", "idHabitacion", "fechaInicio", "fechaFin", "personas", "precioTotal", "nombre", "apellido", "dni", "direccion", "email", "telefono", "idPreferencia"],
+                properties: {
+                    idHabitacion: {
+                        type: "string"
+                    },
+                    idUsuario: {
+                        type: "string"
+                    },
+                    idHospedaje: {
+                        type: "string"
+                    },
+                    fechaInicio: {
+                        type: "date"
+                    },
+                    fechaFin: {
+                        type: "date"
+                    },
+                    personas: {
+                        type: "string"
+                    },
+                    precioTotal: {
+                        type: "number"
+                    },
+                    nombre: {
+                        type: "string"
+                    },
+                    apellido: {
+                        type: "string"
+                    },
+                    dni: {
+                        type: "date"
+                    },
+                    direccion: {
+                        type: "date"
+                    },
+                    email: {
+                        type: "string"
+                    },
+                    telefono: {
+                        type: "date"
+                    },
+                    idPreferencia: {
+                        type: "string"
+                    }
+                },
+            },
+            reservaActividad: {
+                type: "object",
+                required: ["idUsuario", "idActividad", "fecha", "personas", "precioTotal", "nombre", "apellido", "dni", "direccion", "email", "telefono", "idPreferencia"],
+                properties: {
+                    idUsuario: {
+                        type: "string"
+                    },
+                    idActividad: {
+                        type: "string"
+                    },
+                    fecha: {
+                        type: "date"
+                    },
+                    personas: {
+                        type: "string"
+                    },
+                    precioTotal: {
+                        type: "number"
+                    },
+                    nombre: {
+                        type: "string"
+                    },
+                    apellido: {
+                        type: "string"
+                    },
+                    dni: {
+                        type: "date"
+                    },
+                    direccion: {
+                        type: "date"
+                    },
+                    email: {
+                        type: "string"
+                    },
+                    telefono: {
+                        type: "date"
+                    },
+                    idPreferencia: {
+                        type: "string"
+                    }
+                }
+            },
+            tipoReserva: {
+                type: "object",
+                required: ["id", "tipo"],
+                properties: {
+                    id: {
+                        type: "string"
+                    },
+                    tipo: {
+                        type: "string"
+                    }
+                }
+            },
+            fechasOcupadas: {
+                type: "object",
+                required: ["idUsuario", "tipo"],
+                properties: {
+                    idUsuario: {
+                        type: "string"
+                    },
+                    tipo: {
+                        type: "string"
+                    }
+                }
+            },
+            verificarPago: {
+                type: "object",
+                required: ["idPreferencia"],
+                properties: {
+                    idPreferencia: {
+                        type: "string"
+                    }
+                }
+            },
+            hospedajeNew: {
+                type: "object",
+                required: ["titulo", "descripcion", "servicios", "estrellas", "telefono", "ciudad", "direccion", "coordenadas", "imagen"],
+                properties: {
+                    titulo: {
+                        type: "string"
+                    },
+                    descripcion: {
+                        type: "string"
+                    },
+                    servicios: {
+                        type: "date"
+                    },
+                    estrellas: {
+                        type: "string"
+                    },
+                    telefono: {
+                        type: "number"
+                    },
+                    ciudad: {
+                        type: "string"
+                    },
+                    imagen: {
+                        type: "string"
+                    }
+                }
+            },
+            hospedajeUpdate: {
+                type: "object",
+                required: ["idHospedaje", "titulo", "descripcion", "servicios", "estrellas", "telefono", "ciudad", "direccion", "coordenadas", "imagen"],
+                properties: {
+                    idHospedaje: {
+                        type: "string"
+                    },
+                    titulo: {
+                        type: "string"
+                    },
+                    descripcion: {
+                        type: "string"
+                    },
+                    servicios: {
+                        type: "date"
+                    },
+                    estrellas: {
+                        type: "number"
+                    },
+                    telefono: {
+                        type: "string"
+                    },
+                    ciudad: {
+                        type: "string"
+                    },
+                    imagen: {
+                        type: "string"
+                    }
+                }
+            },
+            habitacionNew: {
+                type: "object",
+                required: ["idHospedaje", "numero", "tipo", "precio", "capacidad", "servicios"],
+                properties: {
+                    idHospedaje: {
+                        type: "string"
+                    },
+                    numero: {
+                        type: "string"
+                    },
+                    tipo: {
+                        type: "string"
+                    },
+                    precio: {
+                        type: "number"
+                    },
+                    capacidad: {
+                        type: "number"
+                    },
+                    servicios: {
+                        type: "string"
+                    }
+                }
+            },
+            habitacionUpdate: {
+                type: "object",
+                required: ["idHabitacion", "idHospedaje", "numero", "tipo", "precio", "capacidad", "servicios"],
+                properties: {
+                    idHabitacion: {
+                        type: "string"
+                    },
+                    idHospedaje: {
+                        type: "string"
+                    },
+                    numero: {
+                        type: "string"
+                    },
+                    tipo: {
+                        type: "string"
+                    },
+                    precio: {
+                        type: "number"
+                    },
+                    capacidad: {
+                        type: "number"
+                    },
+                    servicios: {
+                        type: "string"
+                    }
+                }
+            },
+            actividadNew: {
+                type: "object",
+                required: ["nombre", "descripcion", "imagen", "ciudad", "precio"],
+                properties: {
+                    nombre: {
+                        type: "string"
+                    },
+                    descripcion: {
+                        type: "string"
+                    },
+                    imagen: {
+                        type: "string"
+                    },
+                    ciudad: {
+                        type: "number"
+                    },
+                    precio: {
+                        type: "number"
+                    }
+                }
+            },
+            actividadUpdate: {
+                type: "object",
+                required: ["idActividad", "nombre", "descripcion", "imagen", "ciudad", "precio"],
+                properties: {
+                    idActividad: {
+                        type: "string"
+                    },
+                    nombre: {
+                        type: "string"
+                    },
+                    descripcion: {
+                        type: "string"
+                    },
+                    imagen: {
+                        type: "string"
+                    },
+                    ciudad: {
+                        type: "number"
+                    },
+                    precio: {
+                        type: "number"
+                    }
+                }
+            },
+        },
+    }
+};
+/**
+ * Opciones
+ */
+const options = {
+    swaggerDefinition,
+    apis: [
+        "src/routes/*.ts"
+    ]
+};
+const openApiConfiguration = (0, swagger_jsdoc_1.default)(options);
+exports.default = openApiConfiguration;
+//# sourceMappingURL=swagger.js.map
