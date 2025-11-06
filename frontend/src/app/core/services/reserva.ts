@@ -9,7 +9,7 @@ import { TokenService } from './token';
   providedIn: 'root'
 })
 export class ReservaService {
-  private apiUrl = 'http://localhost:4001/api/reserva/';
+  private apiUrl = 'https://app-hospedajes-backend.vercel.app/api/reserva/';
 
   // Inject
   private http = inject(HttpClient);

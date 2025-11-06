@@ -15,7 +15,7 @@ interface LoginResponse {
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:4001/api/auth/';
+  private apiUrl = 'https://app-hospedajes-backend.vercel.app/api/auth/';
 
   // Inject
   private http = inject(HttpClient);

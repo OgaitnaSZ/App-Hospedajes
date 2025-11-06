@@ -8,7 +8,7 @@ import { catchError, finalize, of, tap } from 'rxjs';
   providedIn: 'root'
 })
 export class HospedajeService {
-  private apiUrl = 'http://localhost:4001/api/hospedaje/';
+  private apiUrl = 'https://app-hospedajes-backend.vercel.app/api/hospedaje/';
 
   // Inject
   private http = inject(HttpClient);

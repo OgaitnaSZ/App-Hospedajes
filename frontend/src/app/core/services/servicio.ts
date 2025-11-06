@@ -7,7 +7,7 @@ import { catchError, finalize, of, tap } from 'rxjs';
   providedIn: 'root'
 })
 export class ServicioService {
-  private apiUrl = 'http://localhost:4001/api/servicio';
+  private apiUrl = 'https://app-hospedajes-backend.vercel.app/api/servicio';
 
   // Inject
   private http = inject(HttpClient);

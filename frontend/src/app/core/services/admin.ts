@@ -11,7 +11,7 @@ import { catchError, finalize, of, tap } from 'rxjs';
   providedIn: 'root'
 })
 export class AdminService {
-    private apiUrl = 'http://localhost:4001/api/admin/';
+    private apiUrl = 'https://app-hospedajes-backend.vercel.app/api/admin/';
 
     // Inject
     http = inject(HttpClient);

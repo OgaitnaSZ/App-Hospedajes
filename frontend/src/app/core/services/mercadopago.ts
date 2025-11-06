@@ -7,8 +7,8 @@ import { preferenciaMP } from '../interfaces/mercadopago.model';
   providedIn: 'root'
 })
 export class MercadopagoService {
-  private preferenceUrl = 'https://vamos.fullbusiness.io/api/reservas/mercado-pago/crear-preferencia.php';
-  private webhookUrl = 'https://vamos.fullbusiness.io/api/reservas/mercado-pago/webhook.php';
+  private preferenceUrl = 'https://app-hospedajes-backend.vercel.app/api/reservas/mercado-pago/crear-preferencia.php';
+  private webhookUrl = 'https://app-hospedajes-backend.vercel.app/api/reservas/mercado-pago/webhook.php';
   mercadopago: any;
 
   // Inyecciones
