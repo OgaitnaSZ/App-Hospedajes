@@ -1,1 +1,0 @@
-{"version":3,"file":"foto.js","sourceRoot":"","sources":["../../src/validators/foto.ts"],"names":[],"mappings":";;;AAAA,yDAA0C;AAE1C,8DAA2D;AAE9C,QAAA,WAAW,GAAG;IACvB,IAAA,yBAAK,EAAC,IAAI,CAAC;SACV,MAAM,EAAE,CAAC,WAAW,CAAC,gCAAgC,CAAC;IAEzD,CAAC,GAAY,EAAE,GAAa,EAAE,IAAkB,EAAE,EAAE,CAAC,IAAA,iCAAe,EAAC,GAAG,EAAE,GAAG,EAAE,IAAI,CAAC;CACrF,CAAC"}

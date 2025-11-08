@@ -1,2 +1,6 @@
+Agregar columna 'estado' a habitaciones, y la eliminacion debe ser una desactivacion.
 Terminar componente de detalles de reserva.
-Crear componente para ver pagos de los usuarios
+Crear componente para ver pagos de los usuarios.
+Poner opcion para cambiar medios de pago. (efectivo o MP), para dejar la reserva en 'pendiente'
+Activar infinity scrolling para registros (hospedajes, actividades, historial, pagos)
+Activar filtrado por servicios de habitaciones y hospedajes.
