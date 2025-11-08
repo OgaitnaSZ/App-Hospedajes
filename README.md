@@ -37,24 +37,24 @@ Cada hospedaje cuenta con sus propios servicios, habitaciones y actividades rela
 - **RxJS** para gestión reactiva
 
 ## Estructura general del proyecto/backend
-  ├── prisma/
-  ├── src/
-  ├── .env
-  └── package.json
-
-/frontend
-  ├── src/
-  ├── angular.json
-  └── package.json
-
-/db
-  └── data.sql
+├── prisma/<br>
+├── src/<br>
+├── .env<br>
+└── package.json<br>
+<br>
+/frontend<br>
+├── src/<br>
+├── angular.json<br>
+└── package.json<br>
+<br>
+/db<br>
+  └── data.sql<br>
 
 ## Instrucciones para correr el proyecto
 ### 1. Clonar el repositorio
 ```bash
-git clone <[https://github.com/OgaitnaSZ/App-Hospedajes.git](https://github.com/OgaitnaSZ/App-Hospedajes.git)>
-cd <app-hospedajes>
+git clone https://github.com/OgaitnaSZ/App-Hospedajes.git
+cd app-hospedajes
 ```
 
 ### 2. Configurar la base de datos
@@ -71,7 +71,7 @@ PORT=4001
 PUBLIC_URL=http://localhost:4001
 MP_ACCESS_TOKEN=APP_USR-789193192318643-102217-c4e5469831c28fd8867e8067b16a4774-2022849958
 ```
-Reemplazá usuario, password y nombre_de_tu_db con tus credenciales locales.
+Reemplazá usuario, password y app-hospedajes con tus credenciales locales.
 
 ### 4. Instalar dependencias y ejecutar el backend
 ```
