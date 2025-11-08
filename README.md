@@ -37,15 +37,16 @@ Cada hospedaje cuenta con sus propios servicios, habitaciones y actividades rela
 - **RxJS** para gestión reactiva
 
 ## Estructura general del proyecto/backend
-├── prisma/<br>
-├── src/<br>
-├── .env<br>
-└── package.json<br>
+/backend<br>
+  ├── prisma/<br>
+  ├── src/<br>
+  ├── .env<br>
+  └── package.json<br>
 <br>
 /frontend<br>
-├── src/<br>
-├── angular.json<br>
-└── package.json<br>
+  ├── src/<br>
+  ├── angular.json<br>
+  └── package.json<br>
 <br>
 /db<br>
   └── data.sql<br>
